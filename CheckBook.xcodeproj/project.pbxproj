@@ -13,7 +13,9 @@
 		B6BF9FDD222F160700DFCE8C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6BF9FDB222F160700DFCE8C /* LaunchScreen.storyboard */; };
 		B6BF9FE8222F187600DFCE8C /* CheckBook.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FE6222F187600DFCE8C /* CheckBook.xcdatamodeld */; };
 		B6BF9FEE222F257300DFCE8C /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FED222F257300DFCE8C /* CoreDataStack.swift */; };
-		B6BF9FF0222F266100DFCE8C /* CheckBook+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FEF222F266100DFCE8C /* CheckBook+Convenience.swift */; };
+		B6BF9FF0222F266100DFCE8C /* Purchase+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FEF222F266100DFCE8C /* Purchase+convenience.swift */; };
+		B6BF9FF2222F315D00DFCE8C /* Purchase+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FF1222F315D00DFCE8C /* Purchase+MagicStrings.swift */; };
+		B6BF9FF5222F322300DFCE8C /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6BF9FF4222F322300DFCE8C /* CloudKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,7 +28,9 @@
 		B6BF9FE7222F187600DFCE8C /* Entry.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Entry.xcdatamodel; sourceTree = "<group>"; };
 		B6BF9FEC222F236E00DFCE8C /* CheckBook.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CheckBook.entitlements; sourceTree = "<group>"; };
 		B6BF9FED222F257300DFCE8C /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
-		B6BF9FEF222F266100DFCE8C /* CheckBook+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CheckBook+Convenience.swift"; sourceTree = "<group>"; };
+		B6BF9FEF222F266100DFCE8C /* Purchase+convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Purchase+convenience.swift"; sourceTree = "<group>"; };
+		B6BF9FF1222F315D00DFCE8C /* Purchase+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Purchase+MagicStrings.swift"; sourceTree = "<group>"; };
+		B6BF9FF4222F322300DFCE8C /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,6 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6BF9FF5222F322300DFCE8C /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,6 +50,7 @@
 			children = (
 				B6BF9FD1222F160300DFCE8C /* CheckBook */,
 				B6BF9FD0222F160300DFCE8C /* Products */,
+				B6BF9FF3222F322300DFCE8C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -90,10 +96,19 @@
 			isa = PBXGroup;
 			children = (
 				B6BF9FE6222F187600DFCE8C /* CheckBook.xcdatamodeld */,
-				B6BF9FEF222F266100DFCE8C /* CheckBook+Convenience.swift */,
+				B6BF9FEF222F266100DFCE8C /* Purchase+convenience.swift */,
+				B6BF9FF1222F315D00DFCE8C /* Purchase+MagicStrings.swift */,
 				B6BF9FED222F257300DFCE8C /* CoreDataStack.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		B6BF9FF3222F322300DFCE8C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B6BF9FF4222F322300DFCE8C /* CloudKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -130,6 +145,12 @@
 						CreatedOnToolsVersion = 10.1;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
 								enabled = 1;
 							};
 						};
@@ -174,8 +195,9 @@
 			files = (
 				B6BF9FEE222F257300DFCE8C /* CoreDataStack.swift in Sources */,
 				B6BF9FE8222F187600DFCE8C /* CheckBook.xcdatamodeld in Sources */,
+				B6BF9FF2222F315D00DFCE8C /* Purchase+MagicStrings.swift in Sources */,
 				B6BF9FD3222F160300DFCE8C /* AppDelegate.swift in Sources */,
-				B6BF9FF0222F266100DFCE8C /* CheckBook+Convenience.swift in Sources */,
+				B6BF9FF0222F266100DFCE8C /* Purchase+convenience.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
