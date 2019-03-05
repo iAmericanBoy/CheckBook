@@ -22,6 +22,7 @@
 		B6BF9FDC222F160700DFCE8C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B6BF9FDE222F160700DFCE8C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B6BF9FE7222F187600DFCE8C /* Entry.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Entry.xcdatamodel; sourceTree = "<group>"; };
+		B6BF9FEC222F236E00DFCE8C /* CheckBook.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CheckBook.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +55,7 @@
 		B6BF9FD1222F160300DFCE8C /* CheckBook */ = {
 			isa = PBXGroup;
 			children = (
+				B6BF9FEC222F236E00DFCE8C /* CheckBook.entitlements */,
 				B6BF9FD2222F160300DFCE8C /* AppDelegate.swift */,
 				B6BF9FE9222F187F00DFCE8C /* Model */,
 				B6BF9FE5222F163200DFCE8C /* View */,
@@ -120,6 +122,11 @@
 				TargetAttributes = {
 					B6BF9FCE222F160300DFCE8C = {
 						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -306,6 +313,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CheckBook/CheckBook.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = J6B8ZX28ZW;
 				INFOPLIST_FILE = "$(SRCROOT)/CheckBook/Resources/Info.plist";
@@ -324,6 +332,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CheckBook/CheckBook.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = J6B8ZX28ZW;
 				INFOPLIST_FILE = "$(SRCROOT)/CheckBook/Resources/Info.plist";
