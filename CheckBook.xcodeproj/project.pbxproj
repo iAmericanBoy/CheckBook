@@ -16,6 +16,7 @@
 		B6BF9FF0222F266100DFCE8C /* Purchase+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FEF222F266100DFCE8C /* Purchase+convenience.swift */; };
 		B6BF9FF2222F315D00DFCE8C /* Purchase+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FF1222F315D00DFCE8C /* Purchase+MagicStrings.swift */; };
 		B6BF9FF5222F322300DFCE8C /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6BF9FF4222F322300DFCE8C /* CloudKit.framework */; };
+		B6BF9FF7222F3FDA00DFCE8C /* PurchaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FF6222F3FDA00DFCE8C /* PurchaseController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		B6BF9FEF222F266100DFCE8C /* Purchase+convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Purchase+convenience.swift"; sourceTree = "<group>"; };
 		B6BF9FF1222F315D00DFCE8C /* Purchase+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Purchase+MagicStrings.swift"; sourceTree = "<group>"; };
 		B6BF9FF4222F322300DFCE8C /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		B6BF9FF6222F3FDA00DFCE8C /* PurchaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 				B6BF9FD2222F160300DFCE8C /* AppDelegate.swift */,
 				B6BF9FE9222F187F00DFCE8C /* Model */,
 				B6BF9FE5222F163200DFCE8C /* View */,
+				B6BF9FF9222F3FF000DFCE8C /* Controller */,
 				B6BF9FE4222F162200DFCE8C /* Resources */,
 			);
 			path = CheckBook;
@@ -109,6 +112,22 @@
 				B6BF9FF4222F322300DFCE8C /* CloudKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B6BF9FF8222F3FDF00DFCE8C /* ModelController */ = {
+			isa = PBXGroup;
+			children = (
+				B6BF9FF6222F3FDA00DFCE8C /* PurchaseController.swift */,
+			);
+			path = ModelController;
+			sourceTree = "<group>";
+		};
+		B6BF9FF9222F3FF000DFCE8C /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B6BF9FF8222F3FDF00DFCE8C /* ModelController */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -197,6 +216,7 @@
 				B6BF9FE8222F187600DFCE8C /* CheckBook.xcdatamodeld in Sources */,
 				B6BF9FF2222F315D00DFCE8C /* Purchase+MagicStrings.swift in Sources */,
 				B6BF9FD3222F160300DFCE8C /* AppDelegate.swift in Sources */,
+				B6BF9FF7222F3FDA00DFCE8C /* PurchaseController.swift in Sources */,
 				B6BF9FF0222F266100DFCE8C /* Purchase+convenience.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
