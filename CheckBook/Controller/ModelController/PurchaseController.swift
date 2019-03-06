@@ -7,17 +7,11 @@
 //
 
 import Foundation
-import CloudKit
-
 
 class PurchaseController {
     //MARK: - Singleton
     /// The shared Instance of ContactController.
     static let shared = PurchaseController()
-    
-    //MARK: - Properties
-    /// The private Database of the User.
-    fileprivate let privateDB = CKContainer.default().privateCloudDatabase
     
     //MARK: - CRUD
     /// Creates new Purchase.
@@ -31,7 +25,7 @@ class PurchaseController {
         save(purchase: newPurchase)
     }
     
-    /// Updates the Purchase.
+    /// Updates the Purchase and resets the last modified parameter.
     /// - parameter purchase: The purchase to update.
     /// - parameter amount: The updated amount of the purchase.
     /// - parameter date: The updated date of the purchase.
@@ -43,7 +37,7 @@ class PurchaseController {
         if let date = date {purchase.date = date}
         if let item = item {purchase.item = item}
         if let storeName = storeName {purchase.storeName = storeName}
-        if let method = method { purchase.method = method}
+        if let method = method {purchase.method = method}
         purchase.lastModified = Date()
         save(purchase: purchase)
     }
@@ -51,12 +45,14 @@ class PurchaseController {
     /// Deletes the Purchase.
     /// - parameter purchase: The purchase to delete.
     func delete(purchase: Purchase) {
-        
+        //TODO Delete from CoreData
+        //TODO Delete from CloudKit
     }
     
     //MARK: - Save
     /// - parameter purchase: The purchase to save.
     private func save(purchase: Purchase) {
-        
+        //TODO Save to CoreData
+        //TODO Save to CloudKit
     }
 }
