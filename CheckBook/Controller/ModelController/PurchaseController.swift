@@ -9,20 +9,21 @@
 import Foundation
 
 class PurchaseController {
+    
     //MARK: - Singleton
-    /// The shared Instance of ContactController.
+    /// The shared Instance of PurchaseController.
     static let shared = PurchaseController()
     
     //MARK: - CRUD
-    /// Creates new Purchase.
+    /// Creates new Purchase using the convenience initilizer inside the CoredataStack.context and
     /// - parameter amount: The amount of the purchase.
     /// - parameter date: The date of the purchase.
     /// - parameter item: The itemName of the purchase.
     /// - parameter storeName: The storeName of the purchase.
     /// - parameter method: The method of payment of the purchase.
     func createNewPurchaseWith(amount: Double, date: Date, item: String, storeName:String, method: String) {
-        let newPurchase = Purchase(amount: amount, date: date, item: item , storeName: storeName, method: method)
-        save(purchase: newPurchase)
+        Purchase(amount: amount, date: date, item: item , storeName: storeName, method: method)
+        CoreDataController.shared.saveToPersistentStore()
     }
     
     /// Updates the Purchase and resets the last modified parameter.
@@ -39,20 +40,13 @@ class PurchaseController {
         if let storeName = storeName {purchase.storeName = storeName}
         if let method = method {purchase.method = method}
         purchase.lastModified = Date()
-        save(purchase: purchase)
+        CoreDataController.shared.saveToPersistentStore()
     }
     
     /// Deletes the Purchase.
     /// - parameter purchase: The purchase to delete.
     func delete(purchase: Purchase) {
-        //TODO Delete from CoreData
-        //TODO Delete from CloudKit
-    }
-    
-    //MARK: - Save
-    /// - parameter purchase: The purchase to save.
-    private func save(purchase: Purchase) {
-        //TODO Save to CoreData
-        //TODO Save to CloudKit
+        CoreDataController.shared.remove(purchase: purchase)
+        //TODO: Delete from CloudKit
     }
 }

@@ -17,6 +17,7 @@
 		B6BF9FF2222F315D00DFCE8C /* Purchase+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FF1222F315D00DFCE8C /* Purchase+MagicStrings.swift */; };
 		B6BF9FF5222F322300DFCE8C /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6BF9FF4222F322300DFCE8C /* CloudKit.framework */; };
 		B6BF9FF7222F3FDA00DFCE8C /* PurchaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FF6222F3FDA00DFCE8C /* PurchaseController.swift */; };
+		B6DE00AF223030F400C76A40 /* CoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE00AE223030F400C76A40 /* CoreDataController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		B6BF9FF1222F315D00DFCE8C /* Purchase+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Purchase+MagicStrings.swift"; sourceTree = "<group>"; };
 		B6BF9FF4222F322300DFCE8C /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		B6BF9FF6222F3FDA00DFCE8C /* PurchaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseController.swift; sourceTree = "<group>"; };
+		B6DE00AE223030F400C76A40 /* CoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				B6BF9FF6222F3FDA00DFCE8C /* PurchaseController.swift */,
+				B6DE00AE223030F400C76A40 /* CoreDataController.swift */,
 			);
 			path = ModelController;
 			sourceTree = "<group>";
@@ -215,6 +218,7 @@
 				B6BF9FEE222F257300DFCE8C /* CoreDataStack.swift in Sources */,
 				B6BF9FE8222F187600DFCE8C /* CheckBook.xcdatamodeld in Sources */,
 				B6BF9FF2222F315D00DFCE8C /* Purchase+MagicStrings.swift in Sources */,
+				B6DE00AF223030F400C76A40 /* CoreDataController.swift in Sources */,
 				B6BF9FD3222F160300DFCE8C /* AppDelegate.swift in Sources */,
 				B6BF9FF7222F3FDA00DFCE8C /* PurchaseController.swift in Sources */,
 				B6BF9FF0222F266100DFCE8C /* Purchase+convenience.swift in Sources */,
