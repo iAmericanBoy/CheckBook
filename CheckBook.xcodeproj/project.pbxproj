@@ -18,6 +18,7 @@
 		B6BF9FF5222F322300DFCE8C /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6BF9FF4222F322300DFCE8C /* CloudKit.framework */; };
 		B6BF9FF7222F3FDA00DFCE8C /* PurchaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FF6222F3FDA00DFCE8C /* PurchaseController.swift */; };
 		B6DE00AF223030F400C76A40 /* CoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE00AE223030F400C76A40 /* CoreDataController.swift */; };
+		B6DE00B12230345600C76A40 /* CloudKitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE00B02230345600C76A40 /* CloudKitController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		B6BF9FF4222F322300DFCE8C /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		B6BF9FF6222F3FDA00DFCE8C /* PurchaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseController.swift; sourceTree = "<group>"; };
 		B6DE00AE223030F400C76A40 /* CoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataController.swift; sourceTree = "<group>"; };
+		B6DE00B02230345600C76A40 /* CloudKitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +123,7 @@
 			children = (
 				B6BF9FF6222F3FDA00DFCE8C /* PurchaseController.swift */,
 				B6DE00AE223030F400C76A40 /* CoreDataController.swift */,
+				B6DE00B02230345600C76A40 /* CloudKitController.swift */,
 			);
 			path = ModelController;
 			sourceTree = "<group>";
@@ -221,6 +224,7 @@
 				B6DE00AF223030F400C76A40 /* CoreDataController.swift in Sources */,
 				B6BF9FD3222F160300DFCE8C /* AppDelegate.swift in Sources */,
 				B6BF9FF7222F3FDA00DFCE8C /* PurchaseController.swift in Sources */,
+				B6DE00B12230345600C76A40 /* CloudKitController.swift in Sources */,
 				B6BF9FF0222F266100DFCE8C /* Purchase+convenience.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
