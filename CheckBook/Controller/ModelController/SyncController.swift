@@ -16,7 +16,7 @@ class SyncController {
     /// The shared Instance of SyncController.
     static let shared = SyncController()
     
-    //compare both Stores(uuid and lastUpdated)
+    //compare both Stores(uuid and lastUpdated) 
     
     ///When CoreData has an update this function notifies CloudKit and deals with the updated Purchase.
     func syncCloudKitWithCoreData() {

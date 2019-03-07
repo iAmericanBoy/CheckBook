@@ -22,8 +22,11 @@ class PurchaseController {
     /// - parameter storeName: The storeName of the purchase.
     /// - parameter method: The method of payment of the purchase.
     func createNewPurchaseWith(amount: Double, date: Date, item: String, storeName:String, method: String) {
-        Purchase(amount: amount, date: date, item: item , storeName: storeName, method: method)
+        let purchase = Purchase(amount: amount, date: date, item: item , storeName: storeName, method: method)
         CoreDataController.shared.saveToPersistentStore()
+        CloudKitController.shared.create(purchase: purchase) { (isSuccess, newPurchase) in
+            //TODO: Handel createNew Error
+        }
     }
     
     /// Updates the Purchase and resets the last modified parameter.
@@ -41,12 +44,17 @@ class PurchaseController {
         if let method = method {purchase.method = method}
         purchase.lastModified = Date()
         CoreDataController.shared.saveToPersistentStore()
+        CloudKitController.shared.update(purchase: purchase) { (isSuccess, updatedPurchase) in
+            //TODO: Handel update Error
+        }
     }
     
     /// Deletes the Purchase.
     /// - parameter purchase: The purchase to delete.
     func delete(purchase: Purchase) {
         CoreDataController.shared.remove(purchase: purchase)
-        //TODO: Delete from CloudKit
+        CloudKitController.shared.delete(purchase: purchase) { (isSuccess) in
+            //TODO: Handel delete Error
+        }
     }
 }

@@ -16,7 +16,6 @@ class PurchaseListTableViewController: UITableViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tableView.reloadData()
     }
 
     // MARK: - Table view data source
@@ -34,8 +33,8 @@ class PurchaseListTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let purchasse = CoreDataController.shared.purchaseFetchResultsController.object(at: indexPath)
-            PurchaseController.shared.delete(purchase: purchasse)
+            let purchase = CoreDataController.shared.purchaseFetchResultsController.object(at: indexPath)
+            PurchaseController.shared.delete(purchase: purchase)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
