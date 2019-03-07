@@ -41,6 +41,25 @@ class CloudKitController {
         }
     }
     
+    ///Gets all the Records form CloudKit
+    /// - parameter completion: Handler for the feched Records.
+    /// - parameter isSuccess: Confirms that records where able to be fetched.
+    /// - parameter fetchedPurchases: The fetched Records (can be nil).
+    func fetchPurchasesFromCK(completion: @escaping(_ isSuccess: Bool,_ fetchedPurchases:[Purchase]?)-> Void ) {
+        let predicate = NSPredicate(value: true)
+        let query = CKQuery(recordType: Purchase.typeKey, predicate: predicate)
+        privateDB.perform(query, inZoneWith: nil) { (records, error) in
+            if let error = error {
+                print("An Error fetching record from CloudKit has occured: \(error), \(error.localizedDescription)")
+                completion(false, nil)
+                return
+            }
+            guard let fetchedRecords = records else {completion(false,nil); return}
+            let purchases = fetchedRecords.compactMap({ Purchase(record: $0)})
+            completion(true,purchases)
+        }
+    }
+    
     /// Updates the purchase if the purchase exists in the source of truth.
     /// - parameter purchase: The purchase that needs updating.
     /// - parameter completion: Handler for when the purchase has been updated.
