@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		B6920AD1223045D000A63EC8 /* SyncController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6920AD0223045D000A63EC8 /* SyncController.swift */; };
+		B6920AD32231796200A63EC8 /* PurchaseListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6920AD22231796200A63EC8 /* PurchaseListTableViewController.swift */; };
+		B6920AD62231798A00A63EC8 /* PurchaseDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6920AD52231798A00A63EC8 /* PurchaseDetailViewController.swift */; };
 		B6BF9FD3222F160300DFCE8C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FD2222F160300DFCE8C /* AppDelegate.swift */; };
 		B6BF9FD8222F160300DFCE8C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6BF9FD6222F160300DFCE8C /* Main.storyboard */; };
 		B6BF9FDA222F160700DFCE8C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B6BF9FD9222F160700DFCE8C /* Assets.xcassets */; };
@@ -24,6 +26,8 @@
 
 /* Begin PBXFileReference section */
 		B6920AD0223045D000A63EC8 /* SyncController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncController.swift; sourceTree = "<group>"; };
+		B6920AD22231796200A63EC8 /* PurchaseListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseListTableViewController.swift; sourceTree = "<group>"; };
+		B6920AD52231798A00A63EC8 /* PurchaseDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseDetailViewController.swift; sourceTree = "<group>"; };
 		B6BF9FCF222F160300DFCE8C /* CheckBook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CheckBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6BF9FD2222F160300DFCE8C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B6BF9FD7222F160300DFCE8C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -53,6 +57,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B6920AD42231796700A63EC8 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				B6920AD22231796200A63EC8 /* PurchaseListTableViewController.swift */,
+				B6920AD52231798A00A63EC8 /* PurchaseDetailViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
 		B6BF9FC6222F160200DFCE8C = {
 			isa = PBXGroup;
 			children = (
@@ -135,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				B6BF9FF8222F3FDF00DFCE8C /* ModelController */,
+				B6920AD42231796700A63EC8 /* ViewController */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -223,10 +237,12 @@
 			files = (
 				B6BF9FEE222F257300DFCE8C /* CoreDataStack.swift in Sources */,
 				B6BF9FE8222F187600DFCE8C /* CheckBook.xcdatamodeld in Sources */,
+				B6920AD32231796200A63EC8 /* PurchaseListTableViewController.swift in Sources */,
 				B6BF9FF2222F315D00DFCE8C /* Purchase+MagicStrings.swift in Sources */,
 				B6920AD1223045D000A63EC8 /* SyncController.swift in Sources */,
 				B6DE00AF223030F400C76A40 /* CoreDataController.swift in Sources */,
 				B6BF9FD3222F160300DFCE8C /* AppDelegate.swift in Sources */,
+				B6920AD62231798A00A63EC8 /* PurchaseDetailViewController.swift in Sources */,
 				B6BF9FF7222F3FDA00DFCE8C /* PurchaseController.swift in Sources */,
 				B6DE00B12230345600C76A40 /* CloudKitController.swift in Sources */,
 				B6BF9FF0222F266100DFCE8C /* Purchase+convenience.swift in Sources */,

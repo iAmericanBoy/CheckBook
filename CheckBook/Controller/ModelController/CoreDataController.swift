@@ -15,6 +15,25 @@ class CoreDataController {
     /// The shared Instance of CoreDataController.
     static let shared = CoreDataController()
     
+    //MARK: - FetchResultsController
+    ///Simple FetchController to fetch all the Purchases.
+    let purchaseFetchResultsController: NSFetchedResultsController<Purchase> = {
+        let fetchRequest: NSFetchRequest<Purchase> = Purchase.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "item", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
+    }()
+    
+    //MARK: - init
+    ///Simple initializer to set up the fetchResultsController.
+    init() {
+        do{
+            try purchaseFetchResultsController.performFetch()
+        } catch {
+            print("Error loading fetchResultsController. \(String(describing: error)), \(error.localizedDescription)")
+        }
+    }
+    
     //MARK: Read
     /// Looks in the Context for a Purchase with a given UUID.
     /// - parameter uuid: The uuid of the Puchease that is being searched for.

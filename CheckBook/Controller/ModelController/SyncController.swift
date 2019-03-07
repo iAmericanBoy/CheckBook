@@ -17,8 +17,12 @@ class SyncController {
     static let shared = SyncController()
     
     //compare both Stores(uuid and lastUpdated)
-    //CoreData has update -> notify CloudKit
-    //CloudKit has update -> notify CoreData
     
+    ///When CoreData has an update this function notifies CloudKit and deals with the updated Purchase.
+    func syncCloudKitWithCoreData() {
+        
+    }
+    ///When CloudKit has an update this function notifies CoreData and deals with the updated Purchase.
+
     //if CK not available
 }
