@@ -15,11 +15,11 @@ class SyncController {
     //MARK: - Singleton
     /// The shared Instance of SyncController.
     static let shared = SyncController()
-
+    
     ///Saves failed CK object to a local cache.
-    /// - parameter failedPurchaseUUID: The UUID of the purchase that was not able to be uploaded.
-    func saveFailedUpload(failedPurchaseUUID: UUID) {
-        CachePurchase(uuid: failedPurchaseUUID)
+    /// - parameter uuid: The UUID of the purchase that was not able to be uploaded.
+    func saveFailedUpload(withFailedPurchaseUUID uuid: UUID) {
+        CachePurchase(uuid: uuid)
         do {
             if CoreDataStack.cacheContext.hasChanges {
                 try CoreDataStack.cacheContext.save()
@@ -67,12 +67,43 @@ class SyncController {
         do {
             if CoreDataStack.childContext.hasChanges {
                 try CoreDataStack.childContext.save()
+                //TODO: - Make sure MainContext gets notified and updates Views
             }
         } catch {
             print("Error saving updated Objects to childContext with error: \(String(describing: error)) \(error.localizedDescription))")
         }
     }
     
-    ///retry upload of cached objects
-    
+    ///Retries upload of cached objects.
+    func saveCachedPurchasesToCK() {
+        var cachedPurchases: [CachePurchase] = []
+        var recordsToUpdate: [CKRecord?] = []
+        var recordsToDelete: [CKRecord.ID?] = []
+
+        
+        let dateSort = NSSortDescriptor(key: "\(CachePurchase.uploadKey)", ascending: false)
+        let fetchRequest: NSFetchRequest<CachePurchase> = CachePurchase.fetchRequest()
+        fetchRequest.fetchLimit = 20
+        fetchRequest.sortDescriptors = [dateSort]
+        do {
+            cachedPurchases =  try CoreDataStack.cacheContext.fetch(fetchRequest)
+        } catch {
+            print("Error fetching cachedObjects with error: \(String(describing: error)) \(error.localizedDescription))")
+        }
+        
+        
+        cachedPurchases.forEach { (cachedPurchase) in
+            CoreDataController.shared.findPurchaseWith(uuid: cachedPurchase.uuid, completion: { (purchaseFromCD) in
+                if let purchase = purchaseFromCD {
+                    //sent update to CK
+                    recordsToUpdate.append(CKRecord(purchase: purchase))
+                } else {
+                    //sentdeleteToCK
+                    recordsToDelete.append(CKRecord.ID(recordName: (cachedPurchase.uuid?.uuidString)!))
+                }
+            })
+        }
+        //TODO: BatchUpdate ToCK
+        //TODO: Delete form Cache
+    }
 }

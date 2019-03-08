@@ -27,7 +27,7 @@ class PurchaseController {
         CloudKitController.shared.create(purchase: purchase) { (isSuccess, newPurchase) in
             if !isSuccess {
                 guard let uuid = purchase.uuid else {return}
-                SyncController.shared.saveFailedUpload(failedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
             }
         }
     }
@@ -50,7 +50,7 @@ class PurchaseController {
         CloudKitController.shared.update(purchase: purchase) { (isSuccess, updatedPurchase) in
             if !isSuccess {
                 guard let uuid = purchase.uuid else {return}
-                SyncController.shared.saveFailedUpload(failedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
             }
         }
     }
@@ -62,7 +62,7 @@ class PurchaseController {
         CloudKitController.shared.delete(purchase: purchase) { (isSuccess) in
             if !isSuccess {
                 guard let uuid = purchase.uuid else {return}
-                SyncController.shared.saveFailedUpload(failedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
             }
         }
     }

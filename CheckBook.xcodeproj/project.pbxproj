@@ -23,6 +23,7 @@
 		B6DE00AF223030F400C76A40 /* CoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE00AE223030F400C76A40 /* CoreDataController.swift */; };
 		B6DE00B12230345600C76A40 /* CloudKitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE00B02230345600C76A40 /* CloudKitController.swift */; };
 		B6EA85C122322C8900211068 /* CachePurchase+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EA85C022322C8900211068 /* CachePurchase+convenience.swift */; };
+		B6EA85C322323B7A00211068 /* CachePurchase+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EA85C222323B7A00211068 /* CachePurchase+MagicStrings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		B6DE00AE223030F400C76A40 /* CoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataController.swift; sourceTree = "<group>"; };
 		B6DE00B02230345600C76A40 /* CloudKitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitController.swift; sourceTree = "<group>"; };
 		B6EA85C022322C8900211068 /* CachePurchase+convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CachePurchase+convenience.swift"; sourceTree = "<group>"; };
+		B6EA85C222323B7A00211068 /* CachePurchase+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CachePurchase+MagicStrings.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +126,7 @@
 				B6BF9FEF222F266100DFCE8C /* Purchase+convenience.swift */,
 				B6BF9FF1222F315D00DFCE8C /* Purchase+MagicStrings.swift */,
 				B6EA85C022322C8900211068 /* CachePurchase+convenience.swift */,
+				B6EA85C222323B7A00211068 /* CachePurchase+MagicStrings.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -245,6 +248,7 @@
 				B6BF9FF2222F315D00DFCE8C /* Purchase+MagicStrings.swift in Sources */,
 				B6920AD1223045D000A63EC8 /* SyncController.swift in Sources */,
 				B6DE00AF223030F400C76A40 /* CoreDataController.swift in Sources */,
+				B6EA85C322323B7A00211068 /* CachePurchase+MagicStrings.swift in Sources */,
 				B6BF9FD3222F160300DFCE8C /* AppDelegate.swift in Sources */,
 				B6920AD62231798A00A63EC8 /* PurchaseDetailViewController.swift in Sources */,
 				B6BF9FF7222F3FDA00DFCE8C /* PurchaseController.swift in Sources */,
