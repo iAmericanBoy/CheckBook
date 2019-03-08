@@ -44,7 +44,7 @@ class CloudKitController {
     ///Gets all the Records form CloudKit
     /// - parameter completion: Handler for the feched Records.
     /// - parameter isSuccess: Confirms that records where able to be fetched.
-    /// - parameter fetchedPurchases: The fetched Records (can be nil).
+    /// - parameter fetchedPurchases: The fetched Purchases (can be nil).
     func fetchPurchasesFromCK(completion: @escaping(_ isSuccess: Bool,_ fetchedPurchases:[Purchase]?)-> Void ) {
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: Purchase.typeKey, predicate: predicate)

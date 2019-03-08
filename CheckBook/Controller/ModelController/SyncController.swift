@@ -15,14 +15,10 @@ class SyncController {
     //MARK: - Singleton
     /// The shared Instance of SyncController.
     static let shared = SyncController()
-    
-    //compare both Stores(uuid and lastUpdated) 
-    
-    ///When CoreData has an update this function notifies CloudKit and deals with the updated Purchase.
-    func syncCloudKitWithCoreData() {
-        
-    }
-    ///When CloudKit has an update this function notifies CoreData and deals with the updated Purchase.
 
-    //if CK not available
+    
+    ///save failed CK uploads to a local cache
+    
+    ///updatec child MOC with objects from CK
+    
 }

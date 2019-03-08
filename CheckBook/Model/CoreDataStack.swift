@@ -28,4 +28,15 @@ enum CoreDataStack {
     }()
     
     static var context: NSManagedObjectContext { return container.viewContext }
+    
+    static var childContext: NSManagedObjectContext {
+        let chidContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        chidContext.parent = context
+        
+        return chidContext
+    }
+    
+    static var cacheContext: NSManagedObjectContext {
+        return container.newBackgroundContext()
+    }
 }
