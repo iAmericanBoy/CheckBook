@@ -36,10 +36,11 @@ class CoreDataController {
     
     //MARK: Read
     /// Looks in the Context for a Purchase with a given UUID.
-    /// - parameter uuid: The uuid of the Puchease that is being searched for.
+    /// - parameter uuid: The UUID of the Puchease that is being searched for.
+    /// - parameter context: The context where we should check for the Object with the given UUID.
     /// - parameter completion: Handler for when the purchase has been found.
     /// - parameter foundPurchase: The purchase that was found or nil.
-    func findPurchaseWith(uuid: UUID?, completion: @escaping (_ foundPurchase:Purchase?) -> Void ) {
+    func findPurchaseWith(uuid: UUID?, inContext context: NSManagedObjectContext = CoreDataStack.context, completion: @escaping (_ foundPurchase:Purchase?) -> Void ) {
         guard let uuid = uuid else {
             completion(nil)
             return

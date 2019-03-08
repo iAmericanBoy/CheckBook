@@ -25,7 +25,7 @@ extension Purchase {
         self.uuid = uuid
     }
     
-    convenience init?(record: CKRecord) {
+    convenience init?(record: CKRecord, context: NSManagedObjectContext = CoreDataStack.context) {
         guard let amount = record[Purchase.amountKey] as? Double,
             let date = record[Purchase.dateKey] as? Date,
             let item = record[Purchase.itemKey] as? String,
@@ -33,7 +33,7 @@ extension Purchase {
             let lastModified = record[Purchase.lastModifiedKey] as? Date,
             let storeName = record[Purchase.storeNameKey] as? String else {return nil}
         
-        self.init(amount: amount, date: date, item: item, storeName: storeName, method: method, uuid: UUID(uuidString: record.recordID.recordName)!, lastModified: lastModified)
+        self.init(amount: amount, date: date, item: item, storeName: storeName, method: method, uuid: UUID(uuidString: record.recordID.recordName)!, lastModified: lastModified, context: context)
     }
 }
 
