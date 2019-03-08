@@ -89,7 +89,7 @@ class CloudKitController {
         
         guard let record = CKRecord(purchase: purchase) else {completion(false); return}
 
-        saveChangestoCK(purchasesToUpdate: [], purchasesToDelete: [record]) { (isSuccess, _, deletedRecordIDs) in
+        saveChangestoCK(purchasesToUpdate: [], purchasesToDelete: [record.recordID]) { (isSuccess, _, deletedRecordIDs) in
             if isSuccess {
                 guard let recordID = deletedRecordIDs?.first , recordID.recordName == purchase.uuid?.uuidString else {
                     completion(false)
@@ -103,14 +103,13 @@ class CloudKitController {
     //MARK: - Save
     /// Updates and Deletes changes to CloudKit.
     /// - parameter purchasesToUpdate: Purchases that where updated or created as Records.
-    /// - parameter purchasesToDelete: Purchases that need deleted as Records.
+    /// - parameter recordIDs: Purchases that need deleted as RecordsIDs.
     /// - parameter completion: Handler for when the Purchases has been deleted or updated/saved.
     /// - parameter isSuccess: Confirms that the change has synced to CloudKit.
     /// - parameter savedRecords: The saved records (can be nil).
     /// - parameter deletedRecordIDs: The deleted recordIds (can be nil).
-    fileprivate func saveChangestoCK(purchasesToUpdate update: [CKRecord], purchasesToDelete delete: [CKRecord], completion: @escaping (_ isSuccess: Bool,_ savedRecords: [CKRecord]?, _ deletedRecordIDs: [CKRecord.ID]?) -> Void) {
-        let recordIDsOfRecordsToDelete = delete.compactMap({ $0.recordID})
-        let operation = CKModifyRecordsOperation(recordsToSave: update, recordIDsToDelete: recordIDsOfRecordsToDelete)
+    func saveChangestoCK(purchasesToUpdate update: [CKRecord], purchasesToDelete recordIDs: [CKRecord.ID], completion: @escaping (_ isSuccess: Bool,_ savedRecords: [CKRecord]?, _ deletedRecordIDs: [CKRecord.ID]?) -> Void) {
+        let operation = CKModifyRecordsOperation(recordsToSave: update, recordIDsToDelete: recordIDs)
         operation.savePolicy = .changedKeys
         operation.modifyRecordsCompletionBlock = { (savedRecords,deletedRecords,error) in
             if let error = error {

@@ -77,8 +77,8 @@ class SyncController {
     ///Retries upload of cached objects.
     func saveCachedPurchasesToCK() {
         var cachedPurchases: [CachePurchase] = []
-        var recordsToUpdate: [CKRecord?] = []
-        var recordsToDelete: [CKRecord.ID?] = []
+        var recordsToUpdate: [CKRecord] = []
+        var recordsToDelete: [CKRecord.ID] = []
 
         
         let dateSort = NSSortDescriptor(key: "\(CachePurchase.uploadKey)", ascending: false)
@@ -96,14 +96,29 @@ class SyncController {
             CoreDataController.shared.findPurchaseWith(uuid: cachedPurchase.uuid, completion: { (purchaseFromCD) in
                 if let purchase = purchaseFromCD {
                     //sent update to CK
-                    recordsToUpdate.append(CKRecord(purchase: purchase))
+                    recordsToUpdate.append(CKRecord(purchase: purchase)!)
                 } else {
                     //sentdeleteToCK
-                    recordsToDelete.append(CKRecord.ID(recordName: (cachedPurchase.uuid?.uuidString)!))
+                    if let uuid = cachedPurchase.uuid?.uuidString {
+                        recordsToDelete.append(CKRecord.ID(recordName: uuid))
+                    }
                 }
             })
         }
-        //TODO: BatchUpdate ToCK
-        //TODO: Delete form Cache
+        CloudKitController.shared.saveChangestoCK(purchasesToUpdate: recordsToUpdate, purchasesToDelete: recordsToDelete) { (isSuccess, savedRecords, deletedRecordIDs) in
+            guard let savedRecords = savedRecords, let deletedRecordIDs = deletedRecordIDs, isSuccess else {return}
+            savedRecords.forEach({ (record) in
+                CoreDataController.shared.findPurchaseWith(uuid: UUID(uuidString: record.recordID.recordName), inContext: CoreDataStack.cacheContext, completion: { (cachePurchase) in
+                    guard let cachePurchase = cachePurchase else {return}
+                    CoreDataController.shared.remove(purchase: cachePurchase)
+                })
+            })
+            deletedRecordIDs.forEach({ (recordID) in
+                CoreDataController.shared.findPurchaseWith(uuid: UUID(uuidString: recordID.recordName), inContext: CoreDataStack.cacheContext, completion: { (cachePurchase) in
+                    guard let cachePurchase = cachePurchase else {return}
+                    CoreDataController.shared.remove(purchase: cachePurchase)
+                })
+            })
+        }
     }
 }
