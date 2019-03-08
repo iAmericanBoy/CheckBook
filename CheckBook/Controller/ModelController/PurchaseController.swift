@@ -15,7 +15,7 @@ class PurchaseController {
     static let shared = PurchaseController()
     
     //MARK: - CRUD
-    /// Creates new Purchase using the convenience initilizer inside the CoredataStack.context and
+    /// Creates new Purchase using the convenience initilizer inside the CoredataStack.context and tries to uploads it to CloudKit. If the upload fails the new Purchase gets added to the CacheContext for a later try.
     /// - parameter amount: The amount of the purchase.
     /// - parameter date: The date of the purchase.
     /// - parameter item: The itemName of the purchase.
@@ -25,11 +25,14 @@ class PurchaseController {
         let purchase = Purchase(amount: amount, date: date, item: item , storeName: storeName, method: method)
         CoreDataController.shared.saveToPersistentStore()
         CloudKitController.shared.create(purchase: purchase) { (isSuccess, newPurchase) in
-            //TODO: Handel createNew Error
+            if !isSuccess {
+                guard let uuid = purchase.uuid else {return}
+                SyncController.shared.saveFailedUpload(failedPurchaseUUID: uuid)
+            }
         }
     }
     
-    /// Updates the Purchase and resets the last modified parameter.
+    /// Updates the Purchase and resets the last modified parameter and updates the object in the CoredataStack.context. It tries to upload it to CloudKit.If the upload fails the new Purchase gets added to the CacheContext for a later try.
     /// - parameter purchase: The purchase to update.
     /// - parameter amount: The updated amount of the purchase.
     /// - parameter date: The updated date of the purchase.
@@ -45,16 +48,22 @@ class PurchaseController {
         purchase.lastModified = Date()
         CoreDataController.shared.saveToPersistentStore()
         CloudKitController.shared.update(purchase: purchase) { (isSuccess, updatedPurchase) in
-            //TODO: Handel update Error
+            if !isSuccess {
+                guard let uuid = purchase.uuid else {return}
+                SyncController.shared.saveFailedUpload(failedPurchaseUUID: uuid)
+            }
         }
     }
     
-    /// Deletes the Purchase.
+    /// Deletes the Purchase, deletes it from Cotext and CloudKit. If the CK delete Fails the puchease gets added to the cache for uploading at a later date.
     /// - parameter purchase: The purchase to delete.
     func delete(purchase: Purchase) {
         CoreDataController.shared.remove(purchase: purchase)
         CloudKitController.shared.delete(purchase: purchase) { (isSuccess) in
-            //TODO: Handel delete Error
+            if !isSuccess {
+                guard let uuid = purchase.uuid else {return}
+                SyncController.shared.saveFailedUpload(failedPurchaseUUID: uuid)
+            }
         }
     }
 }

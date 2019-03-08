@@ -9,7 +9,6 @@
 import Foundation
 import  CoreData
 
-
 extension CachePurchase {
     @discardableResult
     convenience init(uuid: UUID, lastUploadDate: Date = Date(), context: NSManagedObjectContext = CoreDataStack.cacheContext) {

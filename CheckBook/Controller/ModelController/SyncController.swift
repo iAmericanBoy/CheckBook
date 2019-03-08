@@ -16,9 +16,21 @@ class SyncController {
     /// The shared Instance of SyncController.
     static let shared = SyncController()
 
+    ///saves failed CK uploads to a local cache
+    /// - parameter failedPurchaseUUID: The UUID of the purchase that was not able to be uploaded.
+    func saveFailedUpload(failedPurchaseUUID: UUID) {
+        CachePurchase(uuid: failedPurchaseUUID)
+        do {
+            if CoreDataStack.cacheContext.hasChanges {
+                try CoreDataStack.cacheContext.save()
+            }
+        } catch {
+            print("Error saving failed purchase to chache with error: \(String(describing: error)) \(error.localizedDescription))")
+        }
+    }
     
-    ///save failed CK uploads to a local cache
+    ///update child MOC with objects from CK
     
-    ///updatec child MOC with objects from CK
+    ///retry upload of cached objects
     
 }
