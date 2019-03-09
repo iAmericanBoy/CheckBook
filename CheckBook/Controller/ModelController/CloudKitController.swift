@@ -31,12 +31,11 @@ class CloudKitController {
         
         saveChangestoCK(purchasesToUpdate: [record], purchasesToDelete: []) { (isSuccess, savedRecords, _) in
             if isSuccess {
-                guard let record = savedRecords?.first , record.recordID.recordName == purchase.uuid?.uuidString,
-                    let savedPurchase = Purchase(record: record) else {
+                guard let record = savedRecords?.first , record.recordID.recordName == purchase.uuid?.uuidString else {
                         completion(false, nil)
                         return
                 }
-                completion(true,savedPurchase)
+                completion(true,purchase)
             }
         }
     }

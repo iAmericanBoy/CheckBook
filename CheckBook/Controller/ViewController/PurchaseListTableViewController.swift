@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import CoreData
 
 class PurchaseListTableViewController: UITableViewController {
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        CoreDataController.shared.purchaseFetchResultsController.delegate = self
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -46,6 +48,43 @@ class PurchaseListTableViewController: UITableViewController {
             if let destinationVC = segue.destination as? PurchaseDetailViewController {
                 destinationVC.purchase = CoreDataController.shared.purchaseFetchResultsController.object(at: index)
             }
+        }
+    }
+}
+
+//MARK: - NSFetchResultsControllerDelegate
+extension PurchaseListTableViewController: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.beginUpdates()
+    }
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.endUpdates()
+    }
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            guard let newIndexPath = newIndexPath else {return}
+            tableView.insertRows(at: [newIndexPath], with: .automatic)
+        case .delete:
+            guard let indexPath = indexPath else {return}
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        case .move:
+            guard let newIndexPath = newIndexPath, let indexPath = indexPath else {return}
+            tableView.moveRow(at: indexPath, to: newIndexPath)
+        case .update:
+            guard let indexPath = indexPath else {return}
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
+    }
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        let indexSet = IndexSet(integer: sectionIndex)
+        switch type{
+        case .insert:
+            tableView.insertSections(indexSet, with: .automatic)
+        case .delete:
+            tableView.deleteSections(indexSet, with: .automatic)
+        default:
+            break
         }
     }
 }
