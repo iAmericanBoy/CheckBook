@@ -35,7 +35,6 @@ class PurchaseListTableViewController: UITableViewController {
         if editingStyle == .delete {
             let purchase = CoreDataController.shared.purchaseFetchResultsController.object(at: indexPath)
             PurchaseController.shared.delete(purchase: purchase)
-            tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
  

@@ -10,5 +10,7 @@ import Foundation
 
 extension CloudKitController {
     /// "serverChangeToken"
-    static let changeToken = "serverChangeToken"
+    static let zoneChangeServerToken = "serverChangeToken"
+    /// "updatesInZoneServerToken"
+    static let updatesInZoneServerToken = "updatesInZoneServerToken"
 }

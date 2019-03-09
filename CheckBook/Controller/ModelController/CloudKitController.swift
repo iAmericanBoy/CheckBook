@@ -45,7 +45,7 @@ class CloudKitController {
     /// - parameter isSuccess: Confirms there was a zone with Updates.
     /// - parameter updatedZone: The updated Zone (can be nil).
     private func fetchUpdatedZone(completion: @escaping (_ isSuccess: Bool, _ updatedZone: CKRecordZone.ID?) -> Void) {
-        let serverChangeTokenData = UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.data(forKey: CloudKitController.changeToken) ?? Data()
+        let serverChangeTokenData = UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.data(forKey: CloudKitController.zoneChangeServerToken) ?? Data()
         
         let token: CKServerChangeToken?
         do {
@@ -59,7 +59,7 @@ class CloudKitController {
         fetch.changeTokenUpdatedBlock = { (newToken) in
             do {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: newToken, requiringSecureCoding: false)
-                UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(data, forKey: CloudKitController.changeToken)
+                UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(data, forKey: CloudKitController.zoneChangeServerToken)
             } catch {
                 print("Error encoding the token for UserDefualts: \(String(describing: error)) \(error.localizedDescription))")
             }
@@ -73,7 +73,7 @@ class CloudKitController {
             guard let newToken = newToken else {completion(false,nil); return}
             do {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: newToken, requiringSecureCoding: false)
-                UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(data, forKey: CloudKitController.changeToken)
+                UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(data, forKey: CloudKitController.zoneChangeServerToken)
             } catch {
                 print("Error encoding the token for UserDefualts: \(String(describing: error)) \(error.localizedDescription))")
             }
@@ -88,10 +88,64 @@ class CloudKitController {
     ///Gets all the updated records form CloudKit
     /// - parameter completion: Handler for the feched Records.
     /// - parameter isSuccess: Confirms that records where able to be fetched.
-    /// - parameter fetchedPurchases: The fetched Purchases (can be nil).
-    func fetchUpdatedPurchasesFromCK(completion: @escaping(_ isSuccess: Bool,_ fetchedPurchases:[Purchase]?)-> Void ) {
-        fetchUpdatedZone { (isSuccess, updatedZone) in
-            <#code#>
+    /// - parameter updatedPurchases: The updated records (can be empty).
+    /// - parameter updatedPurchases: The deleted recordIDS (can be empty).
+    func fetchUpdatedRecordsFromCK(completion: @escaping(_ isSuccess: Bool,_ updatedPurchases:[CKRecord], _ deletedPurchases: [CKRecord.ID])-> Void ) {
+        var deletedRecordIDs: [CKRecord.ID] = []
+        var updatedRecords: [CKRecord] = []
+        
+        fetchUpdatedZone { [weak self] (isSuccess, updatedZoneID) in
+            if isSuccess {
+                guard let updatedZoneID = updatedZoneID else {return}
+                
+                
+                let serverChangeTokenData = UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.data(forKey: CloudKitController.updatesInZoneServerToken) ?? Data()
+                
+                let token: CKServerChangeToken?
+                do {
+                    token = try NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: serverChangeTokenData)
+                } catch {
+                    token = nil
+                }
+                
+                let fetch = CKFetchRecordZoneChangesOperation(recordZoneIDs: [updatedZoneID], configurationsByRecordZoneID: [updatedZoneID: CKFetchRecordZoneChangesOperation.ZoneConfiguration(previousServerChangeToken: token, resultsLimit: nil, desiredKeys: nil)])
+                
+                fetch.recordChangedBlock = { (updatedRecord) in
+                    updatedRecords.append(updatedRecord)
+                }
+                fetch.recordWithIDWasDeletedBlock = { (deletedRecordID,_) in
+                    deletedRecordIDs.append(deletedRecordID)
+                }
+                fetch.recordZoneFetchCompletionBlock = { (_,newServerChangeToken,_,_,error) in
+                    if let error = error {
+                        print("An Error fetching updates in Zone has occured. \(error), \(error.localizedDescription)")
+                        completion(false, updatedRecords,deletedRecordIDs)
+                        return
+                    }
+                    guard let newToken = newServerChangeToken else {completion(false,updatedRecords,deletedRecordIDs); return}
+                    do {
+                        let data = try NSKeyedArchiver.archivedData(withRootObject: newToken, requiringSecureCoding: false)
+                        UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(data, forKey: CloudKitController.updatesInZoneServerToken)
+                    } catch {
+                        print("Error encoding the token for UserDefualts: \(String(describing: error)) \(error.localizedDescription))")
+                    }
+                }
+                
+                fetch.fetchRecordZoneChangesCompletionBlock = { error in
+                    if let error = error {
+                        print("An Error fetching updates from CK has occured. \(error), \(error.localizedDescription)")
+                        completion(false, updatedRecords,deletedRecordIDs)
+                        return
+                    } else {
+                        completion(true, updatedRecords,deletedRecordIDs)
+                    }
+                }
+                
+                self?.privateDB.add(fetch)
+                
+            } else {
+                completion(false,updatedRecords,deletedRecordIDs)
+            }
         }
     }
     
