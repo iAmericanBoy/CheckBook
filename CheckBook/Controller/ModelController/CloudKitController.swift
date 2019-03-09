@@ -82,6 +82,7 @@ class CloudKitController {
         fetch.recordZoneWithIDChangedBlock = { (recordZoneID) in
             completion(true,recordZoneID)
         }
+        privateDB.add(fetch)
     }
     
     ///Gets all the updated records form CloudKit
