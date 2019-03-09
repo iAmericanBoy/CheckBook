@@ -40,6 +40,7 @@ class CloudKitController {
             }
         }
     }
+    
     ///Function to fetch the updated RecordZone
     /// - parameter completion: Handler for the feched Zone.
     /// - parameter isSuccess: Confirms there was a zone with Updates.

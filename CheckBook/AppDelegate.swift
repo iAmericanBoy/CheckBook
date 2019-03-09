@@ -16,7 +16,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        //TODO: Fetch new records from CK and process them in childContext, then upload cached objects to CK
+        //Check for updates from Ck
+        //-> If there are updates update Context
+        //-> after that try to upload cached Purchases to CK
+        CloudKitController.shared.fetchUpdatedRecordsFromCK { (isSuccess, recordsToUpdate, recordIDsToDelete) in
+            if isSuccess {
+                SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
+                while CoreDataStack.cacheContext.registeredObjects.count > 0 {
+                    SyncController.shared.saveCachedPurchasesToCK()
+                }
+            }
+        }
         return true
     }
 }
