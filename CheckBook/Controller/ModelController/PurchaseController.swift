@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CloudKit
 
 class PurchaseController {
     
@@ -47,7 +48,8 @@ class PurchaseController {
         if let method = method {purchase.method = method}
         purchase.lastModified = Date()
         CoreDataController.shared.saveToPersistentStore()
-        CloudKitController.shared.update(purchase: purchase) { (isSuccess, updatedPurchase) in
+        guard let recordToUpdate = CKRecord(purchase: purchase) else {return}
+        CloudKitController.shared.update(record: recordToUpdate) { (isSuccess, updatedPurchase) in
             if !isSuccess {
                 guard let uuid = purchase.uuid else {return}
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
@@ -58,7 +60,8 @@ class PurchaseController {
     /// Deletes the Purchase, deletes it from Cotext and CloudKit. If the CK delete Fails the puchease gets added to the cache for uploading at a later date.
     /// - parameter purchase: The purchase to delete.
     func delete(purchase: Purchase) {
-        CloudKitController.shared.delete(purchase: purchase) { (isSuccess) in
+        guard let recordToDelete = CKRecord(purchase: purchase) else {return}
+        CloudKitController.shared.delete(record: recordToDelete) { (isSuccess) in
             if !isSuccess {
                 guard let uuid = purchase.uuid else {return}
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)

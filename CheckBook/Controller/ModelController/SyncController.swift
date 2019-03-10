@@ -107,7 +107,7 @@ class SyncController {
                 }
             })
         }
-        CloudKitController.shared.saveChangestoCK(purchasesToUpdate: recordsToUpdate, purchasesToDelete: recordsToDelete) { (isSuccess, savedRecords, deletedRecordIDs) in
+        CloudKitController.shared.saveChangestoCK(recordsToUpdate: recordsToUpdate, purchasesToDelete: recordsToDelete) { (isSuccess, savedRecords, deletedRecordIDs) in
             guard let savedRecords = savedRecords, let deletedRecordIDs = deletedRecordIDs, isSuccess else {return}
             savedRecords.forEach({ (record) in
                 CoreDataController.shared.findPurchaseWith(uuid: UUID(uuidString: record.recordID.recordName), completion: { (cachePurchase) in
