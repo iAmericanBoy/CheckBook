@@ -9,7 +9,8 @@
         <attribute name="date" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="item" attributeType="String" syncable="YES"/>
         <attribute name="lastModified" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="method" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="methodName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="methodUUID" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="storeName" attributeType="String" syncable="YES"/>
         <attribute name="uuid" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="purchaseMethod" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PurchaseMethod" inverseName="purchases" inverseEntity="PurchaseMethod" syncable="YES"/>
@@ -22,7 +23,7 @@
     </entity>
     <elements>
         <element name="CachePurchase" positionX="-631.53515625" positionY="43.23046875" width="128" height="75"/>
-        <element name="Purchase" positionX="-338.11328125" positionY="-39.5625" width="128" height="163"/>
+        <element name="Purchase" positionX="-338.11328125" positionY="-39.5625" width="128" height="178"/>
         <element name="PurchaseMethod" positionX="-30.3125" positionY="35.515625" width="128" height="103"/>
     </elements>
 </model>

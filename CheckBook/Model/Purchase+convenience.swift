@@ -12,13 +12,23 @@ import CloudKit
 
 extension Purchase {
     @discardableResult
-    convenience init(amount: Double, date: Date, item: String, storeName: String, method: UUID, uuid: UUID = UUID(), lastModified: Date = Date(), purchaseMethod: PurchaseMethod, context: NSManagedObjectContext = CoreDataStack.context) {
+    convenience init(amount: Double,
+                     date: Date,
+                     item: String,
+                     storeName: String,
+                     methodUUID: UUID,
+                     uuid: UUID = UUID(),
+                     lastModified: Date = Date(),
+                     purchaseMethod: PurchaseMethod,
+                     context: NSManagedObjectContext = CoreDataStack.context) {
+        
         self.init(context: context)
         
         self.amount = amount
         self.date = date
         self.item = item
-        self.method = method
+        self.methodName = purchaseMethod.name
+        self.methodUUID = methodUUID
         self.storeName = storeName
         self.purchaseMethod = purchaseMethod
         
@@ -30,11 +40,29 @@ extension Purchase {
         guard let amount = record[Purchase.amountKey] as? Double,
             let date = record[Purchase.dateKey] as? Date,
             let item = record[Purchase.itemKey] as? String,
-            let method = record[Purchase.methodKey] as? UUID,
+            let methodUUID = record[Purchase.methodKey] as? UUID,
+            let methodName = record[Purchase.methodNameKey] as? String,
             let lastModified = record[Purchase.lastModifiedKey] as? Date,
             let storeName = record[Purchase.storeNameKey] as? String else {return nil}
         
-        self.init(amount: amount, date: date, item: item, storeName: storeName, method: method, uuid: UUID(uuidString: record.recordID.recordName)!, lastModified: lastModified, context: context)
+        self.init(context: context)
+
+        CoreDataController.shared.findPurchaseMethodWith(uuid: methodUUID) { [weak self] (foundPurchaseMethod) in
+            if let foundPurchaseMethod = foundPurchaseMethod {
+                self?.purchaseMethod  = foundPurchaseMethod
+            } else {
+                self?.purchaseMethod = PurchaseMethod(name: methodName, uuid: methodUUID)
+            }
+        }
+        
+        self.amount = amount
+        self.date = date
+        self.item = item
+        self.storeName = storeName
+        self.methodName = methodName
+        self.methodUUID = methodUUID
+        self.lastModified = lastModified
+        self.uuid = UUID(uuidString: record.recordID.recordName)!
     }
 }
 
@@ -42,10 +70,14 @@ extension CKRecord {
     convenience init?(purchase: Purchase) {
         self.init(recordType: Purchase.typeKey, recordID: CKRecord.ID(recordName: purchase.uuid!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)))
         
+        let purchaseMethodReference = CKRecord.Reference(recordID: CKRecord.ID(recordName: purchase.methodUUID!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)), action: CKRecord_Reference_Action.none)
+        
         setValue(purchase.amount, forKey: Purchase.amountKey)
+        setValue(purchaseMethodReference, forKey: Purchase.methodReferenceKey)
         setValue(purchase.date, forKey: Purchase.dateKey)
         setValue(purchase.item, forKey: Purchase.itemKey)
-        setValue(purchase.method, forKey: Purchase.methodKey)
+        setValue(purchase.methodUUID, forKey: Purchase.methodKey)
+        setValue(purchase.methodName, forKey: Purchase.methodNameKey)
         setValue(purchase.lastModified, forKey: Purchase.lastModifiedKey)
         setValue(purchase.storeName, forKey: Purchase.storeNameKey)
     }

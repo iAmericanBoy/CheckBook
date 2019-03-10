@@ -12,7 +12,12 @@ import CloudKit
 
 extension PurchaseMethod {
     @discardableResult
-    convenience init(name: String, uuid: UUID = UUID(), purchases: NSSet = NSSet(),lastModified: Date = Date(), context: NSManagedObjectContext = CoreDataStack.context) {
+    convenience init(name: String,
+                     uuid: UUID = UUID(),
+                     purchases: NSSet = NSSet(),
+                     lastModified: Date = Date(),
+                     context: NSManagedObjectContext = CoreDataStack.context) {
+        
         self.init(context: context)
         
         self.name = name
