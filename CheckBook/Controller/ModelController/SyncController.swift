@@ -20,13 +20,7 @@ class SyncController {
     /// - parameter uuid: The UUID of the purchase that was not able to be uploaded.
     func saveFailedUpload(withFailedPurchaseUUID uuid: UUID) {
         CachePurchase(uuid: uuid)
-        do {
-            if CoreDataStack.cacheContext.hasChanges {
-                try CoreDataStack.cacheContext.save()
-            }
-        } catch {
-            print("Error saving failed purchase to chache with error: \(String(describing: error)) \(error.localizedDescription))")
-        }
+        CoreDataController.shared.saveToPersistentStore()
     }
     
     ///Updates child MOC with objects from CK
@@ -92,10 +86,9 @@ class SyncController {
         
         let dateSort = NSSortDescriptor(key: "\(CachePurchase.uploadKey)", ascending: false)
         let fetchRequest: NSFetchRequest<CachePurchase> = CachePurchase.fetchRequest()
-        fetchRequest.fetchLimit = 20
         fetchRequest.sortDescriptors = [dateSort]
         do {
-            cachedPurchases =  try CoreDataStack.cacheContext.fetch(fetchRequest)
+            cachedPurchases =  try CoreDataStack.context.fetch(fetchRequest)
         } catch {
             print("Error fetching cachedObjects with error: \(String(describing: error)) \(error.localizedDescription))")
         }

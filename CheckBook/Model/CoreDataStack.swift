@@ -36,8 +36,4 @@ enum CoreDataStack {
         
         return childContext
     }
-    
-    static var cacheContext: NSManagedObjectContext {
-        return container.newBackgroundContext()
-    }
 }

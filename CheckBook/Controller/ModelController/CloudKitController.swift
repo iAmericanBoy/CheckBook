@@ -46,7 +46,10 @@ class CloudKitController {
                     return
                 }
                 completion(true,purchase)
+            } else {
+                completion(false, nil)
             }
+            
         }
     }
     
@@ -199,6 +202,8 @@ class CloudKitController {
                         return
                 }
                 completion(true,purchase)
+            } else {
+                completion(false, nil)
             }
         }
     }
@@ -218,6 +223,8 @@ class CloudKitController {
                     return
                 }
                 completion(true)
+            } else {
+                completion(false)
             }
         }
     }

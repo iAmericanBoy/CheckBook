@@ -11,7 +11,7 @@ import  CoreData
 
 extension CachePurchase {
     @discardableResult
-    convenience init(uuid: UUID, lastUploadDate: Date = Date(), context: NSManagedObjectContext = CoreDataStack.cacheContext) {
+    convenience init(uuid: UUID, lastUploadDate: Date = Date(), context: NSManagedObjectContext = CoreDataStack.context) {
         self.init(context: context)
         self.uuid = uuid
         self.lastUploadDate = lastUploadDate

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CloudKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -22,11 +23,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         CloudKitController.shared.fetchUpdatedRecordsFromCK { (isSuccess, recordsToUpdate, recordIDsToDelete) in
             if isSuccess {
                 SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
-                while CoreDataStack.cacheContext.registeredObjects.count > 0 {
-                    SyncController.shared.saveCachedPurchasesToCK()
-                }
             }
         }
+        SyncController.shared.saveCachedPurchasesToCK()
+
         return true
     }
 }
