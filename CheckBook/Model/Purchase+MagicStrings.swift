@@ -11,6 +11,8 @@ import Foundation
 extension Purchase {
     /// "purchase"
     static let typeKey = "purchase"
+    /// "private"
+    static let privateRecordZoneName = "private"
     /// "amount"
     static let amountKey = "amount"
     /// "date"

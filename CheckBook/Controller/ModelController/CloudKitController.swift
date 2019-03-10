@@ -19,6 +19,16 @@ class CloudKitController {
     /// The private Database of the User.
     fileprivate let privateDB = CKContainer.default().privateCloudDatabase
     
+    
+    //MARK: - INIT
+    init() {
+        createZone(withName: Purchase.privateRecordZoneName) { (isSuccess, newZone) in
+            if !isSuccess {
+                print("Could not create new zone.")
+            }
+        }
+    }
+    
     //MARK: - CRUD
     /// Creates new Purchase in CloudKit.
     /// - parameter purchase: The purchase to be created
@@ -32,13 +42,37 @@ class CloudKitController {
         saveChangestoCK(purchasesToUpdate: [record], purchasesToDelete: []) { (isSuccess, savedRecords, _) in
             if isSuccess {
                 guard let record = savedRecords?.first , record.recordID.recordName == purchase.uuid?.uuidString else {
-                        completion(false, nil)
-                        return
+                    completion(false, nil)
+                    return
                 }
                 completion(true,purchase)
             }
         }
     }
+    
+    ///Creates a Custom Zone.
+    /// - parameter name: The name of the custom recordZone.
+    /// - parameter completion: Handler for creating the zone.
+    /// - parameter isSuccess: Confirms there was a zone with Updates.
+    /// - parameter newRecordZone: The new recordZone created. Or nil if error.
+    func createZone(withName name : String, completion: @escaping (_ isSuccess: Bool, _ newRecordZone:CKRecordZone?) -> Void) {
+        
+        let newRecordZone = CKRecordZone(zoneName: name)
+        let fetch = CKModifyRecordZonesOperation(recordZonesToSave: [newRecordZone], recordZoneIDsToDelete: nil)
+        
+        fetch.modifyRecordZonesCompletionBlock = { (savedRecordZones,_,error)in
+            if let error = error {
+                print("Error creating record with name: \(name) has occured: \(error), \(error.localizedDescription)")
+                completion(false,nil)
+            }
+            
+            guard let recordZone = savedRecordZones?.first, recordZone.zoneID.zoneName == name else {completion(false,nil);return}
+            completion(true, recordZone)
+        }
+        
+        privateDB.add(fetch)
+    }
+
     
     ///Function to fetch the updated RecordZone
     /// - parameter completion: Handler for the feched Zone.
@@ -160,12 +194,11 @@ class CloudKitController {
         
         saveChangestoCK(purchasesToUpdate: [record], purchasesToDelete: []) { (isSuccess, savedRecords, _) in
             if isSuccess {
-                guard let record = savedRecords?.first , record.recordID.recordName == purchase.uuid?.uuidString,
-                    let updatedPurchase = Purchase(record: record) else {
+                guard let record = savedRecords?.first , record.recordID.recordName == purchase.uuid?.uuidString else {
                         completion(false, nil)
                         return
                 }
-                completion(true,updatedPurchase)
+                completion(true,purchase)
             }
         }
     }

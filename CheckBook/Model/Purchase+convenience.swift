@@ -39,7 +39,7 @@ extension Purchase {
 
 extension CKRecord {
     convenience init?(purchase: Purchase) {
-        self.init(recordType: Purchase.typeKey, recordID: CKRecord.ID(recordName: purchase.uuid!.uuidString))
+        self.init(recordType: Purchase.typeKey, recordID: CKRecord.ID(recordName: purchase.uuid!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)))
         
         setValue(purchase.amount, forKey: Purchase.amountKey)
         setValue(purchase.date, forKey: Purchase.dateKey)
