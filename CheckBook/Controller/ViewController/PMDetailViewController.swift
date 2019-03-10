@@ -32,11 +32,11 @@ class PMDetailViewController: UIViewController {
         
         if let purchaseMethod = purchaseMethod {
             //update
-            
+            PurchaseMethodController.shared.update(purchaseMethod: purchaseMethod, name: name)
             self.navigationController?.popViewController(animated: true)
         } else {
             //saveNew
-            
+            PurchaseMethodController.shared.createNewPurchaseWith(name: name)
             self.navigationController?.popViewController(animated: true)
         }
     }
