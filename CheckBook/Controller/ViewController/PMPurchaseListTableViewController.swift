@@ -45,8 +45,8 @@ class PMPurchaseListTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            
-            PurchaseController.shared.delete(purchase: purchase)
+            guard let purchaseToDelete = purchaseMethod?.purchases?.object(at: indexPath.row) as? Purchase else {return}
+            PurchaseController.shared.delete(purchase: purchaseToDelete)
         }
     }
     
@@ -56,7 +56,7 @@ class PMPurchaseListTableViewController: UITableViewController {
         if segue.identifier == "toDetailVC" {
             guard let index = tableView.indexPathForSelectedRow else {return}
             if let destinationVC = segue.destination as? PurchaseDetailViewController {
-                destinationVC.purchase =
+                destinationVC.purchase = purchaseMethod?.purchases?.object(at: index.row) as? Purchase
             }
         }
     }

@@ -14,7 +14,7 @@ extension PurchaseMethod {
     @discardableResult
     convenience init(name: String,
                      uuid: UUID = UUID(),
-                     purchases: NSSet = NSSet(),
+                     purchases: NSOrderedSet = NSOrderedSet(),
                      lastModified: Date = Date(),
                      context: NSManagedObjectContext = CoreDataStack.context) {
         
