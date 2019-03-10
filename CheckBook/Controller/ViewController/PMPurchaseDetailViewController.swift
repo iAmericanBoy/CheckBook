@@ -1,14 +1,14 @@
 //
-//  PurchaseDetailViewController.swift
+//  PMPurchaseDetailTableViewController.swift
 //  CheckBook
 //
-//  Created by Dominic Lanzillotta on 3/7/19.
+//  Created by Dominic Lanzillotta on 3/10/19.
 //  Copyright © 2019 Dominic Lanzillotta. All rights reserved.
 //
 
 import UIKit
 
-class PurchaseDetailViewController: UIViewController {
+class PMPurchaseDetailViewController: UIViewController {
     
     //MARK: - Outlets
     @IBOutlet weak var amountTextField: UITextField!
@@ -19,6 +19,13 @@ class PurchaseDetailViewController: UIViewController {
     
     //MARK: - Properties
     var purchase: Purchase? {
+        didSet{
+            loadViewIfNeeded()
+            updateViews()
+        }
+    }
+    
+    var purchaseMethod: PurchaseMethod? {
         didSet{
             loadViewIfNeeded()
             updateViews()
@@ -40,21 +47,23 @@ class PurchaseDetailViewController: UIViewController {
         
         if let purchase = purchase {
             //update
-
+            
             self.navigationController?.popViewController(animated: true)
         } else {
             //saveNew
-
+            
             self.navigationController?.popViewController(animated: true)
         }
     }
     
     //MARK: - Private Functions
     func updateViews(){
-        guard let purchase = purchase else {dateTextField.text = Date().description;return }
+        methodTextField.text = purchaseMethod?.name
+        dateTextField.text = Date().description
+        
+        guard let purchase = purchase else {return }
         amountTextField.text = "\(purchase.amount)"
         storeNameTextField.text = purchase.storeName
-        methodTextField.text = purchase.purchaseMethod?.name
         itemTextField.text = purchase.item
         dateTextField.text = "\(String(describing: purchase.date))"
     }

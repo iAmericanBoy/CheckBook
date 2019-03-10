@@ -24,13 +24,22 @@ class CoreDataController {
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
     }()
     
+    ///Simple FetchController to fetch all the PurchaseMethods.
+    let purchaseMethodFetchResultsController: NSFetchedResultsController<PurchaseMethod> = {
+        let fetchRequest: NSFetchRequest<PurchaseMethod> = PurchaseMethod.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
+    }()
+    
     //MARK: - init
     ///Simple initializer to set up the fetchResultsController.
     init() {
         do{
             try purchaseFetchResultsController.performFetch()
+            try purchaseMethodFetchResultsController.performFetch()
         } catch {
-            print("Error loading fetchResultsController. \(String(describing: error)), \(error.localizedDescription)")
+            print("Error loading fetchResultsControllers. \(String(describing: error)), \(error.localizedDescription)")
         }
     }
     
