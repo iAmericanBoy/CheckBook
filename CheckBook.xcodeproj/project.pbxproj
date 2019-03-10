@@ -24,6 +24,7 @@
 		B6DE00B12230345600C76A40 /* CloudKitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE00B02230345600C76A40 /* CloudKitController.swift */; };
 		B6E3329F2234CAD80088D6FF /* PurchaseMethod+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E3329E2234CAD80088D6FF /* PurchaseMethod+convenience.swift */; };
 		B6E332A12234CBFB0088D6FF /* PurchaseMethod+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E332A02234CBFA0088D6FF /* PurchaseMethod+MagicStrings.swift */; };
+		B6E332A42234CD5F0088D6FF /* PurchaseMethodController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E332A32234CD5F0088D6FF /* PurchaseMethodController.swift */; };
 		B6EA85C122322C8900211068 /* CachePurchase+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EA85C022322C8900211068 /* CachePurchase+convenience.swift */; };
 		B6EA85C322323B7A00211068 /* CachePurchase+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EA85C222323B7A00211068 /* CachePurchase+MagicStrings.swift */; };
 		B6EA85F3223316C200211068 /* CloudKitController+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EA85F2223316C200211068 /* CloudKitController+MagicStrings.swift */; };
@@ -50,6 +51,7 @@
 		B6DE00B02230345600C76A40 /* CloudKitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitController.swift; sourceTree = "<group>"; };
 		B6E3329E2234CAD80088D6FF /* PurchaseMethod+convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PurchaseMethod+convenience.swift"; sourceTree = "<group>"; };
 		B6E332A02234CBFA0088D6FF /* PurchaseMethod+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PurchaseMethod+MagicStrings.swift"; sourceTree = "<group>"; };
+		B6E332A32234CD5F0088D6FF /* PurchaseMethodController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseMethodController.swift; sourceTree = "<group>"; };
 		B6EA85C022322C8900211068 /* CachePurchase+convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CachePurchase+convenience.swift"; sourceTree = "<group>"; };
 		B6EA85C222323B7A00211068 /* CachePurchase+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CachePurchase+MagicStrings.swift"; sourceTree = "<group>"; };
 		B6EA85F2223316C200211068 /* CloudKitController+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CloudKitController+MagicStrings.swift"; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				B6BF9FF6222F3FDA00DFCE8C /* PurchaseController.swift */,
+				B6E332A32234CD5F0088D6FF /* PurchaseMethodController.swift */,
 				B6DE00AE223030F400C76A40 /* CoreDataController.swift */,
 				B6DE00B02230345600C76A40 /* CloudKitController.swift */,
 				B6EA85F2223316C200211068 /* CloudKitController+MagicStrings.swift */,
@@ -268,6 +271,7 @@
 				B6DE00AF223030F400C76A40 /* CoreDataController.swift in Sources */,
 				B6EA85C322323B7A00211068 /* CachePurchase+MagicStrings.swift in Sources */,
 				B6BF9FD3222F160300DFCE8C /* AppDelegate.swift in Sources */,
+				B6E332A42234CD5F0088D6FF /* PurchaseMethodController.swift in Sources */,
 				B6E332A12234CBFB0088D6FF /* PurchaseMethod+MagicStrings.swift in Sources */,
 				B6920AD62231798A00A63EC8 /* PurchaseDetailViewController.swift in Sources */,
 				B6E3329F2234CAD80088D6FF /* PurchaseMethod+convenience.swift in Sources */,

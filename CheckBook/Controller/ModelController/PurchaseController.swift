@@ -64,6 +64,6 @@ class PurchaseController {
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
             }
         }
-        CoreDataController.shared.remove(purchase: purchase)
+        CoreDataController.shared.remove(object: purchase)
     }
 }

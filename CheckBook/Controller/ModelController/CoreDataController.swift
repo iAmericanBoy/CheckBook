@@ -60,9 +60,9 @@ class CoreDataController {
     //MARK: - Delete
     /// Removes the Purchase from the Context.
     /// - parameter purchase: The purchase to remove.
-    func remove(purchase: Purchase) {
-        if let moc = purchase.managedObjectContext {
-            moc.delete(purchase)
+    func remove(object: NSManagedObject) {
+        if let moc = object.managedObjectContext {
+            moc.delete(object)
             saveToPersistentStore()
         }
     }

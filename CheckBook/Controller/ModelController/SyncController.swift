@@ -61,7 +61,7 @@ class SyncController {
         recordIDs.forEach { (recordID) in
             CoreDataController.shared.findPurchaseWith(uuid: UUID(uuidString: recordID.recordName)!, inContext: CoreDataStack.childContext, completion: { (purchaseToDelete) in
                 if let purchase = purchaseToDelete {
-                    CoreDataController.shared.remove(purchase: purchase)
+                    CoreDataController.shared.remove(object: purchase)
                 }
             })
         }
@@ -112,13 +112,13 @@ class SyncController {
             savedRecords.forEach({ (record) in
                 CoreDataController.shared.findPurchaseWith(uuid: UUID(uuidString: record.recordID.recordName), completion: { (cachePurchase) in
                     guard let cachePurchase = cachePurchase else {return}
-                    CoreDataController.shared.remove(purchase: cachePurchase)
+                    CoreDataController.shared.remove(object: cachePurchase)
                 })
             })
             deletedRecordIDs.forEach({ (recordID) in
                 CoreDataController.shared.findPurchaseWith(uuid: UUID(uuidString: recordID.recordName), completion: { (cachePurchase) in
                     guard let cachePurchase = cachePurchase else {return}
-                    CoreDataController.shared.remove(purchase: cachePurchase)
+                    CoreDataController.shared.remove(object: cachePurchase)
                 })
             })
         }
