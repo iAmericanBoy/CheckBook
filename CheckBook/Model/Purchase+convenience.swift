@@ -12,7 +12,7 @@ import CloudKit
 
 extension Purchase {
     @discardableResult
-    convenience init(amount: Double, date: Date, item: String, storeName: String, method: UUID, uuid: UUID = UUID(), lastModified: Date = Date(), context: NSManagedObjectContext = CoreDataStack.context) {
+    convenience init(amount: Double, date: Date, item: String, storeName: String, method: UUID, uuid: UUID = UUID(), lastModified: Date = Date(), purchaseMethod: PurchaseMethod, context: NSManagedObjectContext = CoreDataStack.context) {
         self.init(context: context)
         
         self.amount = amount
@@ -20,6 +20,7 @@ extension Purchase {
         self.item = item
         self.method = method
         self.storeName = storeName
+        self.purchaseMethod = purchaseMethod
         
         self.lastModified = lastModified
         self.uuid = uuid

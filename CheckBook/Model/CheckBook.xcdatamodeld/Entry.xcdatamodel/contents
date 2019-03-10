@@ -12,13 +12,13 @@
         <attribute name="method" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="storeName" attributeType="String" syncable="YES"/>
         <attribute name="uuid" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="paymentMethod" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PurchaseMethod" inverseName="purchase" inverseEntity="PurchaseMethod" syncable="YES"/>
+        <relationship name="purchaseMethod" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PurchaseMethod" inverseName="purchases" inverseEntity="PurchaseMethod" syncable="YES"/>
     </entity>
     <entity name="PurchaseMethod" representedClassName="PurchaseMethod" syncable="YES" codeGenerationType="class">
         <attribute name="lastModified" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="purchase" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Purchase" inverseName="paymentMethod" inverseEntity="Purchase" syncable="YES"/>
+        <relationship name="purchases" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Purchase" inverseName="purchaseMethod" inverseEntity="Purchase" syncable="YES"/>
     </entity>
     <elements>
         <element name="CachePurchase" positionX="-631.53515625" positionY="43.23046875" width="128" height="75"/>
