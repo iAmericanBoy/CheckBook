@@ -21,7 +21,7 @@ class PurchaseController {
     /// - parameter item: The itemName of the purchase.
     /// - parameter storeName: The storeName of the purchase.
     /// - parameter method: The method of payment of the purchase.
-    func createNewPurchaseWith(amount: Double, date: Date, item: String, storeName:String, method: String) {
+    func createNewPurchaseWith(amount: Double, date: Date, item: String, storeName:String, method: UUID) {
         let purchase = Purchase(amount: amount, date: date, item: item , storeName: storeName, method: method)
         CoreDataController.shared.saveToPersistentStore()
         CloudKitController.shared.create(purchase: purchase) { (isSuccess, newPurchase) in
@@ -39,7 +39,7 @@ class PurchaseController {
     /// - parameter item: The updated itemName of the purchase.
     /// - parameter storeName: updated The storeName of the purchase.
     /// - parameter method: The updated method of payment of the purchase.
-    func update(purchase: Purchase, amount:Double?, date: Date?, item: String?, storeName: String?, method: String?) {
+    func update(purchase: Purchase, amount:Double?, date: Date?, item: String?, storeName: String?, method: UUID?) {
         if let amount = amount {purchase.amount = amount}
         if let date = date {purchase.date = date}
         if let item = item {purchase.item = item}

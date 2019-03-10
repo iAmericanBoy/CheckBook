@@ -22,6 +22,8 @@
 		B6BF9FF7222F3FDA00DFCE8C /* PurchaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FF6222F3FDA00DFCE8C /* PurchaseController.swift */; };
 		B6DE00AF223030F400C76A40 /* CoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE00AE223030F400C76A40 /* CoreDataController.swift */; };
 		B6DE00B12230345600C76A40 /* CloudKitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE00B02230345600C76A40 /* CloudKitController.swift */; };
+		B6E3329F2234CAD80088D6FF /* PurchaseMethod+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E3329E2234CAD80088D6FF /* PurchaseMethod+convenience.swift */; };
+		B6E332A12234CBFB0088D6FF /* PurchaseMethod+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E332A02234CBFA0088D6FF /* PurchaseMethod+MagicStrings.swift */; };
 		B6EA85C122322C8900211068 /* CachePurchase+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EA85C022322C8900211068 /* CachePurchase+convenience.swift */; };
 		B6EA85C322323B7A00211068 /* CachePurchase+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EA85C222323B7A00211068 /* CachePurchase+MagicStrings.swift */; };
 		B6EA85F3223316C200211068 /* CloudKitController+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EA85F2223316C200211068 /* CloudKitController+MagicStrings.swift */; };
@@ -46,6 +48,8 @@
 		B6BF9FF6222F3FDA00DFCE8C /* PurchaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseController.swift; sourceTree = "<group>"; };
 		B6DE00AE223030F400C76A40 /* CoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataController.swift; sourceTree = "<group>"; };
 		B6DE00B02230345600C76A40 /* CloudKitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitController.swift; sourceTree = "<group>"; };
+		B6E3329E2234CAD80088D6FF /* PurchaseMethod+convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PurchaseMethod+convenience.swift"; sourceTree = "<group>"; };
+		B6E332A02234CBFA0088D6FF /* PurchaseMethod+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PurchaseMethod+MagicStrings.swift"; sourceTree = "<group>"; };
 		B6EA85C022322C8900211068 /* CachePurchase+convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CachePurchase+convenience.swift"; sourceTree = "<group>"; };
 		B6EA85C222323B7A00211068 /* CachePurchase+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CachePurchase+MagicStrings.swift"; sourceTree = "<group>"; };
 		B6EA85F2223316C200211068 /* CloudKitController+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CloudKitController+MagicStrings.swift"; sourceTree = "<group>"; };
@@ -126,9 +130,9 @@
 				B6BF9FED222F257300DFCE8C /* CoreDataStack.swift */,
 				B6BF9FE6222F187600DFCE8C /* CheckBook.xcdatamodeld */,
 				B6BF9FEF222F266100DFCE8C /* Purchase+convenience.swift */,
-				B6BF9FF1222F315D00DFCE8C /* Purchase+MagicStrings.swift */,
 				B6EA85C022322C8900211068 /* CachePurchase+convenience.swift */,
-				B6EA85C222323B7A00211068 /* CachePurchase+MagicStrings.swift */,
+				B6E3329E2234CAD80088D6FF /* PurchaseMethod+convenience.swift */,
+				B6E332A22234CC0D0088D6FF /* MagicStrings */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -160,6 +164,16 @@
 				B6920AD42231796700A63EC8 /* ViewController */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		B6E332A22234CC0D0088D6FF /* MagicStrings */ = {
+			isa = PBXGroup;
+			children = (
+				B6BF9FF1222F315D00DFCE8C /* Purchase+MagicStrings.swift */,
+				B6EA85C222323B7A00211068 /* CachePurchase+MagicStrings.swift */,
+				B6E332A02234CBFA0088D6FF /* PurchaseMethod+MagicStrings.swift */,
+			);
+			path = MagicStrings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -254,7 +268,9 @@
 				B6DE00AF223030F400C76A40 /* CoreDataController.swift in Sources */,
 				B6EA85C322323B7A00211068 /* CachePurchase+MagicStrings.swift in Sources */,
 				B6BF9FD3222F160300DFCE8C /* AppDelegate.swift in Sources */,
+				B6E332A12234CBFB0088D6FF /* PurchaseMethod+MagicStrings.swift in Sources */,
 				B6920AD62231798A00A63EC8 /* PurchaseDetailViewController.swift in Sources */,
+				B6E3329F2234CAD80088D6FF /* PurchaseMethod+convenience.swift in Sources */,
 				B6BF9FF7222F3FDA00DFCE8C /* PurchaseController.swift in Sources */,
 				B6DE00B12230345600C76A40 /* CloudKitController.swift in Sources */,
 				B6BF9FF0222F266100DFCE8C /* Purchase+convenience.swift in Sources */,

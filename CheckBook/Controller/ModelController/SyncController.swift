@@ -34,7 +34,7 @@ class SyncController {
                 guard let amount = recordFromCK[Purchase.amountKey] as? Double,
                     let date = recordFromCK[Purchase.dateKey] as? Date,
                     let item = recordFromCK[Purchase.itemKey] as? String,
-                    let method = recordFromCK[Purchase.methodKey] as? String,
+                    let method = recordFromCK[Purchase.methodKey] as? UUID,
                     let lastModified = recordFromCK[Purchase.lastModifiedKey] as? Date,
                     let storeName = recordFromCK[Purchase.storeNameKey] as? String else {return }
                 
@@ -110,13 +110,13 @@ class SyncController {
         CloudKitController.shared.saveChangestoCK(purchasesToUpdate: recordsToUpdate, purchasesToDelete: recordsToDelete) { (isSuccess, savedRecords, deletedRecordIDs) in
             guard let savedRecords = savedRecords, let deletedRecordIDs = deletedRecordIDs, isSuccess else {return}
             savedRecords.forEach({ (record) in
-                CoreDataController.shared.findPurchaseWith(uuid: UUID(uuidString: record.recordID.recordName), inContext: CoreDataStack.cacheContext, completion: { (cachePurchase) in
+                CoreDataController.shared.findPurchaseWith(uuid: UUID(uuidString: record.recordID.recordName), completion: { (cachePurchase) in
                     guard let cachePurchase = cachePurchase else {return}
                     CoreDataController.shared.remove(purchase: cachePurchase)
                 })
             })
             deletedRecordIDs.forEach({ (recordID) in
-                CoreDataController.shared.findPurchaseWith(uuid: UUID(uuidString: recordID.recordName), inContext: CoreDataStack.cacheContext, completion: { (cachePurchase) in
+                CoreDataController.shared.findPurchaseWith(uuid: UUID(uuidString: recordID.recordName), completion: { (cachePurchase) in
                     guard let cachePurchase = cachePurchase else {return}
                     CoreDataController.shared.remove(purchase: cachePurchase)
                 })
