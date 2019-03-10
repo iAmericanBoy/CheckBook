@@ -30,26 +30,23 @@ class CloudKitController {
     }
     
     //MARK: - CRUD
-    /// Creates new Purchase in CloudKit.
-    /// - parameter purchase: The purchase to be created
+    /// Creates new Record in CloudKit.
+    /// - parameter record: The record to be created
     /// - parameter completion: Handler for when the purchase has been created.
     /// - parameter isSuccess: Confirms the new purchase was created.
-    /// - parameter newPurchase: The new Purchase or nil.
-    func create(purchase: Purchase, completion: @escaping (_ isSuccess: Bool, _ newPurchase: Purchase?) -> Void) {
+    /// - parameter newRecord: The new Record or nil.
+    func create(record: CKRecord, completion: @escaping (_ isSuccess: Bool, _ newRecord: CKRecord?) -> Void) {
         
-        guard let record = CKRecord(purchase: purchase) else {completion(false, nil); return}
-        
-        saveChangestoCK(purchasesToUpdate: [record], purchasesToDelete: []) { (isSuccess, savedRecords, _) in
+        saveChangestoCK(recordsToUpdate: [record], purchasesToDelete: []) { (isSuccess, savedRecords, _) in
             if isSuccess {
-                guard let record = savedRecords?.first , record.recordID.recordName == purchase.uuid?.uuidString else {
+                guard let newRecord = savedRecords?.first , newRecord.recordID == record.recordID else {
                     completion(false, nil)
                     return
                 }
-                completion(true,purchase)
+                completion(true,newRecord)
             } else {
                 completion(false, nil)
             }
-            
         }
     }
     
@@ -186,39 +183,35 @@ class CloudKitController {
         }
     }
     
-    /// Updates the purchase if the purchase exists in the source of truth.
-    /// - parameter purchase: The purchase that needs updating.
-    /// - parameter completion: Handler for when the purchase has been updated.
-    /// - parameter isSuccess: Confirms the new purchase was updated.
-    /// - parameter updatedPurchase: The updated purchase or nil if the puchase could not be updated in CloudKit.
-    func update(purchase: Purchase, completion: @escaping (_ isSuccess: Bool, _ updatedPurchase: Purchase?) -> Void) {
+    /// Updates the record if the record exists in the source of truth.
+    /// - parameter record: The record that needs updating.
+    /// - parameter completion: Handler for when the record has been updated.
+    /// - parameter isSuccess: Confirms the new record was updated.
+    /// - parameter updatedRecord: The updated record or nil if the record could not be updated in CloudKit.
+    func update(record: CKRecord, completion: @escaping (_ isSuccess: Bool, _ updatedRecord: CKRecord?) -> Void) {
         
-        guard let record = CKRecord(purchase: purchase) else {completion(false, nil); return}
-        
-        saveChangestoCK(purchasesToUpdate: [record], purchasesToDelete: []) { (isSuccess, savedRecords, _) in
+        saveChangestoCK(recordsToUpdate: [record], purchasesToDelete: []) { (isSuccess, savedRecords, _) in
             if isSuccess {
-                guard let record = savedRecords?.first , record.recordID.recordName == purchase.uuid?.uuidString else {
+                guard let updatedRecord = savedRecords?.first , updatedRecord.recordID == updatedRecord.recordID else {
                         completion(false, nil)
                         return
                 }
-                completion(true,purchase)
+                completion(true,updatedRecord)
             } else {
                 completion(false, nil)
             }
         }
     }
     
-    /// Deletes the purchase if the contact exists in the source of truth.
-    /// - parameter purchase: The purchase that needs deleting
-    /// - parameter completion: Handler for when the purchase has been deleted
-    /// - parameter isSuccess: Confirms the purchase was deleted.
-    func delete(purchase: Purchase, completion: @escaping (_ isSuccess: Bool) -> Void) {
-        
-        guard let record = CKRecord(purchase: purchase) else {completion(false); return}
-        
-        saveChangestoCK(purchasesToUpdate: [], purchasesToDelete: [record.recordID]) { (isSuccess, _, deletedRecordIDs) in
+    /// Deletes the record if the record exists in the source of truth.
+    /// - parameter record: The record that needs deleting
+    /// - parameter completion: Handler for when the record has been deleted
+    /// - parameter isSuccess: Confirms the record was deleted.
+    func delete(record: CKRecord, completion: @escaping (_ isSuccess: Bool) -> Void) {
+    
+        saveChangestoCK(recordsToUpdate: [], purchasesToDelete: [record.recordID]) { (isSuccess, _, deletedRecordIDs) in
             if isSuccess {
-                guard let recordID = deletedRecordIDs?.first , recordID.recordName == purchase.uuid?.uuidString else {
+                guard let recordID = deletedRecordIDs?.first , recordID == record.recordID else {
                     completion(false)
                     return
                 }
@@ -231,14 +224,14 @@ class CloudKitController {
     
     //MARK: - Save
     /// Updates and Deletes changes to CloudKit.
-    /// - parameter purchasesToUpdate: Purchases that where updated or created as Records.
-    /// - parameter recordIDs: Purchases that need deleted as RecordsIDs.
-    /// - parameter completion: Handler for when the Purchases has been deleted or updated/saved.
+    /// - parameter records: Records that where updated or created.
+    /// - parameter recordIDs: RecordIDs of record that need deleted.
+    /// - parameter completion: Handler for when the Record has been deleted or updated/saved.
     /// - parameter isSuccess: Confirms that the change has synced to CloudKit.
     /// - parameter savedRecords: The saved records (can be nil).
-    /// - parameter deletedRecordIDs: The deleted recordIds (can be nil).
-    func saveChangestoCK(purchasesToUpdate update: [CKRecord], purchasesToDelete recordIDs: [CKRecord.ID], completion: @escaping (_ isSuccess: Bool,_ savedRecords: [CKRecord]?, _ deletedRecordIDs: [CKRecord.ID]?) -> Void) {
-        let operation = CKModifyRecordsOperation(recordsToSave: update, recordIDsToDelete: recordIDs)
+    /// - parameter deletedRecordIDs: The deleted recordIDs (can be nil).
+    func saveChangestoCK(recordsToUpdate records: [CKRecord], purchasesToDelete recordIDs: [CKRecord.ID], completion: @escaping (_ isSuccess: Bool,_ savedRecords: [CKRecord]?, _ deletedRecordIDs: [CKRecord.ID]?) -> Void) {
+        let operation = CKModifyRecordsOperation(recordsToSave: records, recordIDsToDelete: recordIDs)
         operation.savePolicy = .changedKeys
         operation.modifyRecordsCompletionBlock = { (savedRecords,deletedRecords,error) in
             if let error = error {
