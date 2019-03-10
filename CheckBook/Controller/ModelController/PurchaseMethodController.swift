@@ -50,6 +50,35 @@ class PurchaseMethodController {
         }
     }
     
+    ///Changes to current PurchaseMethod reference to a different PurchaseMethod and saves the change to CloudKit.
+    /// - parameter oldPurchaseMethod: The purchase to delete.
+    /// - parameter purchase: The purchase to delete.
+    /// - parameter newPurchaseMethod: The purchase to delete.
+    func change(purchaseMethod oldPurchaseMethod: PurchaseMethod, ofPurchase purchase: Purchase, toPurchaseMethod newPurchaseMethod: PurchaseMethod) {
+        
+        oldPurchaseMethod.removeFromPurchases(purchase)
+        purchase.purchaseMethod = newPurchaseMethod
+        newPurchaseMethod.addToPurchases(purchase)
+        purchase.lastModified = Date()
+        newPurchaseMethod.lastModified = Date()
+        oldPurchaseMethod.lastModified = Date()
+
+        guard let oldPurchaseMethodRecord = CKRecord(purchaseMethod: oldPurchaseMethod),
+            let newPurchaseMethodRecord = CKRecord(purchaseMethod: newPurchaseMethod),
+            let purchaseRecord = CKRecord(purchase: purchase) else {return}
+
+        CloudKitController.shared.saveChangestoCK(recordsToUpdate: [oldPurchaseMethodRecord,newPurchaseMethodRecord,purchaseRecord], purchasesToDelete: []) { (isSuccess, updatedRecords, _) in
+            if !isSuccess {
+                guard let uuid = purchase.uuid else {return}
+                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                guard let uuidOfOld = oldPurchaseMethod.uuid else {return}
+                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuidOfOld)
+                guard let uuidOfNew = newPurchaseMethod.uuid else {return}
+                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuidOfNew)
+            }
+        }
+    }
+    
     /// Deletes the PurchaseMethod, deletes it from Cotext and CloudKit. If the CK delete Fails the PurchaseMethod gets added to the cache for uploading at a later date.
     /// - parameter purchase: The purchase to delete.
     func delete(purchaseMethod: PurchaseMethod) {
