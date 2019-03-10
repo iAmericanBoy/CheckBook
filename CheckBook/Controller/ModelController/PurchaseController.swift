@@ -22,10 +22,12 @@ class PurchaseController {
     /// - parameter item: The itemName of the purchase.
     /// - parameter storeName: The storeName of the purchase.
     /// - parameter method: The method of payment of the purchase.
-    func createNewPurchaseWith(amount: Double, date: Date, item: String, storeName:String, method: UUID) {
-        let purchase = Purchase(amount: amount, date: date, item: item , storeName: storeName, method: method)
+    func createNewPurchaseWith(amount: Double, date: Date, item: String, storeName:String, purchaseMethod: PurchaseMethod ) {
+        let purchase = Purchase(amount: amount, date: date, item: item , storeName: storeName, purchaseMethod: purchaseMethod)
         CoreDataController.shared.saveToPersistentStore()
-        CloudKitController.shared.create(purchase: purchase) { (isSuccess, newPurchase) in
+        
+        guard let recordToCreate = CKRecord(purchase: purchase) else {return}
+        CloudKitController.shared.create(record: recordToCreate) { (isSuccess, newRecord) in
             if !isSuccess {
                 guard let uuid = purchase.uuid else {return}
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
@@ -40,12 +42,12 @@ class PurchaseController {
     /// - parameter item: The updated itemName of the purchase.
     /// - parameter storeName: updated The storeName of the purchase.
     /// - parameter method: The updated method of payment of the purchase.
-    func update(purchase: Purchase, amount:Double?, date: Date?, item: String?, storeName: String?, method: UUID?) {
+    func update(purchase: Purchase, amount:Double?, date: Date?, item: String?, storeName: String?, purchaseMethod: PurchaseMethod?) {
         if let amount = amount {purchase.amount = amount}
         if let date = date {purchase.date = date}
         if let item = item {purchase.item = item}
         if let storeName = storeName {purchase.storeName = storeName}
-        if let method = method {purchase.method = method}
+        if let purchaseMethod = purchaseMethod {purchase.purchaseMethod = purchaseMethod}
         purchase.lastModified = Date()
         CoreDataController.shared.saveToPersistentStore()
         guard let recordToUpdate = CKRecord(purchase: purchase) else {return}

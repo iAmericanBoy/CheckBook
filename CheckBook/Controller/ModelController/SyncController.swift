@@ -28,33 +28,71 @@ class SyncController {
     /// - parameter recordIDs: The recordIDs of records that need to be deleted from the local Store.
     func updateContextWith(fetchedRecordsToUpdate records: [CKRecord], deletedRecordIDs recordIDs: [CKRecord.ID]) {
         records.forEach { recordFromCK in
+            
             guard let uuid = UUID(uuidString: recordFromCK.recordID.recordName) else {return}
-            CoreDataController.shared.findPurchaseWith(uuid: uuid,inContext: CoreDataStack.childContext, completion: { purchaseFromCD in
-                
-                guard let amount = recordFromCK[Purchase.amountKey] as? Double,
-                    let date = recordFromCK[Purchase.dateKey] as? Date,
-                    let item = recordFromCK[Purchase.itemKey] as? String,
-                    let method = recordFromCK[Purchase.methodKey] as? UUID,
-                    let lastModified = recordFromCK[Purchase.lastModifiedKey] as? Date,
-                    let storeName = recordFromCK[Purchase.storeNameKey] as? String else {return }
-                
-                if let purchaseFromCD = purchaseFromCD {
-                    //update
-                    if Calendar.current.compare(lastModified, to: purchaseFromCD.lastModified!, toGranularity: Calendar.Component.second).rawValue > 0 {
+
+            if recordFromCK.recordType == Purchase.typeKey {
+                CoreDataController.shared.findPurchaseWith(uuid: uuid,inContext: CoreDataStack.childContext, completion: { purchaseFromCD in
                     
-                        purchaseFromCD.amount = amount
-                        purchaseFromCD.date = date
-                        purchaseFromCD.item = item
-                        purchaseFromCD.storeName = storeName
-                        purchaseFromCD.method = method
-                        purchaseFromCD.uuid = uuid
-                        purchaseFromCD.lastModified = lastModified
+                    guard let amount = recordFromCK[Purchase.amountKey] as? Double,
+                        let date = recordFromCK[Purchase.dateKey] as? Date,
+                        let item = recordFromCK[Purchase.itemKey] as? String,
+                        let methodUUID = recordFromCK[Purchase.methodKey] as? UUID,
+                        let methodName = recordFromCK[Purchase.methodNameKey] as? String,
+                        let lastModified = recordFromCK[Purchase.lastModifiedKey] as? Date,
+                        let storeName = recordFromCK[Purchase.storeNameKey] as? String else {return}
+                    
+                    CoreDataController.shared.findPurchaseMethodWith(uuid: methodUUID, inContext: CoreDataStack.childContext, completion: { (foundPurchaseMethod) in
+                        let purchaseMethod: PurchaseMethod?
+
+                        if let foundPurchaseMethod = foundPurchaseMethod {
+                            purchaseMethod  = foundPurchaseMethod
+                        } else {
+                            purchaseMethod = PurchaseMethod(name: methodName, uuid: methodUUID, context: CoreDataStack.childContext)
+                        }
+                        
+                        guard let method = purchaseMethod else {return}
+                        
+                        if let purchaseFromCD = purchaseFromCD {
+                            //update
+                            if Calendar.current.compare(lastModified, to: purchaseFromCD.lastModified!, toGranularity: Calendar.Component.second).rawValue > 0 {
+                                
+                                purchaseFromCD.amount = amount
+                                purchaseFromCD.date = date
+                                purchaseFromCD.item = item
+                                purchaseFromCD.storeName = storeName
+                                purchaseFromCD.uuid = uuid
+                                purchaseFromCD.purchaseMethod = method
+                                purchaseFromCD.methodName = method.name
+                                purchaseFromCD.methodUUID = method.uuid
+                                purchaseFromCD.lastModified = lastModified
+                            }
+                        } else {
+                            //create new Purchase in ChildContext
+                            Purchase(amount: amount, date: date, item: item, storeName: storeName, uuid: uuid, lastModified: lastModified, purchaseMethod: method, context: CoreDataStack.childContext)
+                        }
+                    })
+                })
+            } else if recordFromCK.recordType == PurchaseMethod.typeKey {
+                CoreDataController.shared.findPurchaseMethodWith(uuid: uuid, completion: { (foundPurchaseMethod) in
+                    
+                    guard let name = recordFromCK[PurchaseMethod.nameKey] as? String,
+                        let lastModified = recordFromCK[PurchaseMethod.lastModifiedKey] as? Date else {return}
+                    
+                    if let foundPurchaseMethod = foundPurchaseMethod {
+                        //update
+                        if Calendar.current.compare(lastModified, to: foundPurchaseMethod.lastModified!, toGranularity: Calendar.Component.second).rawValue > 0 {
+                            
+                            foundPurchaseMethod.name = name
+                            foundPurchaseMethod.uuid = uuid
+                            foundPurchaseMethod.lastModified = lastModified
+                        }
+                    } else {
+                        //create new Purchase in ChildContext
+                        PurchaseMethod(name: name, uuid: uuid, lastModified: lastModified, context: CoreDataStack.childContext)
                     }
-                } else {
-                    //create new Purchase in ChildContext
-                    Purchase(amount: amount, date: date, item: item, storeName: storeName, method: method, uuid: uuid, lastModified: lastModified, context: CoreDataStack.childContext)
-                }
-            })
+                })
+            }
         }
         
         //delete
@@ -62,6 +100,11 @@ class SyncController {
             CoreDataController.shared.findPurchaseWith(uuid: UUID(uuidString: recordID.recordName)!, inContext: CoreDataStack.childContext, completion: { (purchaseToDelete) in
                 if let purchase = purchaseToDelete {
                     CoreDataController.shared.remove(object: purchase)
+                }
+            })
+            CoreDataController.shared.findPurchaseMethodWith(uuid: UUID(uuidString: recordID.recordName)!, inContext: CoreDataStack.childContext, completion: { (purchaseMethodToDelete) in
+                if let purchaseMethod = purchaseMethodToDelete {
+                    CoreDataController.shared.remove(object: purchaseMethod)
                 }
             })
         }

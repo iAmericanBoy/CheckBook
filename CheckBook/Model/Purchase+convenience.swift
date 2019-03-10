@@ -16,7 +16,6 @@ extension Purchase {
                      date: Date,
                      item: String,
                      storeName: String,
-                     methodUUID: UUID,
                      uuid: UUID = UUID(),
                      lastModified: Date = Date(),
                      purchaseMethod: PurchaseMethod,
@@ -28,7 +27,7 @@ extension Purchase {
         self.date = date
         self.item = item
         self.methodName = purchaseMethod.name
-        self.methodUUID = methodUUID
+        self.methodUUID = purchaseMethod.uuid
         self.storeName = storeName
         self.purchaseMethod = purchaseMethod
         
