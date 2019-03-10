@@ -16,7 +16,7 @@ class CoreDataController {
     static let shared = CoreDataController()
     
     //MARK: - FetchResultsController
-    ///Simple FetchController to fetch all the Purchases.
+    ///FetchController to fetch all the Purchases.
     let purchaseFetchResultsController: NSFetchedResultsController<Purchase> = {
         let fetchRequest: NSFetchRequest<Purchase> = Purchase.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "item", ascending: true)
@@ -24,9 +24,17 @@ class CoreDataController {
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
     }()
     
-    ///Simple FetchController to fetch all the PurchaseMethods.
+    ///FetchController to fetch all the PurchaseMethods.
     let purchaseMethodFetchResultsController: NSFetchedResultsController<PurchaseMethod> = {
         let fetchRequest: NSFetchRequest<PurchaseMethod> = PurchaseMethod.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
+    }()
+    
+    ///FetchController to fetch all the PurchaseMethods.
+    let purchasesOfPurchaseMethodFetchResultsController: NSFetchedResultsController<Purchase> = {
+        let fetchRequest: NSFetchRequest<Purchase> = Purchase.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
@@ -38,6 +46,8 @@ class CoreDataController {
         do{
             try purchaseFetchResultsController.performFetch()
             try purchaseMethodFetchResultsController.performFetch()
+            try purchasesOfPurchaseMethodFetchResultsController.performFetch()
+
         } catch {
             print("Error loading fetchResultsControllers. \(String(describing: error)), \(error.localizedDescription)")
         }

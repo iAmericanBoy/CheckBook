@@ -13,7 +13,12 @@ class PMPurchaseListTableViewController: UITableViewController {
     
     //MARK: - Properties
     var purchaseMethod: PurchaseMethod? {
-        didSet{
+        didSet {
+            if let method = purchaseMethod {
+                CoreDataController.shared.purchasesOfPurchaseMethodFetchResultsController.fetchRequest.predicate = NSPredicate(format: "%K == %@", argumentArray: [#keyPath(Purchase.purchaseMethod),method])
+                try? CoreDataController.shared.purchasesOfPurchaseMethodFetchResultsController.performFetch()
+            }
+            
             loadViewIfNeeded()
             updateViews()
         }
@@ -22,7 +27,7 @@ class PMPurchaseListTableViewController: UITableViewController {
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        CoreDataController.shared.purchaseFetchResultsController.delegate = self
+        CoreDataController.shared.purchasesOfPurchaseMethodFetchResultsController.delegate = self
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -31,14 +36,14 @@ class PMPurchaseListTableViewController: UITableViewController {
     
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return purchaseMethod?.purchases?.count ?? 0
+        return CoreDataController.shared.purchasesOfPurchaseMethodFetchResultsController.sections?[section].numberOfObjects ?? 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "purchaseCell", for: indexPath)
         
-        cell.textLabel?.text =
-        cell.detailTextLabel?.text =
+        cell.textLabel?.text = CoreDataController.shared.purchasesOfPurchaseMethodFetchResultsController.object(at: indexPath).item
+        cell.detailTextLabel?.text = CoreDataController.shared.purchasesOfPurchaseMethodFetchResultsController.object(at: indexPath).lastModified?.description
         
         return cell
     }
