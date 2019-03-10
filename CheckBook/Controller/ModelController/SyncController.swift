@@ -33,23 +33,32 @@ class SyncController {
     /// - parameter records: The records that need to be updated or created in the local Store
     /// - parameter recordIDs: The recordIDs of records that need to be deleted from the local Store.
     func updateContextWith(fetchedRecordsToUpdate records: [CKRecord], deletedRecordIDs recordIDs: [CKRecord.ID]) {
-        let purchases = records.compactMap({ Purchase(record: $0, context: CoreDataStack.childContext)})
-        purchases.forEach { purchaseFromCK in
-            CoreDataController.shared.findPurchaseWith(uuid: purchaseFromCK.uuid,inContext: CoreDataStack.childContext, completion: { purchaseFromCD in
-                if let purchaseFromCD  = purchaseFromCD {
+        records.forEach { recordFromCK in
+            guard let uuid = UUID(uuidString: recordFromCK.recordID.recordName) else {return}
+            CoreDataController.shared.findPurchaseWith(uuid: uuid,inContext: CoreDataStack.childContext, completion: { purchaseFromCD in
+                
+                guard let amount = recordFromCK[Purchase.amountKey] as? Double,
+                    let date = recordFromCK[Purchase.dateKey] as? Date,
+                    let item = recordFromCK[Purchase.itemKey] as? String,
+                    let method = recordFromCK[Purchase.methodKey] as? String,
+                    let lastModified = recordFromCK[Purchase.lastModifiedKey] as? Date,
+                    let storeName = recordFromCK[Purchase.storeNameKey] as? String else {return }
+                
+                if let purchaseFromCD = purchaseFromCD {
                     //update
-                    if purchaseFromCK.lastModified?.compare((purchaseFromCD.lastModified)!).rawValue == 1 {
-                        purchaseFromCD.amount = purchaseFromCK.amount
-                        purchaseFromCD.date = purchaseFromCK.date
-                        purchaseFromCD.item = purchaseFromCK.item
-                        purchaseFromCD.storeName = purchaseFromCK.storeName
-                        purchaseFromCD.method = purchaseFromCK.method
-                        purchaseFromCD.uuid = purchaseFromCK.uuid
-                        purchaseFromCD.lastModified = purchaseFromCK.lastModified
+                    if Calendar.current.compare(lastModified, to: purchaseFromCD.lastModified!, toGranularity: Calendar.Component.second).rawValue > 0 {
+                    
+                        purchaseFromCD.amount = amount
+                        purchaseFromCD.date = date
+                        purchaseFromCD.item = item
+                        purchaseFromCD.storeName = storeName
+                        purchaseFromCD.method = method
+                        purchaseFromCD.uuid = uuid
+                        purchaseFromCD.lastModified = lastModified
                     }
                 } else {
                     //create new Purchase in ChildContext
-                    Purchase(amount: purchaseFromCK.amount, date: purchaseFromCK.date!, item: purchaseFromCK.item!, storeName: purchaseFromCK.storeName!, method: purchaseFromCK.method!, uuid: purchaseFromCK.uuid!, lastModified: purchaseFromCK.lastModified!, context: CoreDataStack.childContext)
+                    Purchase(amount: amount, date: date, item: item, storeName: storeName, method: method, uuid: uuid, lastModified: lastModified, context: CoreDataStack.childContext)
                 }
             })
         }
@@ -67,11 +76,11 @@ class SyncController {
         do {
             if CoreDataStack.childContext.hasChanges {
                 try CoreDataStack.childContext.save()
-                //TODO: - Make sure MainContext gets notified and updates Views
             }
         } catch {
             print("Error saving updated Objects to childContext with error: \(String(describing: error)) \(error.localizedDescription))")
         }
+        CoreDataController.shared.saveToPersistentStore()
     }
     
     ///Retries upload of cached objects.

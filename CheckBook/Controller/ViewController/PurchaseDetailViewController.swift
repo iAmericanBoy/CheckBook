@@ -33,7 +33,7 @@ class PurchaseDetailViewController: UIViewController {
     //MARK: - Actions
     @IBAction func saveButtonTapped(_ sender: UIBarButtonItem) {
         guard let amount = amountTextField.text, !amount.isEmpty,
-            let storeName = amountTextField.text, !storeName.isEmpty,
+            let storeName = storeNameTextField.text, !storeName.isEmpty,
             let method = methodTextField.text, !method.isEmpty,
             let item = itemTextField.text, !item.isEmpty,
             let date = dateTextField.text, !date.isEmpty else {return }

@@ -29,7 +29,7 @@ class PurchaseListTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "purchaseCell", for: indexPath)
         
         cell.textLabel?.text = CoreDataController.shared.purchaseFetchResultsController.object(at: indexPath).item
-        cell.detailTextLabel?.text = CoreDataController.shared.purchaseFetchResultsController.object(at: indexPath).storeName
+        cell.detailTextLabel?.text = CoreDataController.shared.purchaseFetchResultsController.object(at: indexPath).lastModified?.description
         return cell
     }
     
