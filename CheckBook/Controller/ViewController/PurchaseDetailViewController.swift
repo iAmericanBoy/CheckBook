@@ -40,11 +40,19 @@ class PurchaseDetailViewController: UIViewController {
         
         if let purchase = purchase {
             //update
+            if purchase.purchaseMethod?.name != method {
+                let newMethod = PurchaseMethodController.shared.createNewPurchaseWith(name: method)
+                PurchaseMethodController.shared.change(purchaseMethod: purchase.purchaseMethod!, ofPurchase: purchase, toPurchaseMethod: newMethod)
+            }
 
+            PurchaseController.shared.update(purchase: purchase, amount: Double(amount)!, date: Date(), item: item, storeName: storeName, purchaseMethod: purchase.purchaseMethod)
+            
             self.navigationController?.popViewController(animated: true)
         } else {
             //saveNew
-
+            let newMethod = PurchaseMethodController.shared.createNewPurchaseWith(name: method)
+            PurchaseController.shared.createNewPurchaseWith(amount: Double(amount)!, date: Date(), item: item, storeName: storeName, purchaseMethod: newMethod)
+            
             self.navigationController?.popViewController(animated: true)
         }
     }

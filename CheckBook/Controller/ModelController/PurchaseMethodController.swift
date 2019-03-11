@@ -18,11 +18,11 @@ class PurchaseMethodController {
     //MARK: - CRUD
     /// Creates new PurchaseMethod using the convenience initilizer inside the CoredataStack.context and tries to uploads it to CloudKit. If the upload fails the new PurchaseMethod gets added to the CacheContext for a later try.
     /// - parameter name: The amount of the purchase.
-    func createNewPurchaseWith(name: String) {
+    func createNewPurchaseWith(name: String) -> PurchaseMethod {
         let newPurchaseMethod = PurchaseMethod(name: name)
         CoreDataController.shared.saveToPersistentStore()
         
-        guard let newRecord = CKRecord(purchaseMethod: newPurchaseMethod) else {return}
+        guard let newRecord = CKRecord(purchaseMethod: newPurchaseMethod) else {return newPurchaseMethod}
 
         CloudKitController.shared.create(record: newRecord) { (isSuccess, newPurchase) in
             if !isSuccess {
@@ -30,6 +30,7 @@ class PurchaseMethodController {
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
             }
         }
+        return newPurchaseMethod
     }
     
     /// Updates the PurchaseMethod and resets the last modified parameter and updates the object in the CoredataStack.context. It tries to upload it to CloudKit.If the upload fails the new PurchaseMethod gets added to the CacheContext for a later try.
@@ -77,6 +78,7 @@ class PurchaseMethodController {
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuidOfNew)
             }
         }
+        CoreDataController.shared.saveToPersistentStore()
     }
     
     /// Deletes the PurchaseMethod, deletes it from Cotext and CloudKit. If the CK delete Fails the PurchaseMethod gets added to the cache for uploading at a later date.

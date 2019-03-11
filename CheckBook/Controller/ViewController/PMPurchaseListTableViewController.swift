@@ -60,8 +60,9 @@ class PMPurchaseListTableViewController: UITableViewController {
         //IIDOO
         if segue.identifier == "toDetailVC" {
             guard let index = tableView.indexPathForSelectedRow else {return}
-            if let destinationVC = segue.destination as? PurchaseDetailViewController {
+            if let destinationVC = segue.destination as? PMPurchaseDetailViewController {
                 destinationVC.purchase = purchaseMethod?.purchases?.object(at: index.row) as? Purchase
+                destinationVC.purchaseMethod = purchaseMethod
             }
         }
     }
