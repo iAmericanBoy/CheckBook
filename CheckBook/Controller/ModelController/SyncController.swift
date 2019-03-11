@@ -37,18 +37,18 @@ class SyncController {
                     guard let amount = recordFromCK[Purchase.amountKey] as? Double,
                         let date = recordFromCK[Purchase.dateKey] as? Date,
                         let item = recordFromCK[Purchase.itemKey] as? String,
-                        let methodUUID = recordFromCK[Purchase.methodKey] as? UUID,
+                        let methodUUID = recordFromCK[Purchase.methodKey] as? String,
                         let methodName = recordFromCK[Purchase.methodNameKey] as? String,
                         let lastModified = recordFromCK[Purchase.lastModifiedKey] as? Date,
                         let storeName = recordFromCK[Purchase.storeNameKey] as? String else {return}
                     
-                    CoreDataController.shared.findPurchaseMethodWith(uuid: methodUUID, inContext: CoreDataStack.childContext, completion: { (foundPurchaseMethod) in
+                    CoreDataController.shared.findPurchaseMethodWith(uuid: UUID(uuidString: methodUUID)!, inContext: CoreDataStack.childContext, completion: { (foundPurchaseMethod) in
                         let purchaseMethod: PurchaseMethod?
 
                         if let foundPurchaseMethod = foundPurchaseMethod {
                             purchaseMethod  = foundPurchaseMethod
                         } else {
-                            purchaseMethod = PurchaseMethod(name: methodName, uuid: methodUUID, context: CoreDataStack.childContext)
+                            purchaseMethod = PurchaseMethod(name: methodName, uuid: UUID(uuidString: methodUUID)!, context: CoreDataStack.childContext)
                         }
                         
                         guard let method = purchaseMethod else {return}
