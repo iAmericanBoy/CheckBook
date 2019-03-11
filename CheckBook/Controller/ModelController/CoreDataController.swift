@@ -46,7 +46,6 @@ class CoreDataController {
         do{
             try purchaseFetchResultsController.performFetch()
             try purchaseMethodFetchResultsController.performFetch()
-            try purchasesOfPurchaseMethodFetchResultsController.performFetch()
 
         } catch {
             print("Error loading fetchResultsControllers. \(String(describing: error)), \(error.localizedDescription)")

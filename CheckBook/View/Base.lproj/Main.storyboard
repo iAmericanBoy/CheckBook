@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Root View Controller-->
+        <!--Purchases-->
         <scene sceneID="JhQ-b9-KYv">
             <objects>
                 <tableViewController id="cM3-wx-Q7w" customClass="PurchaseListTableViewController" customModule="CheckBook" customModuleProvider="target" sceneMemberID="viewController">
@@ -52,7 +52,7 @@
                             <outlet property="delegate" destination="cM3-wx-Q7w" id="eyj-gr-14w"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="aRt-MG-fYS">
+                    <navigationItem key="navigationItem" title="Purchases" id="aRt-MG-fYS">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="WbG-dk-70k">
                             <connections>
                                 <segue destination="1V1-JX-nM5" kind="show" identifier="toNewVC" id="uXC-zF-Jj0"/>

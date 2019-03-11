@@ -39,18 +39,18 @@ extension Purchase {
         guard let amount = record[Purchase.amountKey] as? Double,
             let date = record[Purchase.dateKey] as? Date,
             let item = record[Purchase.itemKey] as? String,
-            let methodUUID = record[Purchase.methodKey] as? UUID,
+            let methodUUID = record[Purchase.methodKey] as? String,
             let methodName = record[Purchase.methodNameKey] as? String,
             let lastModified = record[Purchase.lastModifiedKey] as? Date,
             let storeName = record[Purchase.storeNameKey] as? String else {return nil}
         
         self.init(context: context)
 
-        CoreDataController.shared.findPurchaseMethodWith(uuid: methodUUID) { [weak self] (foundPurchaseMethod) in
+        CoreDataController.shared.findPurchaseMethodWith(uuid: UUID(uuidString: methodUUID)!) { [weak self] (foundPurchaseMethod) in
             if let foundPurchaseMethod = foundPurchaseMethod {
                 self?.purchaseMethod  = foundPurchaseMethod
             } else {
-                self?.purchaseMethod = PurchaseMethod(name: methodName, uuid: methodUUID)
+                self?.purchaseMethod = PurchaseMethod(name: methodName, uuid: UUID(uuidString: methodUUID)!)
             }
         }
         
@@ -59,7 +59,7 @@ extension Purchase {
         self.item = item
         self.storeName = storeName
         self.methodName = methodName
-        self.methodUUID = methodUUID
+        self.methodUUID = UUID(uuidString: methodUUID)!
         self.lastModified = lastModified
         self.uuid = UUID(uuidString: record.recordID.recordName)!
     }
@@ -71,12 +71,14 @@ extension CKRecord {
         
         let purchaseMethodReference = CKRecord.Reference(recordID: CKRecord.ID(recordName: purchase.methodUUID!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)), action: CKRecord_Reference_Action.none)
         
+        guard let methodUUID = purchase.purchaseMethod?.uuid, let methodName = purchase.purchaseMethod?.name else {return nil}
+        
         setValue(purchase.amount, forKey: Purchase.amountKey)
         setValue(purchaseMethodReference, forKey: Purchase.methodReferenceKey)
         setValue(purchase.date, forKey: Purchase.dateKey)
         setValue(purchase.item, forKey: Purchase.itemKey)
-        setValue(purchase.purchaseMethod?.uuid, forKey: Purchase.methodKey)
-        setValue(purchase.purchaseMethod?.name, forKey: Purchase.methodNameKey)
+        setValue(methodUUID.uuidString, forKey: Purchase.methodKey)
+        setValue(methodName, forKey: Purchase.methodNameKey)
         setValue(purchase.lastModified, forKey: Purchase.lastModifiedKey)
         setValue(purchase.storeName, forKey: Purchase.storeNameKey)
     }
