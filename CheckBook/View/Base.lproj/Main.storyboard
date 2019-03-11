@@ -398,8 +398,19 @@
                         <viewLayoutGuide key="safeArea" id="KOW-mo-ZPu"/>
                     </view>
                     <navigationItem key="navigationItem" title="new Purchase" id="HwQ-Se-3ml">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="0zE-mm-1nE"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="0zE-mm-1nE">
+                            <connections>
+                                <action selector="saveButtonTapped:" destination="TWi-NU-jhH" id="8bc-hV-tba"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="amountTextField" destination="ky3-Gr-rZk" id="DUq-Nb-Mty"/>
+                        <outlet property="dateTextField" destination="jOm-VS-wAZ" id="xvb-AV-rM0"/>
+                        <outlet property="itemTextField" destination="auD-cv-ken" id="QmF-Da-jxM"/>
+                        <outlet property="methodTextField" destination="qcr-FI-GyE" id="GiZ-cb-g8E"/>
+                        <outlet property="storeNameTextField" destination="yAE-4O-1fq" id="yZ5-Sw-vTF"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Ds-7f-MPa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -407,7 +418,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="XBk-14-izn"/>
+        <segue reference="Oct-H1-ae7"/>
         <segue reference="OYy-W8-gbS"/>
         <segue reference="On9-kT-UMp"/>
     </inferredMetricsTieBreakers>

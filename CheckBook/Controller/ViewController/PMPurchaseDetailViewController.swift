@@ -70,8 +70,10 @@ class PMPurchaseDetailViewController: UIViewController {
     
     //MARK: - Private Functions
     func updateViews(){
-        methodTextField.text = purchaseMethod?.name
-        dateTextField.text = Date().description
+        guard let purchaseMethod = purchaseMethod else {return }
+
+        methodTextField?.text = purchaseMethod.name
+        dateTextField?.text = Date().description
         
         guard let purchase = purchase else {return }
         amountTextField.text = "\(purchase.amount)"

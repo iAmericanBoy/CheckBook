@@ -71,6 +71,11 @@ class PMPurchaseListTableViewController: UITableViewController {
                 destinationVC.purchaseMethod = purchaseMethod
             }
         }
+        if segue.identifier == "toNewVC" {
+            if let destinationVC = segue.destination as? PMPurchaseDetailViewController {
+                destinationVC.purchaseMethod = purchaseMethod
+            }
+        }
     }
     
     //MARK: - Private Functions
