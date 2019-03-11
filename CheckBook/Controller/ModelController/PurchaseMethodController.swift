@@ -49,6 +49,17 @@ class PurchaseMethodController {
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
             }
         }
+        
+        let purchaseRecords = purchaseMethod.purchases?.compactMap({ CKRecord(purchase: $0 as! Purchase )})
+        
+        CloudKitController.shared.saveChangestoCK(recordsToUpdate: purchaseRecords!, purchasesToDelete: []) { (isSuccess, updatedRecords, _) in
+            if !isSuccess {
+                purchaseRecords?.forEach({ (record) in
+                    guard let uuid = UUID(uuidString: record.recordID.recordName) else {return}
+                    SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                })
+            }
+        }
     }
     
     ///Changes to current PurchaseMethod reference to a different PurchaseMethod and saves the change to CloudKit.
