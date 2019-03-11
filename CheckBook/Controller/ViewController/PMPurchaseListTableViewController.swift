@@ -15,7 +15,7 @@ class PMPurchaseListTableViewController: UITableViewController {
     var purchaseMethod: PurchaseMethod? {
         didSet {
             if let method = purchaseMethod {
-                CoreDataController.shared.purchasesOfPurchaseMethodFetchResultsController.fetchRequest.predicate = NSPredicate(format: "%K == %@", argumentArray: [#keyPath(Purchase.purchaseMethod),method])
+                CoreDataController.shared.purchasesOfPurchaseMethodFetchResultsController.fetchRequest.predicate = NSPredicate(format: "%@ == %@", argumentArray: ["purchaseMethod",method])
                 try? CoreDataController.shared.purchasesOfPurchaseMethodFetchResultsController.performFetch()
             }
             
@@ -58,10 +58,16 @@ class PMPurchaseListTableViewController: UITableViewController {
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //IIDOO
-        if segue.identifier == "toDetailVC" {
+        if segue.identifier == "toDetailPurchaseVC" {
             guard let index = tableView.indexPathForSelectedRow else {return}
             if let destinationVC = segue.destination as? PMPurchaseDetailViewController {
                 destinationVC.purchase = purchaseMethod?.purchases?.object(at: index.row) as? Purchase
+                destinationVC.purchaseMethod = purchaseMethod
+            }
+        }
+        if segue.identifier == "toDetailVC" {
+            if let destinationVC = segue.destination as? PMDetailViewController {
+
                 destinationVC.purchaseMethod = purchaseMethod
             }
         }

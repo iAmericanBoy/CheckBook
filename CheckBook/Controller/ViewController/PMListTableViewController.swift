@@ -48,10 +48,6 @@ class PMListTableViewController: UITableViewController {
             if let destinationVC = segue.destination as? PMPurchaseListTableViewController {
                 destinationVC.purchaseMethod = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: index)
             }
-        case "toNewVC":
-            if let destinationVC = segue.destination as? PMDetailViewController {
-                destinationVC.purchaseMethod = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: index)
-            }
         default:
             break
         }

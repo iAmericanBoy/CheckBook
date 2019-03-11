@@ -67,7 +67,7 @@
         <!--Method-->
         <scene sceneID="3Qb-nk-tCM">
             <objects>
-                <tableViewController id="kKz-vl-CJd" customClass="PMListTableViewController" sceneMemberID="viewController">
+                <tableViewController id="kKz-vl-CJd" customClass="PMListTableViewController" customModule="CheckBook" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="5pz-VK-ytw">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -97,7 +97,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="aPp-dz-Lhn" kind="show" identifier="toPurchaseTVC" trigger="accessoryAction" id="9h4-fH-EH8"/>
+                                    <segue destination="aPp-dz-Lhn" kind="show" identifier="toPurchaseTVC" id="bZX-C3-PWI"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -282,7 +282,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tx6-pt-sOI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2185" y="554"/>
+            <point key="canvasLocation" x="2185" y="556"/>
         </scene>
         <!--Purchases-->
         <scene sceneID="C3U-5r-dy8">
@@ -317,7 +317,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="TWi-NU-jhH" kind="show" identifier="toDetailVC" id="XBk-14-izn"/>
+                                    <segue destination="TWi-NU-jhH" kind="show" identifier="toDetailPurchaseVC" id="XBk-14-izn"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -343,7 +343,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Eub-i7-FcV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1214" y="1327"/>
+            <point key="canvasLocation" x="1209" y="1373"/>
         </scene>
         <!--new Purchase-->
         <scene sceneID="a56-Xz-p9D">
@@ -407,7 +407,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Oct-H1-ae7"/>
+        <segue reference="XBk-14-izn"/>
         <segue reference="OYy-W8-gbS"/>
         <segue reference="On9-kT-UMp"/>
     </inferredMetricsTieBreakers>
