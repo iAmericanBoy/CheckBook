@@ -221,6 +221,42 @@ class CloudKitController {
             }
         }
     }
+    //MARK: - Subscribtion
+    ///Subscribes to all new changes in the given CKRecordZone.
+    /// - parameter zone: The zone to subrscribe to changes to.
+    func subscribeToNewChanges(forRecodZone zone: CKRecordZone) {
+        let privateZoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
+        
+        let subscription = CKRecordZoneSubscription(zoneID: zone.zoneID, subscriptionID: CloudKitController.privateSubID)
+        
+        
+        let notificationInfo = CKSubscription.NotificationInfo()
+        notificationInfo.title = "New Record"
+        notificationInfo.alertBody = "New Record available"
+        
+        subscription.notificationInfo = notificationInfo
+        
+        privateDB.save(subscription) { (_, error) in
+            if let error = error {
+                print("An Error signing up for a subscribtion has occured: \(error), \(error.localizedDescription)")
+                return
+            }
+        }
+    }
+    
+    ///Removes Subscribtion with given ID.
+    /// - parameter subscribtionID: The zone to subrscribe to changes to.
+    func removeSubscribtion(withSubscribtionID subscribtionID: String) {
+        
+        let modifyOperation = CKModifySubscriptionsOperation(subscriptionsToSave: <#T##[CKSubscription]?#>, subscriptionIDsToDelete: <#T##[CKSubscription.ID]?#>)
+
+        modifyOperation.modifySubscriptionsCompletionBlock = { (_,_,_) in
+            
+        }
+        
+        privateDB.add(modifyOperation)
+        
+    }
     
     //MARK: - Save
     /// Updates and Deletes changes to CloudKit.

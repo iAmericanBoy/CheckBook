@@ -13,4 +13,6 @@ extension CloudKitController {
     static let zoneChangeServerToken = "serverChangeToken"
     /// "updatesInZoneServerToken"
     static let updatesInZoneServerToken = "updatesInZoneServerToken"
+    /// "privateSubscribtionID"
+    static let privateSubID = "privateSubscribtionID"
 }
