@@ -14,10 +14,6 @@ class PMPurchaseListTableViewController: UITableViewController {
     //MARK: - Properties
     var purchaseMethod: PurchaseMethod? {
         didSet {
-            if let method = purchaseMethod {
-                CoreDataController.shared.purchasesOfPurchaseMethodFetchResultsController.fetchRequest.predicate = NSPredicate(format: "%@ == %@", argumentArray: ["purchaseMethod",method])
-                try? CoreDataController.shared.purchasesOfPurchaseMethodFetchResultsController.performFetch()
-            }
             
             loadViewIfNeeded()
             updateViews()
@@ -27,7 +23,7 @@ class PMPurchaseListTableViewController: UITableViewController {
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        CoreDataController.shared.purchasesOfPurchaseMethodFetchResultsController.delegate = self
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -36,14 +32,16 @@ class PMPurchaseListTableViewController: UITableViewController {
     
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return CoreDataController.shared.purchasesOfPurchaseMethodFetchResultsController.sections?[section].numberOfObjects ?? 0
+        return purchaseMethod?.purchases?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "purchaseCell", for: indexPath)
         
-        cell.textLabel?.text = CoreDataController.shared.purchasesOfPurchaseMethodFetchResultsController.object(at: indexPath).item
-        cell.detailTextLabel?.text = CoreDataController.shared.purchasesOfPurchaseMethodFetchResultsController.object(at: indexPath).lastModified?.description
+        guard let purchase = purchaseMethod?.purchases?[indexPath.row] as? Purchase else {return cell}
+        
+        cell.textLabel?.text = purchase.item
+        cell.detailTextLabel?.text = purchase.lastModified?.description
         
         return cell
     }
@@ -83,42 +81,6 @@ class PMPurchaseListTableViewController: UITableViewController {
         guard let purchaseMethod = purchaseMethod else {return}
         
         self.title = purchaseMethod.name
-    }
-}
-
-//MARK: - NSFetchResultsControllerDelegate
-extension PMPurchaseListTableViewController: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.beginUpdates()
-    }
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
-    }
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-        case .insert:
-            guard let newIndexPath = newIndexPath else {return}
-            tableView.insertRows(at: [newIndexPath], with: .automatic)
-        case .delete:
-            guard let indexPath = indexPath else {return}
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-        case .move:
-            guard let newIndexPath = newIndexPath, let indexPath = indexPath else {return}
-            tableView.moveRow(at: indexPath, to: newIndexPath)
-        case .update:
-            guard let indexPath = indexPath else {return}
-            tableView.reloadRows(at: [indexPath], with: .automatic)
-        }
-    }
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-        let indexSet = IndexSet(integer: sectionIndex)
-        switch type{
-        case .insert:
-            tableView.insertSections(indexSet, with: .automatic)
-        case .delete:
-            tableView.deleteSections(indexSet, with: .automatic)
-        default:
-            break
-        }
+        tableView.reloadData()
     }
 }
