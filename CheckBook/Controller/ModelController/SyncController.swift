@@ -54,24 +54,38 @@ class SyncController {
                         
                         guard let method = purchaseMethod else {return}
                         
-                        if let purchaseFromCD = purchaseFromCD {
-                            //update
-                            if Calendar.current.compare(lastModified, to: purchaseFromCD.lastModified!, toGranularity: Calendar.Component.second).rawValue > 0 {
-                                
-                                purchaseFromCD.amount = amount
-                                purchaseFromCD.date = date
-                                purchaseFromCD.item = item
-                                purchaseFromCD.storeName = storeName
-                                purchaseFromCD.uuid = uuid
-                                purchaseFromCD.purchaseMethod = method
-                                purchaseFromCD.methodName = method.name
-                                purchaseFromCD.methodUUID = method.uuid
-                                purchaseFromCD.lastModified = lastModified
+                        CoreDataController.shared.findLedgerWith(uuid: UUID(uuidString: ledgerUUID)!, inContext: CoreDataStack.childContext, completion: { (foundLedger) in
+                            
+                            let ledgerOfPurchase: Ledger?
+                            
+                            if let foundLedger = foundLedger {
+                                ledgerOfPurchase = foundLedger
+                            } else {
+                                ledgerOfPurchase = Ledger(name: "", uuid: UUID(uuidString: ledgerUUID)!, context: CoreDataStack.childContext)
                             }
-                        } else {
-                            //create new Purchase in ChildContext
-                            Purchase(amount: amount, date: date, item: item, storeName: storeName, uuid: uuid, lastModified: lastModified, purchaseMethod: method, context: CoreDataStack.childContext)
-                        }
+                            
+                            guard let ledger = ledgerOfPurchase else {return}
+                            if let purchaseFromCD = purchaseFromCD {
+                                //update
+                                if Calendar.current.compare(lastModified, to: purchaseFromCD.lastModified!, toGranularity: Calendar.Component.second).rawValue > 0 {
+                                    
+                                    purchaseFromCD.amount = amount
+                                    purchaseFromCD.date = date
+                                    purchaseFromCD.item = item
+                                    purchaseFromCD.storeName = storeName
+                                    purchaseFromCD.uuid = uuid
+                                    purchaseFromCD.purchaseMethod = method
+                                    purchaseFromCD.methodName = method.name
+                                    purchaseFromCD.methodUUID = method.uuid
+                                    purchaseFromCD.ledger = ledger
+                                    purchaseFromCD.ledgerUUID = ledger.uuid
+                                    purchaseFromCD.lastModified = lastModified
+                                }
+                            } else {
+                                //create new Purchase in ChildContext
+                                Purchase(amount: amount, date: date, item: item, storeName: storeName, uuid: uuid, lastModified: lastModified, purchaseMethod: method, ledger: ledger, context: CoreDataStack.childContext)
+                            }
+                        })
                     })
                 })
             } else if recordFromCK.recordType == PurchaseMethod.typeKey {
