@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14460.32" systemVersion="18D109" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14490.98" systemVersion="18D109" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CachePurchase" representedClassName="CachePurchase" syncable="YES" codeGenerationType="class">
         <attribute name="lastUploadDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="uuid" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
+    </entity>
+    <entity name="Ledger" representedClassName="Ledger" syncable="YES" codeGenerationType="class">
+        <attribute name="lastModified" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="purchases" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Purchase" inverseName="ledger" inverseEntity="Purchase" syncable="YES"/>
     </entity>
     <entity name="Purchase" representedClassName="Purchase" syncable="YES" codeGenerationType="class">
         <attribute name="amount" attributeType="Double" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="date" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="item" attributeType="String" syncable="YES"/>
         <attribute name="lastModified" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="ledgerUUID" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="methodName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="methodUUID" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="storeName" attributeType="String" syncable="YES"/>
         <attribute name="uuid" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="ledger" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Ledger" inverseName="purchases" inverseEntity="Ledger" syncable="YES"/>
         <relationship name="purchaseMethod" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PurchaseMethod" inverseName="purchases" inverseEntity="PurchaseMethod" syncable="YES"/>
     </entity>
     <entity name="PurchaseMethod" representedClassName="PurchaseMethod" syncable="YES" codeGenerationType="class">
@@ -23,7 +31,8 @@
     </entity>
     <elements>
         <element name="CachePurchase" positionX="-631.53515625" positionY="43.23046875" width="128" height="75"/>
-        <element name="Purchase" positionX="-338.11328125" positionY="-39.5625" width="128" height="178"/>
-        <element name="PurchaseMethod" positionX="-30.3125" positionY="35.515625" width="128" height="103"/>
+        <element name="Purchase" positionX="-338.11328125" positionY="-39.5625" width="128" height="208"/>
+        <element name="PurchaseMethod" positionX="21.8046875" positionY="65.8359375" width="128" height="103"/>
+        <element name="Ledger" positionX="-527.53515625" positionY="-138.66796875" width="128" height="103"/>
     </elements>
 </model>

@@ -10,6 +10,7 @@
 		B6920AD1223045D000A63EC8 /* SyncController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6920AD0223045D000A63EC8 /* SyncController.swift */; };
 		B6920AD32231796200A63EC8 /* PurchaseListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6920AD22231796200A63EC8 /* PurchaseListTableViewController.swift */; };
 		B6920AD62231798A00A63EC8 /* PurchaseDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6920AD52231798A00A63EC8 /* PurchaseDetailViewController.swift */; };
+		B6A7E2242255136C0078174E /* Ledger+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A7E2232255136C0078174E /* Ledger+convenience.swift */; };
 		B6BF9FD3222F160300DFCE8C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FD2222F160300DFCE8C /* AppDelegate.swift */; };
 		B6BF9FD8222F160300DFCE8C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6BF9FD6222F160300DFCE8C /* Main.storyboard */; };
 		B6BF9FDA222F160700DFCE8C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B6BF9FD9222F160700DFCE8C /* Assets.xcassets */; };
@@ -32,12 +33,14 @@
 		B6EA85C122322C8900211068 /* CachePurchase+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EA85C022322C8900211068 /* CachePurchase+convenience.swift */; };
 		B6EA85C322323B7A00211068 /* CachePurchase+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EA85C222323B7A00211068 /* CachePurchase+MagicStrings.swift */; };
 		B6EA85F3223316C200211068 /* CloudKitController+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EA85F2223316C200211068 /* CloudKitController+MagicStrings.swift */; };
+		B6EF3BED225514340009BC2A /* Ledger+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EF3BEC225514340009BC2A /* Ledger+MagicStrings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		B6920AD0223045D000A63EC8 /* SyncController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncController.swift; sourceTree = "<group>"; };
 		B6920AD22231796200A63EC8 /* PurchaseListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseListTableViewController.swift; sourceTree = "<group>"; };
 		B6920AD52231798A00A63EC8 /* PurchaseDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseDetailViewController.swift; sourceTree = "<group>"; };
+		B6A7E2232255136C0078174E /* Ledger+convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ledger+convenience.swift"; sourceTree = "<group>"; };
 		B6BF9FCF222F160300DFCE8C /* CheckBook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CheckBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6BF9FD2222F160300DFCE8C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B6BF9FD7222F160300DFCE8C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -63,6 +66,7 @@
 		B6EA85C022322C8900211068 /* CachePurchase+convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CachePurchase+convenience.swift"; sourceTree = "<group>"; };
 		B6EA85C222323B7A00211068 /* CachePurchase+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CachePurchase+MagicStrings.swift"; sourceTree = "<group>"; };
 		B6EA85F2223316C200211068 /* CloudKitController+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CloudKitController+MagicStrings.swift"; sourceTree = "<group>"; };
+		B6EF3BEC225514340009BC2A /* Ledger+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ledger+MagicStrings.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +150,7 @@
 				B6BF9FEF222F266100DFCE8C /* Purchase+convenience.swift */,
 				B6EA85C022322C8900211068 /* CachePurchase+convenience.swift */,
 				B6E3329E2234CAD80088D6FF /* PurchaseMethod+convenience.swift */,
+				B6A7E2232255136C0078174E /* Ledger+convenience.swift */,
 				B6E332A22234CC0D0088D6FF /* MagicStrings */,
 			);
 			path = Model;
@@ -187,6 +192,7 @@
 				B6BF9FF1222F315D00DFCE8C /* Purchase+MagicStrings.swift */,
 				B6EA85C222323B7A00211068 /* CachePurchase+MagicStrings.swift */,
 				B6E332A02234CBFA0088D6FF /* PurchaseMethod+MagicStrings.swift */,
+				B6EF3BEC225514340009BC2A /* Ledger+MagicStrings.swift */,
 			);
 			path = MagicStrings;
 			sourceTree = "<group>";
@@ -293,6 +299,8 @@
 				B6E3329F2234CAD80088D6FF /* PurchaseMethod+convenience.swift in Sources */,
 				B6BF9FF7222F3FDA00DFCE8C /* PurchaseController.swift in Sources */,
 				B6DE00B12230345600C76A40 /* CloudKitController.swift in Sources */,
+				B6A7E2242255136C0078174E /* Ledger+convenience.swift in Sources */,
+				B6EF3BED225514340009BC2A /* Ledger+MagicStrings.swift in Sources */,
 				B6BF9FF0222F266100DFCE8C /* Purchase+convenience.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

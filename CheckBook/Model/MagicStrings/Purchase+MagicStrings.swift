@@ -11,7 +11,6 @@ import Foundation
 extension Purchase {
     /// "purchase"
     static let typeKey = "purchase"
-
     /// "private"
     static let privateRecordZoneName = "private"
     /// "amount"
@@ -24,8 +23,12 @@ extension Purchase {
     static let personKey = "person"
     /// "method"
     static let methodKey = "method"
+    /// "ledger"
+    static let ledgerKey = "ledger"
     /// "methodReferenceKey"
     static let methodReferenceKey = "methodReferenceKey"
+    /// "ledgerReferenceKey"
+    static let ledgerReferenceKey = "ledgerReferenceKey"
     /// "methodName"
     static let methodNameKey = "methodName"
     /// "storeName"
