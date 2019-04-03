@@ -40,12 +40,21 @@ class CoreDataController {
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
     }()
     
+    ///FetchController to fetch all the Ledgers.
+    let ledgerFetchResultsController: NSFetchedResultsController<Ledger> = {
+        let fetchRequest: NSFetchRequest<Ledger> = Ledger.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
+    }()
+    
     //MARK: - init
     ///Simple initializer to set up the fetchResultsController.
     init() {
         do{
             try purchaseFetchResultsController.performFetch()
             try purchaseMethodFetchResultsController.performFetch()
+            try ledgerFetchResultsController.performFetch()
 
         } catch {
             print("Error loading fetchResultsControllers. \(String(describing: error)), \(error.localizedDescription)")
@@ -78,7 +87,7 @@ class CoreDataController {
     /// Looks in the Context for a PurchaseMethod with a given UUID.
     /// - parameter uuid: The UUID of the PurchaseMethod that is being searched for.
     /// - parameter context: The context where we should check for the Object with the given UUID.
-    /// - parameter completion: Handler for when the purchase has been found.
+    /// - parameter completion: Handler for when the purchaseMethod has been found.
     /// - parameter foundPurchaseMethod: The purchaseMethod that was found or nil.
     func findPurchaseMethodWith(uuid: UUID?, inContext context: NSManagedObjectContext = CoreDataStack.context, completion: @escaping (_ foundPurchaseMethod:PurchaseMethod?) -> Void ) {
         guard let uuid = uuid else {
@@ -92,7 +101,29 @@ class CoreDataController {
             let purchaseMethods = try CoreDataStack.context.fetch(request)
             completion(purchaseMethods.first)
         } catch {
-            print("No PurchaseMethod with UUID fouund: \(error), \(error.localizedDescription)")
+            print("No PurchaseMethod with UUID found: \(error), \(error.localizedDescription)")
+            completion(nil)
+        }
+    }
+    
+    /// Looks in the Context for a Ledger with a given UUID.
+    /// - parameter uuid: The UUID of the ledger that is being searched for.
+    /// - parameter context: The context where we should check for the Object with the given UUID.
+    /// - parameter completion: Handler for when the ledger has been found.
+    /// - parameter foundLedger: The ledger that was found or nil.
+    func findLedgerWith(uuid: UUID?, inContext context: NSManagedObjectContext = CoreDataStack.context, completion: @escaping (_ foundLedger:Ledger?) -> Void ) {
+        guard let uuid = uuid else {
+            completion(nil)
+            return
+        }
+        let request: NSFetchRequest<Ledger> = Ledger.fetchRequest()
+        request.fetchLimit = 1
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(Ledger.uuid), uuid as CVarArg)
+        do {
+            let ledgers = try CoreDataStack.context.fetch(request)
+            completion(ledgers.first)
+        } catch {
+            print("No Ledger with UUID found: \(error), \(error.localizedDescription)")
             completion(nil)
         }
     }

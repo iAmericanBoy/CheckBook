@@ -59,7 +59,13 @@ extension Purchase {
             }
         }
         
-        //TODO: FIND Ledger in CoreData
+        CoreDataController.shared.findLedgerWith(uuid: UUID(uuidString: ledgerUUID)!) { [weak self] (foundLedger) in
+            if let foundLedger = foundLedger {
+                self?.ledger  = foundLedger
+            } else {
+                self?.ledger = Ledger(name: "", uuid: UUID(uuidString: ledgerUUID)!)
+            }
+        }
         
         self.amount = amount
         self.date = date

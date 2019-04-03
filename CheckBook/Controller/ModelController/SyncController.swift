@@ -38,6 +38,7 @@ class SyncController {
                         let date = recordFromCK[Purchase.dateKey] as? Date,
                         let item = recordFromCK[Purchase.itemKey] as? String,
                         let methodUUID = recordFromCK[Purchase.methodKey] as? String,
+                        let ledgerUUID = recordFromCK[Purchase.ledgerKey] as? String,
                         let methodName = recordFromCK[Purchase.methodNameKey] as? String,
                         let lastModified = recordFromCK[Purchase.lastModifiedKey] as? Date,
                         let storeName = recordFromCK[Purchase.storeNameKey] as? String else {return}
@@ -92,6 +93,25 @@ class SyncController {
                         PurchaseMethod(name: name, uuid: uuid, lastModified: lastModified, context: CoreDataStack.childContext)
                     }
                 })
+            } else if recordFromCK.recordType == Ledger.typeKey {
+                CoreDataController.shared.findLedgerWith(uuid: uuid, completion: { (foundLedger) in
+                    
+                    guard let name = recordFromCK[Ledger.nameKey] as? String,
+                        let lastModified = recordFromCK[Ledger.lastModifiedKey] as? Date else {return}
+                    
+                    if let foundLedger = foundLedger {
+                        //update foundLedger
+                        if Calendar.current.compare(lastModified, to: foundLedger.lastModified!, toGranularity: Calendar.Component.second).rawValue > 0 {
+                            
+                            foundLedger.name = name
+                            foundLedger.uuid = uuid
+                            foundLedger.lastModified = lastModified
+                        }
+                    } else {
+                        //create new Ledger in ChildContext
+                        Ledger(name: name, uuid: uuid, lastModified: lastModified, context: CoreDataStack.childContext)
+                    }
+                })
             }
         }
         
@@ -107,6 +127,12 @@ class SyncController {
                     CoreDataController.shared.remove(object: purchaseMethod)
                 }
             })
+            CoreDataController.shared.findLedgerWith(uuid: UUID(uuidString: recordID.recordName)!, inContext: CoreDataStack.childContext, completion: { (ledgerToDelete) in
+                if let ledger = ledgerToDelete {
+                    CoreDataController.shared.remove(object: ledger)
+                }
+            })
+            
         }
         
         //save
@@ -149,6 +175,9 @@ class SyncController {
                     }
                 }
             })
+            
+            //TODO: FIND PURCHASE METHOD
+            //TODO: FIND LEDGER
         }
         CloudKitController.shared.saveChangestoCK(recordsToUpdate: recordsToUpdate, purchasesToDelete: recordsToDelete) { (isSuccess, savedRecords, deletedRecordIDs) in
             guard let savedRecords = savedRecords, let deletedRecordIDs = deletedRecordIDs, isSuccess else {return}

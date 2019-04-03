@@ -19,7 +19,6 @@ class CloudKitController {
     /// The private Database of the User.
     fileprivate let privateDB = CKContainer.default().privateCloudDatabase
     
-    
     //MARK: - INIT
     init() {
         createZone(withName: Purchase.privateRecordZoneName) { (isSuccess, newZone) in
@@ -248,13 +247,13 @@ class CloudKitController {
     /// - parameter subscribtionID: The zone to subrscribe to changes to.
     func removeSubscribtion(withSubscribtionID subscribtionID: String) {
         
-        let modifyOperation = CKModifySubscriptionsOperation(subscriptionsToSave: <#T##[CKSubscription]?#>, subscriptionIDsToDelete: <#T##[CKSubscription.ID]?#>)
-
-        modifyOperation.modifySubscriptionsCompletionBlock = { (_,_,_) in
-            
-        }
-        
-        privateDB.add(modifyOperation)
+//        let modifyOperation = CKModifySubscriptionsOperation(subscriptionsToSave: <#T##[CKSubscription]?#>, subscriptionIDsToDelete: <#T##[CKSubscription.ID]?#>)
+//
+//        modifyOperation.modifySubscriptionsCompletionBlock = { (_,_,_) in
+//
+//        }
+//
+//        privateDB.add(modifyOperation)
         
     }
     
