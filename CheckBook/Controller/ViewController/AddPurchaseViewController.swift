@@ -44,6 +44,7 @@ class AddPurchaseViewController: UIViewController {
     
     //MARK: - Actions
     @IBAction func handlePan(_ sender: UIPanGestureRecognizer) {
+        dismissKeyBoards()
         switch sender.state {
         case .began:
             delegate?.panViews(withPanPoint: CGPoint(x: view.center.x, y: view.center.y + sender.translation(in: view).y))
@@ -58,28 +59,25 @@ class AddPurchaseViewController: UIViewController {
             return
         }
     }
+
     @IBAction func addPurchaseButtonTapped(_ sender: UIButton) {
         delegate?.userDidInteractWithCard()
-        storeNameTextField.resignFirstResponder()
-        methodTextField.resignFirstResponder()
+        dismissKeyBoards()
     }
     
     @IBAction func doneButtonTapped(_ sender: UIButton) {
-        amountTextField.resignFirstResponder()
-        dateTextField.resignFirstResponder()
+        dismissKeyBoards()
     }
     
     @IBAction func datePickerValueChanged(_ sender: UIDatePicker) {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale.autoupdatingCurrent
         dateFormatter.dateStyle = .medium
-        
         dateTextField.text = dateFormatter.string(from: sender.date)
     }
     
     //MARK: - Private Functions
     fileprivate func setupViews() {
-        
         storeNameTextField.delegate = self
         amountTextField.delegate = self
         dateTextField.delegate = self
@@ -87,10 +85,10 @@ class AddPurchaseViewController: UIViewController {
 
         dateTextField.inputAccessoryView = toolBar
         dateTextField.inputView = datePicker
+        
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale.autoupdatingCurrent
         dateFormatter.dateStyle = .medium
-        
         dateTextField.text = dateFormatter.string(from: Date())
         
         amountTextField.inputAccessoryView = toolBar
@@ -99,6 +97,13 @@ class AddPurchaseViewController: UIViewController {
         view.layer.cornerRadius = 20
 
         pullView.layer.cornerRadius = 4
+    }
+    
+    fileprivate func dismissKeyBoards() {
+        storeNameTextField.resignFirstResponder()
+        methodTextField.resignFirstResponder()
+        amountTextField.resignFirstResponder()
+        dateTextField.resignFirstResponder()
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
