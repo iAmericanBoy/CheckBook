@@ -19,18 +19,6 @@ class PurchaseListViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    func autoHide() {
-        // Sets target locations of views & then animates.
-        let cardTarget = self.view.frame.maxY  - (cardView.bounds.height / 5)
-        self.autoAnimate(view: cardView, edge: cardView.frame.minY, to: cardTarget, insightAlphaTarget: 1, completion: nil)
-    }
-    
-    func autoShow() {
-        // Sets target locations of views & then animates.
-        let cardTarget = self.view.frame.maxY
-        self.autoAnimate(view: cardView, edge: cardView.frame.maxY, to: cardTarget, insightAlphaTarget: 0, completion: nil)
-    }
-    
     func hideCard() {
         guard let addPurchaseCard = addPurchaseViewController else {return}
 
@@ -54,12 +42,7 @@ class PurchaseListViewController: UIViewController {
         })
     }
     
-    func autoAnimate(view: UIView, edge: CGFloat, to target: CGFloat, insightAlphaTarget: CGFloat?, completion: ((Bool) -> Void)?) {
-        let distanceToTranslate = target - edge
-        UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseInOut, animations: {
-            view.frame = view.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-        }, completion: completion)
-    }
+
     
     //MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -84,15 +67,15 @@ extension PurchaseListViewController: AddPurchaseCardDelegate {
         } else if velocity < -500 {
             self.showCard()
         } else if aboveHalfWay {
-            self.autoShow()
+            self.showCard()
         } else if !aboveHalfWay {
-            self.autoHide()
+            self.hideCard()
         }
     }
     
     func userDidInteractWithCard() {
         if cardView.frame.minY > (self.view.frame.height * 0.5) {
-            self.autoShow()
+            self.showCard()
         }
     }
     
