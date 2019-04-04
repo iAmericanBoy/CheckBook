@@ -115,7 +115,7 @@
         <scene sceneID="j48-7q-nzx">
             <objects>
                 <viewController id="MYC-vt-QZt" customClass="AddPurchaseViewController" customModule="CheckBook" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="QUX-nd-ifU">
+                    <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="QUX-nd-ifU">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -126,6 +126,39 @@
                                     <constraint firstAttribute="height" constant="8" id="xkJ-pD-Eex"/>
                                 </constraints>
                             </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="bcZ-Wj-o5e">
+                                <rect key="frame" x="8" y="204" width="358" height="361"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" horizontalHuggingPriority="249" verticalHuggingPriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="XSR-dV-iaU">
+                                        <rect key="frame" x="0.0" y="0.0" width="358" height="161"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Storename" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WRO-aM-shB">
+                                        <rect key="frame" x="0.0" y="181" width="358" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Amount" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EdB-MH-P9Q">
+                                        <rect key="frame" x="0.0" y="231" width="358" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Method" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dbp-BY-6hn">
+                                        <rect key="frame" x="0.0" y="281" width="358" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Date" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IB5-gg-gZ5">
+                                        <rect key="frame" x="0.0" y="331" width="358" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                            </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4F5-bc-uGJ">
                                 <rect key="frame" x="0.0" y="44" width="375" height="70"/>
                                 <constraints>
@@ -141,11 +174,15 @@
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="Tjs-mr-6hM" firstAttribute="centerX" secondItem="QUX-nd-ifU" secondAttribute="centerX" id="Fm4-AK-Sgg"/>
+                            <constraint firstItem="hgU-b3-rG5" firstAttribute="bottom" secondItem="bcZ-Wj-o5e" secondAttribute="bottom" constant="1" id="ICn-ma-7EJ"/>
                             <constraint firstItem="4F5-bc-uGJ" firstAttribute="leading" secondItem="hgU-b3-rG5" secondAttribute="leading" id="IYW-mL-lu6"/>
+                            <constraint firstItem="bcZ-Wj-o5e" firstAttribute="leading" secondItem="hgU-b3-rG5" secondAttribute="leading" constant="8" id="RRK-mL-gGr"/>
                             <constraint firstItem="hgU-b3-rG5" firstAttribute="trailing" secondItem="4F5-bc-uGJ" secondAttribute="trailing" id="U4Q-Rq-BT7"/>
                             <constraint firstItem="4F5-bc-uGJ" firstAttribute="top" secondItem="hgU-b3-rG5" secondAttribute="top" id="hje-pE-O24"/>
+                            <constraint firstItem="bcZ-Wj-o5e" firstAttribute="height" secondItem="QUX-nd-ifU" secondAttribute="height" multiplier="0.6" constant="1" id="iS4-MR-T2a"/>
                             <constraint firstItem="Tjs-mr-6hM" firstAttribute="top" secondItem="hgU-b3-rG5" secondAttribute="top" constant="8" id="nn5-ZD-UxJ"/>
                             <constraint firstItem="Tjs-mr-6hM" firstAttribute="width" secondItem="QUX-nd-ifU" secondAttribute="width" multiplier="0.15" id="rnx-oA-7Bm"/>
+                            <constraint firstItem="hgU-b3-rG5" firstAttribute="trailing" secondItem="bcZ-Wj-o5e" secondAttribute="trailing" constant="9" id="xNv-yG-XAh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="hgU-b3-rG5"/>
                         <connections>
@@ -154,8 +191,12 @@
                     </view>
                     <connections>
                         <outlet property="addPurchaseButton" destination="4F5-bc-uGJ" id="JrV-w8-u3I"/>
+                        <outlet property="amountTextField" destination="EdB-MH-P9Q" id="n77-cr-la4"/>
+                        <outlet property="dateTextField" destination="IB5-gg-gZ5" id="pXB-z1-GgF"/>
+                        <outlet property="methodTextField" destination="Dbp-BY-6hn" id="Zlw-6K-Txk"/>
                         <outlet property="panGesture" destination="hcl-W6-hCn" id="jmK-ZK-fMD"/>
                         <outlet property="pullView" destination="Tjs-mr-6hM" id="bUV-md-l0z"/>
+                        <outlet property="storeNameTextField" destination="WRO-aM-shB" id="1go-b4-iXz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zlx-ez-7Im" userLabel="First Responder" sceneMemberID="firstResponder"/>

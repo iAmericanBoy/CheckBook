@@ -20,6 +20,10 @@ class AddPurchaseViewController: UIViewController {
     @IBOutlet var panGesture: UIPanGestureRecognizer!
     @IBOutlet weak var pullView: UIView!
     @IBOutlet weak var addPurchaseButton: UIButton!
+    @IBOutlet weak var storeNameTextField: UITextField!
+    @IBOutlet weak var methodTextField: UITextField!
+    @IBOutlet weak var dateTextField: UITextField!
+    @IBOutlet weak var amountTextField: UITextField!
     
     //MARK: - Properties
     var delegate: AddPurchaseCardDelegate?
@@ -49,10 +53,20 @@ class AddPurchaseViewController: UIViewController {
     }
     @IBAction func addPurchaseButtonTapped(_ sender: UIButton) {
         delegate?.userDidInteractWithCard()
+        storeNameTextField.resignFirstResponder()
+        amountTextField.resignFirstResponder()
+        dateTextField.resignFirstResponder()
+        methodTextField.resignFirstResponder()
     }
     
     //MARK: - Private Functions
     fileprivate func setupViews() {
+        
+        storeNameTextField.delegate = self
+        amountTextField.delegate = self
+        dateTextField.delegate = self
+        methodTextField.delegate = self
+
         view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         view.layer.cornerRadius = 20
         view.layer.shadowColor = UIColor.black.cgColor
@@ -61,5 +75,20 @@ class AddPurchaseViewController: UIViewController {
         
         pullView.layer.cornerRadius = 4
         
+    }
+}
+
+extension AddPurchaseViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 300, right: 0)
+
+    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        textField.resignFirstResponder()
+        return true
     }
 }
