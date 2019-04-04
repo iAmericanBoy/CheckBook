@@ -118,8 +118,22 @@
                     <view key="view" contentMode="scaleToFill" id="QUX-nd-ifU">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view clipsSubviews="YES" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tjs-mr-6hM">
+                                <rect key="frame" x="159.33333333333334" y="52" width="56.333333333333343" height="8"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="8" id="xkJ-pD-Eex"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="Tjs-mr-6hM" firstAttribute="centerX" secondItem="QUX-nd-ifU" secondAttribute="centerX" id="Fm4-AK-Sgg"/>
+                            <constraint firstItem="Tjs-mr-6hM" firstAttribute="top" secondItem="hgU-b3-rG5" secondAttribute="top" constant="8" id="nn5-ZD-UxJ"/>
+                            <constraint firstItem="Tjs-mr-6hM" firstAttribute="width" secondItem="QUX-nd-ifU" secondAttribute="width" multiplier="0.15" id="rnx-oA-7Bm"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="hgU-b3-rG5"/>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="hcl-W6-hCn" appends="YES" id="gTy-IZ-vpO"/>
@@ -127,6 +141,7 @@
                     </view>
                     <connections>
                         <outlet property="panGesture" destination="hcl-W6-hCn" id="jmK-ZK-fMD"/>
+                        <outlet property="pullView" destination="Tjs-mr-6hM" id="bUV-md-l0z"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zlx-ez-7Im" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -136,7 +151,7 @@
                     </connections>
                 </panGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="3183" y="78"/>
+            <point key="canvasLocation" x="3181.5999999999999" y="77.58620689655173"/>
         </scene>
     </scenes>
 </document>

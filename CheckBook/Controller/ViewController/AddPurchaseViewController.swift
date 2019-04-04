@@ -18,6 +18,7 @@ class AddPurchaseViewController: UIViewController {
     
     //MARK: - Outlets
     @IBOutlet var panGesture: UIPanGestureRecognizer!
+    @IBOutlet weak var pullView: UIView!
     
     //MARK: - Properties
     var delegate: AddPurchaseCardDelegate?
@@ -25,11 +26,7 @@ class AddPurchaseViewController: UIViewController {
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-        view.layer.cornerRadius = 20
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOpacity = 0.1
-        view.layer.shadowRadius = 10
+        setupViews()
 
     }
     
@@ -48,5 +45,17 @@ class AddPurchaseViewController: UIViewController {
         default:
             return
         }
+    }
+    
+    //MARK: - Private Functions
+    fileprivate func setupViews() {
+        view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        view.layer.cornerRadius = 20
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.1
+        view.layer.shadowRadius = 10
+        
+        pullView.layer.cornerRadius = 4
+        
     }
 }

@@ -68,11 +68,13 @@ class PurchaseListViewController: UIViewController {
                 addPurchaseCard.view.layer.cornerRadius = 20
                 animatedView.frame = animatedView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
                 self.overlayView.alpha = 0.5
+                addPurchaseCard.pullView.alpha = 0.5
                 animatedView.layoutIfNeeded()
             case .closed:
                 addPurchaseCard.view.layer.cornerRadius = 0
                 animatedView.frame = animatedView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
                 self.overlayView.alpha = 0
+                addPurchaseCard.pullView.alpha = 0
 
                 animatedView.layoutIfNeeded()
             }
