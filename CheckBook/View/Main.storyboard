@@ -68,10 +68,14 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RWZ-CH-ypH">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0oe-sS-ZTM">
-                                <rect key="frame" x="0.0" y="312" width="375" height="500"/>
+                                <rect key="frame" x="0.0" y="212" width="375" height="600"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="500" id="i9b-SC-6Yd"/>
+                                    <constraint firstAttribute="height" constant="600" id="i9b-SC-6Yd"/>
                                 </constraints>
                                 <connections>
                                     <segue destination="MYC-vt-QZt" kind="embed" id="P1P-Ca-3hb"/>
@@ -80,20 +84,27 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="RWZ-CH-ypH" firstAttribute="height" secondItem="PtZ-E8-WJ0" secondAttribute="height" id="5Ry-Pg-beD"/>
                             <constraint firstItem="moa-AL-0ZY" firstAttribute="centerY" secondItem="PtZ-E8-WJ0" secondAttribute="centerY" id="92U-kL-EHq"/>
                             <constraint firstAttribute="bottom" secondItem="0oe-sS-ZTM" secondAttribute="bottom" id="EBw-TP-e9d"/>
                             <constraint firstItem="0oe-sS-ZTM" firstAttribute="leading" secondItem="bVv-mj-cpu" secondAttribute="leading" id="FOS-Tf-zJg"/>
                             <constraint firstItem="moa-AL-0ZY" firstAttribute="centerX" secondItem="PtZ-E8-WJ0" secondAttribute="centerX" id="Iaa-PX-3oe"/>
                             <constraint firstItem="moa-AL-0ZY" firstAttribute="leading" secondItem="bVv-mj-cpu" secondAttribute="leading" id="MhC-Rq-swz"/>
+                            <constraint firstItem="RWZ-CH-ypH" firstAttribute="top" secondItem="PtZ-E8-WJ0" secondAttribute="top" id="YII-Uk-lPf"/>
                             <constraint firstItem="bVv-mj-cpu" firstAttribute="trailing" secondItem="moa-AL-0ZY" secondAttribute="trailing" id="e08-cT-pgd"/>
                             <constraint firstItem="0oe-sS-ZTM" firstAttribute="centerX" secondItem="PtZ-E8-WJ0" secondAttribute="centerX" id="hHQ-hx-r4H"/>
+                            <constraint firstAttribute="bottom" secondItem="RWZ-CH-ypH" secondAttribute="bottom" id="i4k-Zy-4H4"/>
                             <constraint firstItem="0oe-sS-ZTM" firstAttribute="trailing" secondItem="bVv-mj-cpu" secondAttribute="trailing" id="iVd-QP-6Hk"/>
+                            <constraint firstItem="RWZ-CH-ypH" firstAttribute="leading" secondItem="bVv-mj-cpu" secondAttribute="leading" id="mNl-BX-ZWf"/>
+                            <constraint firstItem="RWZ-CH-ypH" firstAttribute="width" secondItem="PtZ-E8-WJ0" secondAttribute="width" id="pw3-Rs-jDt"/>
+                            <constraint firstItem="RWZ-CH-ypH" firstAttribute="trailing" secondItem="bVv-mj-cpu" secondAttribute="trailing" id="t7C-9Y-waA"/>
                             <constraint firstItem="moa-AL-0ZY" firstAttribute="top" secondItem="bVv-mj-cpu" secondAttribute="top" id="v3e-oJ-4eo"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="bVv-mj-cpu"/>
                     </view>
                     <connections>
                         <outlet property="cardView" destination="0oe-sS-ZTM" id="BTB-Jx-nx3"/>
+                        <outlet property="overlayView" destination="RWZ-CH-ypH" id="osj-aW-TzR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7sO-va-BDq" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -105,9 +116,9 @@
             <objects>
                 <viewController id="MYC-vt-QZt" customClass="AddPurchaseViewController" customModule="CheckBook" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QUX-nd-ifU">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="500"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
                         <viewLayoutGuide key="safeArea" id="hgU-b3-rG5"/>
                         <connections>

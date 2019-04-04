@@ -28,6 +28,7 @@ class PurchaseListViewController: UIViewController {
     //MARK: - Outlets
     private var addPurchaseViewController: AddPurchaseViewController?
     @IBOutlet weak var cardView: UIView!
+    @IBOutlet weak var overlayView: UIView!
     
     //MARK: - Properties
     /// The current state of the animation. This variable is changed only when an animation completes.
@@ -42,7 +43,7 @@ class PurchaseListViewController: UIViewController {
         guard let addPurchaseCard = addPurchaseViewController else {return}
 
         // Sets target locations of views & then animates.
-        let cardTarget = self.view.frame.maxY  - (cardView.frame.height / 5)
+        let cardTarget = self.view.frame.maxY  - 75
         self.userInteractionAnimate(forState: .closed, animatedView: cardView, edge: cardView.frame.minY, to: cardTarget, velocity: addPurchaseCard.panGesture.velocity(in: cardView).y, insightAlphaTarget: 1)
     }
     
@@ -66,12 +67,12 @@ class PurchaseListViewController: UIViewController {
             case .open:
                 addPurchaseCard.view.layer.cornerRadius = 20
                 animatedView.frame = animatedView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-                animatedView.alpha = 1
+                self.overlayView.alpha = 0.5
                 animatedView.layoutIfNeeded()
             case .closed:
                 addPurchaseCard.view.layer.cornerRadius = 0
                 animatedView.frame = animatedView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-                animatedView.alpha = 0.7
+                self.overlayView.alpha = 0
 
                 animatedView.layoutIfNeeded()
             }
@@ -113,7 +114,6 @@ extension PurchaseListViewController: AddPurchaseCardDelegate {
         // Check the state when the pan gesture ends and react accordingly with linear or velocity reactive animations.
         let aboveHalfWay = cardView.frame.minY < (self.view.frame.height * 0.5)
         let velocity = addPurchaseCard.panGesture.velocity(in: cardView).y
-        print(velocity)
         if velocity > 500 {
             self.hideCard()
         } else if velocity < -500 {
