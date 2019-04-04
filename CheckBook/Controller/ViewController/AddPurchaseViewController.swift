@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol CardViewDelegate: class {
+protocol AddPurchaseCardDelegate: class {
     func panDidEnd()
     func userDidInteractWithCard()
     func panViews(withPanPoint panPoint:CGPoint)
@@ -16,8 +16,11 @@ protocol CardViewDelegate: class {
 
 class AddPurchaseViewController: UIViewController {
     
+    //MARK: - Outlets
+    @IBOutlet var panGesture: UIPanGestureRecognizer!
+    
     //MARK: - Properties
-    var delegate: CardViewDelegate?
+    var delegate: AddPurchaseCardDelegate?
 
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -25,16 +28,16 @@ class AddPurchaseViewController: UIViewController {
     }
     
     //MARK: - Actions
-    @IBAction func handlePan(_ panGesture: UIPanGestureRecognizer) {
-        switch panGesture.state {
+    @IBAction func handlePan(_ sender: UIPanGestureRecognizer) {
+        switch sender.state {
         case .began:
-            delegate?.panViews(withPanPoint: CGPoint(x: view.center.x, y: view.center.y + panGesture.translation(in: view).y))
-            panGesture.setTranslation(CGPoint.zero, in: view)
+            delegate?.panViews(withPanPoint: CGPoint(x: view.center.x, y: view.center.y + sender.translation(in: view).y))
+            sender.setTranslation(CGPoint.zero, in: view)
         case .changed:
-            delegate?.panViews(withPanPoint: CGPoint(x: view.center.x, y: view.center.y + panGesture.translation(in: view).y))
-            panGesture.setTranslation(CGPoint.zero, in: view)
+            delegate?.panViews(withPanPoint: CGPoint(x: view.center.x, y: view.center.y + sender.translation(in: view).y))
+            sender.setTranslation(CGPoint.zero, in: view)
         case .ended:
-            panGesture.setTranslation(CGPoint.zero, in: view)
+            sender.setTranslation(CGPoint.zero, in: view)
             delegate?.panDidEnd()
         default:
             return

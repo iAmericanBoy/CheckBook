@@ -106,10 +106,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
+                        <viewLayoutGuide key="safeArea" id="hgU-b3-rG5"/>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="hcl-W6-hCn" appends="YES" id="gTy-IZ-vpO"/>
                         </connections>
                     </view>
+                    <connections>
+                        <outlet property="panGesture" destination="hcl-W6-hCn" id="jmK-ZK-fMD"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zlx-ez-7Im" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="hcl-W6-hCn">
