@@ -23,34 +23,36 @@ class PurchaseListViewController: UIViewController {
         addPurchaseCard.delegate = self
     }
     
-    
-    
     func autoHide() {
-        // Sets target locations of views & then animates.
-        let cardTarget = self.view.frame.maxY - self.view.safeAreaInsets.bottom - (addPurchaseViewController?.view.bounds.height / 5)
-        self.autoAnimate(view: addPurchaseViewController?.view, edge: addPurchaseViewController?.view.frame.minY, to: cardTarget, insightAlphaTarget: 1, completion: nil)
+        guard let addPurchaseCard = addPurchaseViewController else {return}
         
-
+        // Sets target locations of views & then animates.
+        let cardTarget = self.view.frame.maxY - self.view.safeAreaInsets.bottom - (addPurchaseCard.view.bounds.height / 5)
+        self.autoAnimate(view: addPurchaseCard.view, edge: addPurchaseCard.view.frame.minY, to: cardTarget, insightAlphaTarget: 1, completion: nil)
     }
     
     func autoShow() {
+        guard let addPurchaseCard = addPurchaseViewController else {return}
+
         // Sets target locations of views & then animates.
         let cardTarget = self.view.frame.maxY - self.view.safeAreaInsets.bottom
-        self.autoAnimate(view: addPurchaseViewController?.view, edge: addPurchaseViewController?.view.frame.maxY, to: cardTarget, insightAlphaTarget: 0, completion: nil)
-        
-
+        self.autoAnimate(view: addPurchaseCard.view, edge: addPurchaseCard.view.frame.maxY, to: cardTarget, insightAlphaTarget: 0, completion: nil)
     }
     
     func hideCard() {
+        guard let addPurchaseCard = addPurchaseViewController else {return}
+
         // Sets target locations of views & then animates.
-        let cardTarget = self.view.frame.maxY - self.view.safeAreaInsets.bottom - (addPurchaseViewController?.view.frame.height / 5)
-        self.userInteractionAnimate(view: addPurchaseViewController?.view, edge: addPurchaseViewController?.view.frame.minY, to: cardTarget, velocity: addPurchaseViewController?.view.panGesture.velocity(in: addPurchaseViewController?.view).y, insightAlphaTarget: 1)
+        let cardTarget = self.view.frame.maxY - self.view.safeAreaInsets.bottom - (addPurchaseCard.view.frame.height / 5)
+        self.userInteractionAnimate(view: addPurchaseCard.view, edge: addPurchaseCard.view.frame.minY, to: cardTarget, velocity: addPurchaseCard.panGesture.velocity(in: addPurchaseCard.view).y, insightAlphaTarget: 1)
     }
     
     func showCard() {
+        guard let addPurchaseCard = addPurchaseViewController else {return}
+
         // Sets target locations of views & then animates.
         let target = self.view.frame.maxY - self.view.safeAreaInsets.bottom
-        self.userInteractionAnimate(view: addPurchaseViewController?.view, edge: addPurchaseViewController?.view.frame.maxY, to: target, velocity: addPurchaseViewController?.view.panGesture.velocity(in: addPurchaseViewController?.view).y, insightAlphaTarget: 0)
+        self.userInteractionAnimate(view: addPurchaseCard.view, edge: addPurchaseCard.view.frame.maxY, to: target, velocity: addPurchaseCard.panGesture.velocity(in: addPurchaseCard.view).y, insightAlphaTarget: 0)
     }
     
     func userInteractionAnimate(view: UIView, edge: CGFloat, to target: CGFloat, velocity: CGFloat, insightAlphaTarget: CGFloat?) {
@@ -72,15 +74,16 @@ class PurchaseListViewController: UIViewController {
             }
         }, completion: completion)
     }
-    
 }
 
 //MARK: - AddPurchaseCardDelegate
 extension PurchaseListViewController: AddPurchaseCardDelegate {
     func panDidEnd() {
+        guard let addPurchaseCard = addPurchaseViewController else {return}
+
         // Check the state when the pan gesture ends and react accordingly with linear or velocity reactive animations.
-        let aboveHalfWay = addPurchaseViewController?.view.frame.minY < (self.view.frame.height * 0.5)
-        let velocity = addPurchaseViewController?.panGesture?.velocity(in: addPurchaseViewController?.view).y
+        let aboveHalfWay = addPurchaseCard.view.frame.minY < (self.view.frame.height * 0.5)
+        let velocity = addPurchaseCard.panGesture.velocity(in: addPurchaseCard.view).y
         
         if velocity > 500 {
             self.hideCard()
@@ -94,19 +97,23 @@ extension PurchaseListViewController: AddPurchaseCardDelegate {
     }
     
     func userDidInteractWithCard() {
-        if addPurchaseViewController?.view.frame.minY > (self.view.frame.height * 0.5) {
+        guard let addPurchaseCard = addPurchaseViewController else {return}
+
+        if addPurchaseCard.view.frame.minY > (self.view.frame.height * 0.5) {
             self.autoShow()
         }
     }
     
     func panViews(withPanPoint panPoint: CGPoint) {
+        guard let addPurchaseCard = addPurchaseViewController else {return}
+
         // If user goes against necessary pan adjust reaction
-        if addPurchaseViewController?.view.frame.maxY < self.view.bounds.maxY {
+        if addPurchaseCard.view.frame.maxY < self.view.bounds.maxY {
             // Don’t animate top bar with pan gesture
-            addPurchaseViewController?.view.center.y += addPurchaseViewController?.panGesture.translation(in: addPurchaseViewController?.view).y / 4
+            addPurchaseCard.view.center.y += addPurchaseCard.panGesture.translation(in: addPurchaseViewController?.view).y / 4
         } else {
             // Normal reaction
-            addPurchaseViewController?.view.center.y += addPurchaseViewController?.view.panGesture.translation(in: addPurchaseViewController?.view).y
+            addPurchaseCard.view.center.y += addPurchaseCard.panGesture.translation(in: addPurchaseCard.view).y
         }
     }
 }
