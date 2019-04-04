@@ -24,6 +24,8 @@ class AddPurchaseViewController: UIViewController {
     @IBOutlet weak var methodTextField: UITextField!
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var amountTextField: UITextField!
+    @IBOutlet var toolBar: UIToolbar!
+    @IBOutlet var datePicker: UIDatePicker!
     
     //MARK: - Properties
     var delegate: AddPurchaseCardDelegate?
@@ -59,10 +61,14 @@ class AddPurchaseViewController: UIViewController {
     @IBAction func addPurchaseButtonTapped(_ sender: UIButton) {
         delegate?.userDidInteractWithCard()
         storeNameTextField.resignFirstResponder()
-        amountTextField.resignFirstResponder()
-        dateTextField.resignFirstResponder()
         methodTextField.resignFirstResponder()
     }
+    
+    @IBAction func doneButtonTapped(_ sender: UIButton) {
+        amountTextField.resignFirstResponder()
+        dateTextField.resignFirstResponder()
+    }
+    
     
     //MARK: - Private Functions
     fileprivate func setupViews() {
@@ -72,12 +78,19 @@ class AddPurchaseViewController: UIViewController {
         dateTextField.delegate = self
         methodTextField.delegate = self
 
+        dateTextField.inputAccessoryView = toolBar
+        dateTextField.inputView = datePicker
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale.autoupdatingCurrent
+        dateFormatter.dateStyle = .medium
+        
+        dateTextField.text = dateFormatter.string(from: Date())
+        
+        amountTextField.inputAccessoryView = toolBar
+        
         view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         view.layer.cornerRadius = 20
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOpacity = 0.1
-        view.layer.shadowRadius = 10
-        
+
         pullView.layer.cornerRadius = 4
     }
     
