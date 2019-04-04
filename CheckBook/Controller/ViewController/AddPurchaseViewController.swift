@@ -26,6 +26,8 @@ class AddPurchaseViewController: UIViewController {
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet var toolBar: UIToolbar!
     @IBOutlet var datePicker: UIDatePicker!
+    @IBOutlet var paymentMethodPickerView: UIPickerView!
+    @IBOutlet var paymentMethodToolBar: UIToolbar!
     
     //MARK: - Properties
     var delegate: AddPurchaseCardDelegate?
@@ -65,7 +67,11 @@ class AddPurchaseViewController: UIViewController {
         dismissKeyBoards()
     }
     
-    @IBAction func doneButtonTapped(_ sender: UIButton) {
+    @IBAction func addNewCardButtonTapped(_ sender: UIBarButtonItem) {
+        
+    }
+    
+    @IBAction func doneButtonTapped(_ sender: UIBarButtonItem) {
         dismissKeyBoards()
     }
     
@@ -81,8 +87,13 @@ class AddPurchaseViewController: UIViewController {
         storeNameTextField.delegate = self
         amountTextField.delegate = self
         dateTextField.delegate = self
+        
         methodTextField.delegate = self
-
+        methodTextField.inputAccessoryView = paymentMethodToolBar
+        methodTextField.inputView = paymentMethodPickerView
+        paymentMethodPickerView.delegate = self
+        paymentMethodPickerView.dataSource = self
+        
         dateTextField.inputAccessoryView = toolBar
         dateTextField.inputView = datePicker
         
@@ -115,6 +126,7 @@ class AddPurchaseViewController: UIViewController {
     }
 }
 
+//MARK: - UITextFieldDelegate
 extension AddPurchaseViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
 
@@ -128,5 +140,20 @@ extension AddPurchaseViewController: UITextFieldDelegate {
         self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         textField.resignFirstResponder()
         return true
+    }
+}
+
+//MARK: - UIPickerViewDelegate, UIPickerViewDataSource
+extension AddPurchaseViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return CoreDataController.shared.purchaseMethodFetchResultsController.sections?.count ?? 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return CoreDataController.shared.purchaseMethodFetchResultsController.sections?[component].numberOfObjects ?? 0
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: row, section: component)).name
     }
 }
