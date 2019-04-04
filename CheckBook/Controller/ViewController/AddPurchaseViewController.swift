@@ -69,6 +69,13 @@ class AddPurchaseViewController: UIViewController {
         dateTextField.resignFirstResponder()
     }
     
+    @IBAction func datePickerValueChanged(_ sender: UIDatePicker) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale.autoupdatingCurrent
+        dateFormatter.dateStyle = .medium
+        
+        dateTextField.text = dateFormatter.string(from: sender.date)
+    }
     
     //MARK: - Private Functions
     fileprivate func setupViews() {
