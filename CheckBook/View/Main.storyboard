@@ -69,7 +69,7 @@
                                 </prototypes>
                             </tableView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0oe-sS-ZTM">
-                                <rect key="frame" x="0.0" y="278" width="375" height="500"/>
+                                <rect key="frame" x="0.0" y="312" width="375" height="500"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="500" id="i9b-SC-6Yd"/>
                                 </constraints>
@@ -81,10 +81,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="moa-AL-0ZY" firstAttribute="centerY" secondItem="PtZ-E8-WJ0" secondAttribute="centerY" id="92U-kL-EHq"/>
+                            <constraint firstAttribute="bottom" secondItem="0oe-sS-ZTM" secondAttribute="bottom" id="EBw-TP-e9d"/>
                             <constraint firstItem="0oe-sS-ZTM" firstAttribute="leading" secondItem="bVv-mj-cpu" secondAttribute="leading" id="FOS-Tf-zJg"/>
                             <constraint firstItem="moa-AL-0ZY" firstAttribute="centerX" secondItem="PtZ-E8-WJ0" secondAttribute="centerX" id="Iaa-PX-3oe"/>
                             <constraint firstItem="moa-AL-0ZY" firstAttribute="leading" secondItem="bVv-mj-cpu" secondAttribute="leading" id="MhC-Rq-swz"/>
-                            <constraint firstItem="bVv-mj-cpu" firstAttribute="bottom" secondItem="0oe-sS-ZTM" secondAttribute="bottom" id="cmm-3Z-ffb"/>
                             <constraint firstItem="bVv-mj-cpu" firstAttribute="trailing" secondItem="moa-AL-0ZY" secondAttribute="trailing" id="e08-cT-pgd"/>
                             <constraint firstItem="0oe-sS-ZTM" firstAttribute="centerX" secondItem="PtZ-E8-WJ0" secondAttribute="centerX" id="hHQ-hx-r4H"/>
                             <constraint firstItem="0oe-sS-ZTM" firstAttribute="trailing" secondItem="bVv-mj-cpu" secondAttribute="trailing" id="iVd-QP-6Hk"/>
@@ -92,6 +92,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="bVv-mj-cpu"/>
                     </view>
+                    <connections>
+                        <outlet property="cardView" destination="0oe-sS-ZTM" id="BTB-Jx-nx3"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7sO-va-BDq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
