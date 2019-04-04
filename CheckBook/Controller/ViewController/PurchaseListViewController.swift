@@ -65,15 +65,17 @@ class PurchaseListViewController: UIViewController {
         transitionAnimator.addAnimations {
             switch state {
             case .open:
-                addPurchaseCard.view.layer.cornerRadius = 20
                 animatedView.frame = animatedView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
                 self.overlayView.alpha = 0.5
+                
+                addPurchaseCard.view.layer.cornerRadius = 20
                 addPurchaseCard.pullView.alpha = 0.5
                 animatedView.layoutIfNeeded()
             case .closed:
-                addPurchaseCard.view.layer.cornerRadius = 0
                 animatedView.frame = animatedView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
                 self.overlayView.alpha = 0
+                
+                addPurchaseCard.view.layer.cornerRadius = 0
                 addPurchaseCard.pullView.alpha = 0
 
                 animatedView.layoutIfNeeded()
@@ -132,6 +134,8 @@ extension PurchaseListViewController: AddPurchaseCardDelegate {
     func userDidInteractWithCard() {
         if cardView.frame.minY > (self.view.frame.height * 0.5) {
             self.showCard()
+        } else {
+            self.hideCard()
         }
     }
     

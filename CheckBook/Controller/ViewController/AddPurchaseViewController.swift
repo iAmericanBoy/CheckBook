@@ -19,6 +19,7 @@ class AddPurchaseViewController: UIViewController {
     //MARK: - Outlets
     @IBOutlet var panGesture: UIPanGestureRecognizer!
     @IBOutlet weak var pullView: UIView!
+    @IBOutlet weak var addPurchaseButton: UIButton!
     
     //MARK: - Properties
     var delegate: AddPurchaseCardDelegate?
@@ -45,6 +46,9 @@ class AddPurchaseViewController: UIViewController {
         default:
             return
         }
+    }
+    @IBAction func addPurchaseButtonTapped(_ sender: UIButton) {
+        delegate?.userDidInteractWithCard()
     }
     
     //MARK: - Private Functions
