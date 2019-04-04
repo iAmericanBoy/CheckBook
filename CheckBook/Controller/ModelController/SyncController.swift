@@ -178,6 +178,8 @@ class SyncController {
         
         
         cachedPurchases.forEach { (cachedPurchase) in
+            //TODO: FIND PURCHASE METHOD
+            //TODO: FIND LEDGER
             CoreDataController.shared.findPurchaseWith(uuid: cachedPurchase.uuid, completion: { (purchaseFromCD) in
                 if let purchase = purchaseFromCD {
                     //sent update to CK
@@ -189,10 +191,11 @@ class SyncController {
                     }
                 }
             })
-            
-            //TODO: FIND PURCHASE METHOD
-            //TODO: FIND LEDGER
+
         }
+        
+        //FIX THIS FUNCTION YOU NEED TO FIND THE CACHE
+
         CloudKitController.shared.saveChangestoCK(recordsToUpdate: recordsToUpdate, purchasesToDelete: recordsToDelete) { (isSuccess, savedRecords, deletedRecordIDs) in
             guard let savedRecords = savedRecords, let deletedRecordIDs = deletedRecordIDs, isSuccess else {return}
             savedRecords.forEach({ (record) in
