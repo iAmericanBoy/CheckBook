@@ -32,7 +32,12 @@ class AddPurchaseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification,object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
     //MARK: - Actions
@@ -74,18 +79,26 @@ class AddPurchaseViewController: UIViewController {
         view.layer.shadowRadius = 10
         
         pullView.layer.cornerRadius = 4
-        
+    }
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+        }
     }
 }
 
 extension AddPurchaseViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 300, right: 0)
 
     }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         textField.resignFirstResponder()
