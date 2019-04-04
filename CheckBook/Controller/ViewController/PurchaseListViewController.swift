@@ -8,11 +8,30 @@
 
 import UIKit
 
+// MARK: - State
+private enum State {
+    case closed
+    case open
+}
+
+extension State {
+    var opposite: State {
+        switch self {
+        case .open: return .closed
+        case .closed: return .open
+        }
+    }
+}
+
 class PurchaseListViewController: UIViewController {
     
     //MARK: - Outlets
     private var addPurchaseViewController: AddPurchaseViewController?
     @IBOutlet weak var cardView: UIView!
+    
+    //MARK: - Properties
+    /// The current state of the animation. This variable is changed only when an animation completes.
+    private var currentState: State = .closed
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -24,7 +43,7 @@ class PurchaseListViewController: UIViewController {
 
         // Sets target locations of views & then animates.
         let cardTarget = self.view.frame.maxY  - (cardView.frame.height / 5)
-        self.userInteractionAnimate(view: cardView, edge: cardView.frame.minY, to: cardTarget, velocity: addPurchaseCard.panGesture.velocity(in: cardView).y, insightAlphaTarget: 1)
+        self.userInteractionAnimate(forState: .closed, animatedView: cardView, edge: cardView.frame.minY, to: cardTarget, velocity: addPurchaseCard.panGesture.velocity(in: cardView).y, insightAlphaTarget: 1)
     }
     
     func showCard() {
@@ -32,14 +51,47 @@ class PurchaseListViewController: UIViewController {
 
         // Sets target locations of views & then animates.
         let target = self.view.frame.maxY
-        self.userInteractionAnimate(view: cardView, edge: cardView.frame.maxY, to: target, velocity: addPurchaseCard.panGesture.velocity(in: cardView).y, insightAlphaTarget: 0)
+        self.userInteractionAnimate(forState: .open, animatedView: cardView, edge: cardView.frame.maxY, to: target, velocity: addPurchaseCard.panGesture.velocity(in: cardView).y, insightAlphaTarget: 0)
     }
     
-    func userInteractionAnimate(view: UIView, edge: CGFloat, to target: CGFloat, velocity: CGFloat, insightAlphaTarget: CGFloat?) {
+    fileprivate func userInteractionAnimate(forState state: State, animatedView: UIView, edge: CGFloat, to target: CGFloat, velocity: CGFloat, insightAlphaTarget: CGFloat?) {
+        guard let addPurchaseCard = addPurchaseViewController else {return}
+        
         let distanceToTranslate = target - edge
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.97, initialSpringVelocity: abs(velocity) * 0.01, options: .curveEaseOut , animations: {
-            view.frame = view.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-        })
+        
+        let timing = UISpringTimingParameters(damping: 0.8, response: 0.3, initialVelocity: CGVector(dx: 0, dy: abs(velocity) * 0.01))
+        let transitionAnimator = UIViewPropertyAnimator(duration: 0.5, timingParameters: timing)
+        transitionAnimator.addAnimations {
+            switch state {
+            case .open:
+                addPurchaseCard.view.layer.cornerRadius = 20
+                animatedView.frame = animatedView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
+                animatedView.alpha = 1
+                animatedView.layoutIfNeeded()
+            case .closed:
+                addPurchaseCard.view.layer.cornerRadius = 0
+                animatedView.frame = animatedView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
+                animatedView.alpha = 0.7
+
+                animatedView.layoutIfNeeded()
+            }
+
+            self.view.layoutIfNeeded()
+        }
+        
+        transitionAnimator.addCompletion { (position) in
+            // update the state
+            switch position {
+            case .start:
+                self.currentState = state.opposite
+            case .end:
+                self.currentState = state
+            case .current:
+                ()
+            }
+        }
+        
+        transitionAnimator.startAnimation()
     }
     
 
@@ -61,7 +113,7 @@ extension PurchaseListViewController: AddPurchaseCardDelegate {
         // Check the state when the pan gesture ends and react accordingly with linear or velocity reactive animations.
         let aboveHalfWay = cardView.frame.minY < (self.view.frame.height * 0.5)
         let velocity = addPurchaseCard.panGesture.velocity(in: cardView).y
-        
+        print(velocity)
         if velocity > 500 {
             self.hideCard()
         } else if velocity < -500 {
@@ -70,6 +122,8 @@ extension PurchaseListViewController: AddPurchaseCardDelegate {
             self.showCard()
         } else if !aboveHalfWay {
             self.hideCard()
+        } else if true {
+            
         }
     }
     
@@ -90,5 +144,13 @@ extension PurchaseListViewController: AddPurchaseCardDelegate {
             // Normal reaction
             cardView.center.y += addPurchaseCard.panGesture.translation(in: cardView).y
         }
+    }
+}
+
+extension UISpringTimingParameters {
+    convenience init(damping: CGFloat, response: CGFloat, initialVelocity: CGVector = .zero) {
+        let stiffness = pow(2 * .pi / response, 2)
+        let damp = 4 * .pi * damping / response
+        self.init(mass: 1, stiffness: stiffness, damping: damp, initialVelocity: initialVelocity)
     }
 }
