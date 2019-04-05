@@ -118,11 +118,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view clipsSubviews="YES" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tjs-mr-6hM">
-                                <rect key="frame" x="159.33333333333334" y="52" width="56.333333333333343" height="8"/>
+                                <rect key="frame" x="159.33333333333334" y="52" width="56.333333333333343" height="6"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="8" id="xkJ-pD-Eex"/>
-                                </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="bcZ-Wj-o5e">
                                 <rect key="frame" x="12" y="202.66666666666666" width="351" height="366.33333333333337"/>
@@ -206,12 +203,13 @@
                                     </textField>
                                 </subviews>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4F5-bc-uGJ">
-                                <rect key="frame" x="0.0" y="44" width="375" height="70"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="fill" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4F5-bc-uGJ">
+                                <rect key="frame" x="16" y="44" width="343" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="fvx-sM-6VB"/>
                                 </constraints>
-                                <state key="normal" title="Add Purchase"/>
+                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
+                                <state key="normal" title="Save"/>
                                 <connections>
                                     <action selector="addPurchaseButtonTapped:" destination="MYC-vt-QZt" eventType="touchUpInside" id="ciR-5b-1dZ"/>
                                 </connections>
@@ -221,14 +219,15 @@
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="Tjs-mr-6hM" firstAttribute="centerX" secondItem="QUX-nd-ifU" secondAttribute="centerX" id="Fm4-AK-Sgg"/>
-                            <constraint firstItem="4F5-bc-uGJ" firstAttribute="leading" secondItem="hgU-b3-rG5" secondAttribute="leading" id="IYW-mL-lu6"/>
+                            <constraint firstItem="4F5-bc-uGJ" firstAttribute="leading" secondItem="hgU-b3-rG5" secondAttribute="leading" constant="16" id="IYW-mL-lu6"/>
                             <constraint firstItem="bcZ-Wj-o5e" firstAttribute="leading" secondItem="hgU-b3-rG5" secondAttribute="leading" constant="12" id="RRK-mL-gGr"/>
-                            <constraint firstItem="hgU-b3-rG5" firstAttribute="trailing" secondItem="4F5-bc-uGJ" secondAttribute="trailing" id="U4Q-Rq-BT7"/>
+                            <constraint firstItem="hgU-b3-rG5" firstAttribute="trailing" secondItem="4F5-bc-uGJ" secondAttribute="trailing" constant="16" id="U4Q-Rq-BT7"/>
                             <constraint firstItem="hgU-b3-rG5" firstAttribute="bottom" secondItem="bcZ-Wj-o5e" secondAttribute="bottom" constant="6" id="gEh-ag-Lno"/>
                             <constraint firstItem="4F5-bc-uGJ" firstAttribute="top" secondItem="hgU-b3-rG5" secondAttribute="top" id="hje-pE-O24"/>
                             <constraint firstItem="bcZ-Wj-o5e" firstAttribute="height" secondItem="QUX-nd-ifU" secondAttribute="height" multiplier="0.6" constant="1" id="iS4-MR-T2a"/>
                             <constraint firstItem="Tjs-mr-6hM" firstAttribute="top" secondItem="hgU-b3-rG5" secondAttribute="top" constant="8" id="nn5-ZD-UxJ"/>
                             <constraint firstItem="Tjs-mr-6hM" firstAttribute="width" secondItem="QUX-nd-ifU" secondAttribute="width" multiplier="0.15" id="rnx-oA-7Bm"/>
+                            <constraint firstItem="Tjs-mr-6hM" firstAttribute="height" secondItem="QUX-nd-ifU" secondAttribute="height" multiplier="0.01" id="thc-MR-4fR"/>
                             <constraint firstItem="hgU-b3-rG5" firstAttribute="trailing" secondItem="bcZ-Wj-o5e" secondAttribute="trailing" constant="12" id="xNv-yG-XAh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="hgU-b3-rG5"/>

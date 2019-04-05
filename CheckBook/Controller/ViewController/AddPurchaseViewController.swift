@@ -9,8 +9,8 @@
 import UIKit
 
 protocol AddPurchaseCardDelegate: class {
-    func panDidEnd()
-    func userDidInteractWithCard()
+    func panDidEnd() -> State
+    func userDidInteractWithCard() -> State
     func panViews(withPanPoint panPoint:CGPoint)
 }
 
@@ -34,12 +34,15 @@ class AddPurchaseViewController: UIViewController {
     
     //MARK: - Properties
     var delegate: AddPurchaseCardDelegate?
+    /// The current state of the card.
+    var currentState: State = .open
 
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification,object: nil)
+        updateViews()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -59,14 +62,16 @@ class AddPurchaseViewController: UIViewController {
             sender.setTranslation(CGPoint.zero, in: view)
         case .ended:
             sender.setTranslation(CGPoint.zero, in: view)
-            delegate?.panDidEnd()
+            currentState = delegate?.panDidEnd() ?? State.closed
+            updateViews()
         default:
             return
         }
     }
 
     @IBAction func addPurchaseButtonTapped(_ sender: UIButton) {
-        delegate?.userDidInteractWithCard()
+        currentState = delegate?.userDidInteractWithCard() ?? State.closed
+        updateViews()
         dismissKeyBoards()
     }
     
@@ -89,6 +94,17 @@ class AddPurchaseViewController: UIViewController {
     }
     
     //MARK: - Private Functions
+    fileprivate func updateViews() {
+        switch currentState {
+        case .open:
+            addPurchaseButton.setTitle("Save", for: .normal)
+            addPurchaseButton.contentHorizontalAlignment = .right
+        case .closed:
+            addPurchaseButton.setTitle("Add Purchase", for: .normal)
+            addPurchaseButton.contentHorizontalAlignment = .center
+        }
+    }
+    
     fileprivate func setupViews() {
         storeNameTextField.delegate = self
         amountTextField.delegate = self
@@ -122,7 +138,7 @@ class AddPurchaseViewController: UIViewController {
         view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         view.layer.cornerRadius = 20
 
-        pullView.layer.cornerRadius = 4
+        pullView.layer.cornerRadius = pullView.frame.height / 2
     }
     
     fileprivate func dismissKeyBoards() {

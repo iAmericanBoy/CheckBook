@@ -9,7 +9,7 @@
 import UIKit
 
 // MARK: - State
-private enum State {
+enum State {
     case closed
     case open
 }
@@ -115,30 +115,36 @@ class PurchaseListViewController: UIViewController {
 
 //MARK: - AddPurchaseCardDelegate
 extension PurchaseListViewController: AddPurchaseCardDelegate {
-    func panDidEnd() {
-        guard let addPurchaseCard = addPurchaseViewController else {return}
+    func panDidEnd() -> State {
+        guard let addPurchaseCard = addPurchaseViewController else {return State.closed}
 
         // Check the state when the pan gesture ends and react accordingly with linear or velocity reactive animations.
         let aboveHalfWay = cardView.frame.minY < (self.view.frame.height * 0.5)
         let velocity = addPurchaseCard.panGesture.velocity(in: cardView).y
         if velocity > 500 {
             self.hideCard()
+            return State.closed
         } else if velocity < -500 {
             self.showCard()
+            return State.open
         } else if aboveHalfWay {
             self.showCard()
+            return State.open
         } else if !aboveHalfWay {
             self.hideCard()
-        } else if true {
-            
+            return State.closed
+        } else {
+            return State.closed
         }
     }
     
-    func userDidInteractWithCard() {
+    func userDidInteractWithCard() -> State {
         if cardView.frame.minY > (self.view.frame.height * 0.5) {
             self.showCard()
+            return State.open
         } else {
             self.hideCard()
+            return State.closed
         }
     }
     
