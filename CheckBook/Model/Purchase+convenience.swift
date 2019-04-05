@@ -97,7 +97,7 @@ extension CKRecord {
         setValue(purchase.date, forKey: Purchase.dateKey)
         setValue(purchase.item, forKey: Purchase.itemKey)
         setValue(methodUUID.uuidString, forKey: Purchase.methodKey)
-        setValue(ledgerUUID, forKey: Purchase.ledgerKey)
+        setValue(ledgerUUID.uuidString, forKey: Purchase.ledgerKey)
         setValue(methodName, forKey: Purchase.methodNameKey)
         setValue(purchase.lastModified, forKey: Purchase.lastModifiedKey)
         setValue(purchase.storeName, forKey: Purchase.storeNameKey)

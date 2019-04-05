@@ -129,8 +129,8 @@ class CoreDataController {
     }
     
     //MARK: - Delete
-    /// Removes the Purchase from the Context.
-    /// - parameter purchase: The purchase to remove.
+    /// Removes the Object from the Context.
+    /// - parameter object: The object to remove.
     func remove(object: NSManagedObject) {
         if let moc = object.managedObjectContext {
             moc.delete(object)

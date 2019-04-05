@@ -82,10 +82,10 @@ class AddPurchaseViewController: UIViewController {
             let methodText = methodTextField.text, !methodText.isEmpty else {return}
         let method = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(row: row, section: 0))
         if let ledger = CoreDataController.shared.ledgerFetchResultsController.fetchedObjects?.first {
-            Purchase(amount: amountDouble, date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger)
+            PurchaseController.shared.createNewPurchaseWith(amount: amountDouble, date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger)
         } else {
-            let newLedger = Ledger(name: "Hello World")
-            Purchase(amount: amountDouble, date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: newLedger)
+            let newLedger = LedgerController.shared.createNewLedgerWith(name: "Hello")
+            PurchaseController.shared.createNewPurchaseWith(amount: amountDouble, date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: newLedger)
         }
     }
     
