@@ -24,10 +24,13 @@ class AddPurchaseViewController: UIViewController {
     @IBOutlet weak var methodTextField: UITextField!
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var amountTextField: UITextField!
+    @IBOutlet weak var categoryTextField: UITextField!
     @IBOutlet var toolBar: UIToolbar!
     @IBOutlet var datePicker: UIDatePicker!
-    @IBOutlet var paymentMethodPickerView: UIPickerView!
+    @IBOutlet var methodPickerView: UIPickerView!
     @IBOutlet var paymentMethodToolBar: UIToolbar!
+    @IBOutlet var categoryToolBar: UIToolbar!
+    @IBOutlet var categoryPickerView: UIPickerView!
     
     //MARK: - Properties
     var delegate: AddPurchaseCardDelegate?
@@ -68,7 +71,10 @@ class AddPurchaseViewController: UIViewController {
     }
     
     @IBAction func addNewCardButtonTapped(_ sender: UIBarButtonItem) {
-        
+        //TODO: Present Alert
+    }
+    @IBAction func newCategoryButtonTapped(_ sender: UIBarButtonItem) {
+        //TODO: PresentAlert
     }
     
     @IBAction func doneButtonTapped(_ sender: UIBarButtonItem) {
@@ -86,14 +92,20 @@ class AddPurchaseViewController: UIViewController {
     fileprivate func setupViews() {
         storeNameTextField.delegate = self
         amountTextField.delegate = self
-        dateTextField.delegate = self
+        
+        categoryTextField.delegate = self
+        categoryTextField.inputAccessoryView = categoryToolBar
+        categoryTextField.inputView = categoryPickerView
+        categoryPickerView.dataSource = self
+        categoryPickerView.delegate = self
         
         methodTextField.delegate = self
         methodTextField.inputAccessoryView = paymentMethodToolBar
-        methodTextField.inputView = paymentMethodPickerView
-        paymentMethodPickerView.delegate = self
-        paymentMethodPickerView.dataSource = self
+        methodTextField.inputView = methodPickerView
+        methodPickerView.delegate = self
+        methodPickerView.dataSource = self
         
+        dateTextField.delegate = self
         dateTextField.inputAccessoryView = toolBar
         dateTextField.inputView = datePicker
         

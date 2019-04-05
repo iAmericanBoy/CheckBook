@@ -109,7 +109,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7sO-va-BDq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1733.5999999999999" y="78.325123152709367"/>
+            <point key="canvasLocation" x="1310" y="78"/>
         </scene>
         <!--Add Purchase View Controller-->
         <scene sceneID="j48-7q-nzx">
@@ -137,22 +137,28 @@
                                         <rect key="frame" x="0.0" y="205" width="351" height="106"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="uqo-ac-OTO">
-                                                <rect key="frame" x="0.0" y="0.0" width="68.333333333333329" height="106"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="75" height="106"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Store:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s2m-rb-5Nb">
-                                                        <rect key="frame" x="0.0" y="0.0" width="68.333333333333329" height="30"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="75" height="20.666666666666668"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WbB-mA-Xq9">
-                                                        <rect key="frame" x="0.0" y="38" width="68.333333333333329" height="30"/>
+                                                        <rect key="frame" x="0.0" y="28.666666666666686" width="75" height="20.333333333333329"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Method: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bsy-BK-Bng">
-                                                        <rect key="frame" x="0.0" y="76" width="68.333333333333329" height="30"/>
+                                                        <rect key="frame" x="0.0" y="56.999999999999993" width="75" height="20.666666666666664"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nBy-qT-Tcc">
+                                                        <rect key="frame" x="0.0" y="85.666666666666686" width="75" height="20.333333333333329"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -160,25 +166,31 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="HPo-lu-00g">
-                                                <rect key="frame" x="76.333333333333343" y="0.0" width="274.66666666666663" height="106"/>
+                                                <rect key="frame" x="83" y="0.0" width="268" height="106"/>
                                                 <subviews>
                                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Add Name..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WRO-aM-shB">
-                                                        <rect key="frame" x="0.0" y="0.0" width="274.66666666666669" height="30"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="268" height="20.666666666666668"/>
                                                         <nil key="textColor"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits" returnKeyType="done"/>
                                                     </textField>
                                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Add Total..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EdB-MH-P9Q">
-                                                        <rect key="frame" x="0.0" y="38" width="274.66666666666669" height="30"/>
+                                                        <rect key="frame" x="0.0" y="28.666666666666686" width="268" height="20.333333333333329"/>
                                                         <nil key="textColor"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="done"/>
                                                     </textField>
                                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Add Method..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dbp-BY-6hn">
-                                                        <rect key="frame" x="0.0" y="76" width="274.66666666666669" height="30"/>
+                                                        <rect key="frame" x="0.0" y="56.999999999999993" width="268" height="20.666666666666664"/>
                                                         <nil key="textColor"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                                    </textField>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Add Category..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5uR-pB-y7l">
+                                                        <rect key="frame" x="0.0" y="85.666666666666686" width="268" height="20.333333333333329"/>
+                                                        <nil key="textColor"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <textInputTraits key="textInputTraits"/>
                                                     </textField>
                                                 </subviews>
                                             </stackView>
@@ -226,11 +238,14 @@
                     <connections>
                         <outlet property="addPurchaseButton" destination="4F5-bc-uGJ" id="JrV-w8-u3I"/>
                         <outlet property="amountTextField" destination="EdB-MH-P9Q" id="n77-cr-la4"/>
+                        <outlet property="categoryPickerView" destination="a97-Qr-3Z8" id="UkZ-CM-UZN"/>
+                        <outlet property="categoryTextField" destination="5uR-pB-y7l" id="oaZ-Nb-GAu"/>
+                        <outlet property="categoryToolBar" destination="h2q-3u-aw4" id="W9w-WN-lNg"/>
                         <outlet property="datePicker" destination="htr-RP-b05" id="ztA-Or-r2d"/>
                         <outlet property="dateTextField" destination="IB5-gg-gZ5" id="pXB-z1-GgF"/>
+                        <outlet property="methodPickerView" destination="yEQ-6F-wi4" id="9LF-bS-F07"/>
                         <outlet property="methodTextField" destination="Dbp-BY-6hn" id="Zlw-6K-Txk"/>
                         <outlet property="panGesture" destination="hcl-W6-hCn" id="jmK-ZK-fMD"/>
-                        <outlet property="paymentMethodPickerView" destination="yEQ-6F-wi4" id="9LF-bS-F07"/>
                         <outlet property="paymentMethodToolBar" destination="P8t-g7-mfu" id="fji-5m-FlL"/>
                         <outlet property="pullView" destination="Tjs-mr-6hM" id="bUV-md-l0z"/>
                         <outlet property="storeNameTextField" destination="WRO-aM-shB" id="1go-b4-iXz"/>
@@ -243,7 +258,11 @@
                         <action selector="handlePan:" destination="MYC-vt-QZt" id="xgW-AW-1NB"/>
                     </connections>
                 </panGestureRecognizer>
-                <pickerView contentMode="scaleToFill" id="yEQ-6F-wi4">
+                <pickerView tag="1111" contentMode="scaleToFill" id="yEQ-6F-wi4">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="216"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                </pickerView>
+                <pickerView tag="2222" contentMode="scaleToFill" id="a97-Qr-3Z8">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="216"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                 </pickerView>
@@ -282,6 +301,23 @@
                         <barButtonItem systemItem="done" id="4TV-en-lZi">
                             <connections>
                                 <action selector="doneButtonTapped:" destination="MYC-vt-QZt" id="I24-be-oTM"/>
+                            </connections>
+                        </barButtonItem>
+                    </items>
+                </toolbar>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="h2q-3u-aw4">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <items>
+                        <barButtonItem title="Add New Category" id="M2o-ww-eHb">
+                            <connections>
+                                <action selector="newCategoryButtonTapped:" destination="MYC-vt-QZt" id="0Wu-oq-grq"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="oQe-bi-vho"/>
+                        <barButtonItem systemItem="done" id="kZZ-ae-4YD">
+                            <connections>
+                                <action selector="doneButtonTapped:" destination="MYC-vt-QZt" id="Vt4-Eu-CSH"/>
                             </connections>
                         </barButtonItem>
                     </items>
