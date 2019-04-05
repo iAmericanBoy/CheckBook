@@ -160,11 +160,15 @@ extension AddPurchaseViewController: UITextFieldDelegate {
             
                 digits *= 10
                 digits += newDigits
-            } else {
-                if range.length == 1 {
-                    digits /= 10
-                }
             }
+            if range.length == 1 {
+                print(digits)
+                digits /= 10
+                var result = Decimal(integerLiteral: 0)
+                NSDecimalRound(&result, &digits, 2, Decimal.RoundingMode.down)
+                digits = result
+            }
+            
             textField.text = NumberFormatter.localizedString(from: digits as NSDecimalNumber, number: .currency)
             
             return false
