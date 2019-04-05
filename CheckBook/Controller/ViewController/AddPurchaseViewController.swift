@@ -133,7 +133,7 @@ class AddPurchaseViewController: UIViewController {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
-            self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+            self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight - 22, right: 0)
         }
     }
 }
@@ -141,7 +141,7 @@ class AddPurchaseViewController: UIViewController {
 //MARK: - UITextFieldDelegate
 extension AddPurchaseViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-
+        print(textField.text)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
