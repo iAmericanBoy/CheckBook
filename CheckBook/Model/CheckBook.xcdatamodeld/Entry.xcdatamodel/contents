@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14490.98" systemVersion="18D109" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14490.98" systemVersion="18E226" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CachePurchase" representedClassName="CachePurchase" syncable="YES" codeGenerationType="class">
         <attribute name="lastUploadDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="uuid" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
@@ -31,8 +31,8 @@
     </entity>
     <elements>
         <element name="CachePurchase" positionX="-631.53515625" positionY="43.23046875" width="128" height="75"/>
+        <element name="Ledger" positionX="-527.53515625" positionY="-138.66796875" width="128" height="103"/>
         <element name="Purchase" positionX="-338.11328125" positionY="-39.5625" width="128" height="208"/>
         <element name="PurchaseMethod" positionX="21.8046875" positionY="65.8359375" width="128" height="103"/>
-        <element name="Ledger" positionX="-527.53515625" positionY="-138.66796875" width="128" height="103"/>
     </elements>
 </model>

@@ -36,6 +36,7 @@ class AddPurchaseViewController: UIViewController {
     var delegate: AddPurchaseCardDelegate?
     /// The current state of the card.
     var currentState: State = .open
+    let numberFormatter = NumberFormatter()
 
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -73,6 +74,19 @@ class AddPurchaseViewController: UIViewController {
         currentState = delegate?.userDidInteractWithCard() ?? State.closed
         updateViews()
         dismissKeyBoards()
+        
+        let row = methodPickerView.selectedRow(inComponent: 0)
+        let date = datePicker.date
+        guard let storeName = storeNameTextField.text, !storeName.isEmpty,
+            let amount = amountTextField.text, let amountNumber = numberFormatter.number(from: amount), let amountDouble = Double(exactly: amountNumber),
+            let methodText = methodTextField.text, !methodText.isEmpty else {return}
+        let method = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(row: row, section: 0))
+        if let ledger = CoreDataController.shared.ledgerFetchResultsController.fetchedObjects?.first {
+            Purchase(amount: amountDouble, date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger)
+        } else {
+            let newLedger = Ledger(name: "Hello World")
+            Purchase(amount: amountDouble, date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: newLedger)
+        }
     }
     
     @IBAction func addNewCardButtonTapped(_ sender: UIBarButtonItem) {
@@ -106,6 +120,8 @@ class AddPurchaseViewController: UIViewController {
     }
     
     fileprivate func setupViews() {
+        numberFormatter.numberStyle = .currency
+
         storeNameTextField.delegate = self
         amountTextField.delegate = self
         amountTextField.text = NumberFormatter.localizedString(from: 0, number: .currency)
@@ -166,9 +182,6 @@ extension AddPurchaseViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if textField == amountTextField {
             guard let text = textField.text else {return true}
-            
-            let numberFormatter = NumberFormatter()
-            numberFormatter.numberStyle = .currency
             
             let oldDigits = numberFormatter.number(from: text) ?? 0
             var digits = oldDigits.decimalValue
