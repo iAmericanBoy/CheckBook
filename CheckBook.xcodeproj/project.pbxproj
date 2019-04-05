@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B652BD66225810440066AD8A /* PurchaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */; };
 		B674FB0822580BD3000A5815 /* LedgerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B674FB0722580BD3000A5815 /* LedgerController.swift */; };
 		B6920AD1223045D000A63EC8 /* SyncController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6920AD0223045D000A63EC8 /* SyncController.swift */; };
 		B69D87F5225554D60019E694 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B69D87F4225554D60019E694 /* Main.storyboard */; };
@@ -34,6 +35,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseTableViewCell.swift; sourceTree = "<group>"; };
 		B674FB0722580BD3000A5815 /* LedgerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LedgerController.swift; sourceTree = "<group>"; };
 		B6920AD0223045D000A63EC8 /* SyncController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncController.swift; sourceTree = "<group>"; };
 		B69D87F4225554D60019E694 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				B69D87F4225554D60019E694 /* Main.storyboard */,
+				B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 				B6BF9FD3222F160300DFCE8C /* AppDelegate.swift in Sources */,
 				B6E332A42234CD5F0088D6FF /* PurchaseMethodController.swift in Sources */,
 				B674FB0822580BD3000A5815 /* LedgerController.swift in Sources */,
+				B652BD66225810440066AD8A /* PurchaseTableViewCell.swift in Sources */,
 				B6E332A12234CBFB0088D6FF /* PurchaseMethod+MagicStrings.swift in Sources */,
 				B6E3329F2234CAD80088D6FF /* PurchaseMethod+convenience.swift in Sources */,
 				B6BF9FF7222F3FDA00DFCE8C /* PurchaseController.swift in Sources */,

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 // MARK: - State
 enum State {
@@ -29,6 +30,7 @@ class PurchaseListViewController: UIViewController {
     private var addPurchaseViewController: AddPurchaseViewController?
     @IBOutlet weak var cardView: UIView!
     @IBOutlet weak var overlayView: UIView!
+    @IBOutlet weak var purchaseList: UITableView!
     
     //MARK: - Properties
     /// The current state of the animation. This variable is changed only when an animation completes.
@@ -37,9 +39,7 @@ class PurchaseListViewController: UIViewController {
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        cardView.layer.shadowColor = UIColor.black.cgColor
-        cardView.layer.shadowOpacity = 0.1
-        cardView.layer.shadowRadius = 10
+        setupViews()
     }
     
     func hideCard() {
@@ -111,6 +111,16 @@ class PurchaseListViewController: UIViewController {
             destinationVC.delegate = self
         }
     }
+    
+    //MARK: - Private Functions
+    fileprivate func setupViews() {
+        purchaseList.delegate = self
+        purchaseList.dataSource = self
+        CoreDataController.shared.purchaseFetchResultsController.delegate = self
+        cardView.layer.shadowColor = UIColor.black.cgColor
+        cardView.layer.shadowOpacity = 0.1
+        cardView.layer.shadowRadius = 10
+    }
 }
 
 //MARK: - AddPurchaseCardDelegate
@@ -167,5 +177,64 @@ extension UISpringTimingParameters {
         let stiffness = pow(2 * .pi / response, 2)
         let damp = 4 * .pi * damping / response
         self.init(mass: 1, stiffness: stiffness, damping: damp, initialVelocity: initialVelocity)
+    }
+}
+
+//MARK: - UITableViewDelegate, UITableViewDataSource
+extension PurchaseListViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return CoreDataController.shared.purchaseFetchResultsController.sections?[section].numberOfObjects ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "purchaseCell", for: indexPath) as? PurchaseTableViewCell
+        
+        cell?.purchase = CoreDataController.shared.purchaseFetchResultsController.object(at: indexPath)
+        
+        return cell ?? UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let purchase = CoreDataController.shared.purchaseFetchResultsController.object(at: indexPath)
+            PurchaseController.shared.delete(purchase: purchase)
+        }
+    }
+}
+
+//MARK: - NSFetchedResultsControllerDelegate
+extension PurchaseListViewController: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        purchaseList.beginUpdates()
+    }
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        purchaseList.endUpdates()
+    }
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            guard let newIndexPath = newIndexPath else {return}
+            purchaseList.insertRows(at: [newIndexPath], with: .automatic)
+        case .delete:
+            guard let indexPath = indexPath else {return}
+            purchaseList.deleteRows(at: [indexPath], with: .automatic)
+        case .move:
+            guard let newIndexPath = newIndexPath, let indexPath = indexPath else {return}
+            purchaseList.moveRow(at: indexPath, to: newIndexPath)
+        case .update:
+            guard let indexPath = indexPath else {return}
+            purchaseList.reloadRows(at: [indexPath], with: .automatic)
+        }
+    }
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        let indexSet = IndexSet(integer: sectionIndex)
+        switch type{
+        case .insert:
+            purchaseList.insertSections(indexSet, with: .automatic)
+        case .delete:
+            purchaseList.deleteSections(indexSet, with: .automatic)
+        default:
+            break
+        }
     }
 }

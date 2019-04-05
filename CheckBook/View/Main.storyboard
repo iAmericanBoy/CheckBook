@@ -22,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="44" width="375" height="724"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="purchaseCell" rowHeight="104" id="vjU-S1-OU1">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="purchaseCell" rowHeight="104" id="vjU-S1-OU1" customClass="PurchaseTableViewCell" customModule="CheckBook" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="104"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="vjU-S1-OU1" id="g8f-NP-Sym">
@@ -65,6 +65,11 @@
                                                 <constraint firstAttribute="bottomMargin" secondItem="ivl-ND-dRh" secondAttribute="bottom" id="vEz-Bx-705"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="amountLabel" destination="0YE-dK-A3G" id="w1U-HO-WoY"/>
+                                            <outlet property="categoryLabel" destination="BTh-Pj-8b5" id="OJc-ke-Pd9"/>
+                                            <outlet property="storeNameLabel" destination="vir-cL-VEN" id="esr-Iq-IXP"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -103,6 +108,7 @@
                     <connections>
                         <outlet property="cardView" destination="0oe-sS-ZTM" id="BTB-Jx-nx3"/>
                         <outlet property="overlayView" destination="RWZ-CH-ypH" id="osj-aW-TzR"/>
+                        <outlet property="purchaseList" destination="moa-AL-0ZY" id="lEO-Vm-uPa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7sO-va-BDq" userLabel="First Responder" sceneMemberID="firstResponder"/>
