@@ -103,6 +103,8 @@ class AddPurchaseViewController: UIViewController {
         methodTextField.delegate = self
         methodTextField.inputAccessoryView = paymentMethodToolBar
         methodTextField.inputView = methodPickerView
+        methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
+
         methodPickerView.delegate = self
         methodPickerView.dataSource = self
         
@@ -162,7 +164,6 @@ extension AddPurchaseViewController: UITextFieldDelegate {
                 digits += newDigits
             }
             if range.length == 1 {
-                print(digits)
                 digits /= 10
                 var result = Decimal(integerLiteral: 0)
                 NSDecimalRound(&result, &digits, 2, Decimal.RoundingMode.down)
@@ -170,7 +171,6 @@ extension AddPurchaseViewController: UITextFieldDelegate {
             }
             
             textField.text = NumberFormatter.localizedString(from: digits as NSDecimalNumber, number: .currency)
-            
             return false
         } else {
             return true
@@ -193,14 +193,33 @@ extension AddPurchaseViewController: UITextFieldDelegate {
 //MARK: - UIPickerViewDelegate, UIPickerViewDataSource
 extension AddPurchaseViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return CoreDataController.shared.purchaseMethodFetchResultsController.sections?.count ?? 1
+        if pickerView.tag == 1111 {
+            return CoreDataController.shared.purchaseMethodFetchResultsController.sections?.count ?? 1
+        } else {
+            return 0
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return CoreDataController.shared.purchaseMethodFetchResultsController.sections?[component].numberOfObjects ?? 0
+        if pickerView.tag == 1111 {
+            return CoreDataController.shared.purchaseMethodFetchResultsController.sections?[component].numberOfObjects ?? 0
+        } else {
+            return 0
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: row, section: component)).name
+        if pickerView.tag == 1111 {
+            return CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: row, section: component)).name
+        } else {
+            return ""
+        }
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if pickerView.tag == 1111 {
+            methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: row, section: component)).name
+        } else {
+        }
     }
 }
