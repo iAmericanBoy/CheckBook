@@ -78,14 +78,14 @@ class AddPurchaseViewController: UIViewController {
         let row = methodPickerView.selectedRow(inComponent: 0)
         let date = datePicker.date
         guard let storeName = storeNameTextField.text, !storeName.isEmpty,
-            let amount = amountTextField.text, let amountNumber = numberFormatter.number(from: amount), let amountDouble = Double(exactly: amountNumber),
+            let amount = amountTextField.text, let amountNumber = numberFormatter.number(from: amount),
             let methodText = methodTextField.text, !methodText.isEmpty else {return}
         let method = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(row: row, section: 0))
         if let ledger = CoreDataController.shared.ledgerFetchResultsController.fetchedObjects?.first {
-            PurchaseController.shared.createNewPurchaseWith(amount: amountDouble, date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger)
+            PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger)
         } else {
             let newLedger = LedgerController.shared.createNewLedgerWith(name: "Hello")
-            PurchaseController.shared.createNewPurchaseWith(amount: amountDouble, date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: newLedger)
+            PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: newLedger)
         }
     }
     

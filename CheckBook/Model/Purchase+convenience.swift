@@ -12,7 +12,7 @@ import CloudKit
 
 extension Purchase {
     @discardableResult
-    convenience init(amount: Double,
+    convenience init(amount: NSDecimalNumber,
                      date: Date,
                      item: String,
                      storeName: String,
@@ -40,7 +40,7 @@ extension Purchase {
     }
     
     convenience init?(record: CKRecord, context: NSManagedObjectContext = CoreDataStack.context) {
-        guard let amount = record[Purchase.amountKey] as? Double,
+        guard let amount = record[Purchase.amountKey] as? NSDecimalNumber,
             let date = record[Purchase.dateKey] as? Date,
             let item = record[Purchase.itemKey] as? String,
             let methodUUID = record[Purchase.methodKey] as? String,

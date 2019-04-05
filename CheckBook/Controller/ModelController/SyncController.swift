@@ -69,7 +69,7 @@ class SyncController {
                                 //update
                                 if Calendar.current.compare(lastModified, to: purchaseFromCD.lastModified!, toGranularity: Calendar.Component.second).rawValue > 0 {
                                     
-                                    purchaseFromCD.amount = amount
+                                    purchaseFromCD.amount = NSDecimalNumber(value: amount)
                                     purchaseFromCD.date = date
                                     purchaseFromCD.item = item
                                     purchaseFromCD.storeName = storeName
@@ -83,7 +83,7 @@ class SyncController {
                                 }
                             } else {
                                 //create new Purchase in ChildContext
-                                Purchase(amount: amount, date: date, item: item, storeName: storeName, uuid: uuid, lastModified: lastModified, purchaseMethod: method, ledger: ledger, context: CoreDataStack.childContext)
+                                Purchase(amount: NSDecimalNumber(value: amount), date: date, item: item, storeName: storeName, uuid: uuid, lastModified: lastModified, purchaseMethod: method, ledger: ledger, context: CoreDataStack.childContext)
                             }
                         })
                     })

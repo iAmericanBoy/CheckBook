@@ -29,7 +29,7 @@ class PurchaseTableViewCell: UITableViewCell {
         guard let purchase = purchase else {return}
         numberFormatter.locale = Locale.autoupdatingCurrent
         numberFormatter.numberStyle = .currency
-        amountLabel.text = numberFormatter.string(from: NSNumber(value: purchase.amount))
+        amountLabel.text = numberFormatter.string(from: purchase.amount!)
         storeNameLabel.text = purchase.storeName
     }
 }

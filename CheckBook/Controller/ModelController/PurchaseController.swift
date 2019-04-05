@@ -23,7 +23,7 @@ class PurchaseController {
     /// - parameter storeName: The storeName of the purchase.
     /// - parameter method: The method of payment of the purchase.
     /// - parameter ledger: The leger of the purchase.
-    func createNewPurchaseWith(amount: Double, date: Date, item: String, storeName:String, purchaseMethod: PurchaseMethod, ledger: Ledger) {
+    func createNewPurchaseWith(amount: NSDecimalNumber, date: Date, item: String, storeName:String, purchaseMethod: PurchaseMethod, ledger: Ledger) {
         let purchase = Purchase(amount: amount, date: date, item: item, storeName: storeName, purchaseMethod: purchaseMethod, ledger: ledger)
         CoreDataController.shared.saveToPersistentStore()
         
@@ -43,8 +43,8 @@ class PurchaseController {
     /// - parameter item: The updated itemName of the purchase.
     /// - parameter storeName: updated The storeName of the purchase.
     /// - parameter method: The updated method of payment of the purchase.
-    func update(purchase: Purchase, amount:Double?, date: Date?, item: String?, storeName: String?, purchaseMethod: PurchaseMethod?) {
-        if let amount = amount {purchase.amount = amount}
+    func update(purchase: Purchase, amount:Decimal?, date: Date?, item: String?, storeName: String?, purchaseMethod: PurchaseMethod?) {
+        if let amount = amount {purchase.amount = amount as NSDecimalNumber}
         if let date = date {purchase.date = date}
         if let item = item {purchase.item = item}
         if let storeName = storeName {purchase.storeName = storeName}
