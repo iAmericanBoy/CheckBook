@@ -92,6 +92,7 @@ class AddPurchaseViewController: UIViewController {
     fileprivate func setupViews() {
         storeNameTextField.delegate = self
         amountTextField.delegate = self
+        amountTextField.text = NumberFormatter.localizedString(from: 0, number: .currency)
         
         categoryTextField.delegate = self
         categoryTextField.inputAccessoryView = categoryToolBar
@@ -141,8 +142,38 @@ class AddPurchaseViewController: UIViewController {
 //MARK: - UITextFieldDelegate
 extension AddPurchaseViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        print(textField.text)
+
     }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if textField == amountTextField {
+            guard let text = textField.text else {return true}
+            
+            let numberFormatter = NumberFormatter()
+            numberFormatter.numberStyle = .currency
+            
+            let oldDigits = numberFormatter.number(from: text) ?? 0
+            var digits = oldDigits.decimalValue
+            
+            if let digit = Decimal(string: string) {
+                let newDigits: Decimal = digit / 100
+            
+                digits *= 10
+                digits += newDigits
+            } else {
+                if range.length == 1 {
+                    digits /= 10
+                }
+            }
+            textField.text = NumberFormatter.localizedString(from: digits as NSDecimalNumber, number: .currency)
+            
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
