@@ -14,7 +14,7 @@ extension User {
     @discardableResult
     convenience init(name: String,
                      color: String? = nil,
-                     appleUserUUID: String,
+                     appleUser: String,
                      uuid: UUID = UUID(),
                      purchases: NSOrderedSet = NSOrderedSet(),
                      lastModified: Date = Date(),
@@ -23,7 +23,7 @@ extension User {
         self.init(context: context)
         
         self.name = name
-        self.appleUser = appleUserUUID
+        self.appleUser = appleUser
         self.uuid = uuid
         self.purchases = purchases
         self.color = color
@@ -35,18 +35,18 @@ extension User {
     convenience init?(record: CKRecord, context: NSManagedObjectContext = CoreDataStack.context) {
         guard let name = record[User.nameKey] as? String,
             let color = record[User.colorKey] as? String,
-            let appleUserUUID = record[User.appleUserKey] as? String,
+            let appleUser = record[User.appleUserKey] as? String,
             let lastModified = record[User.lastModifiedKey] as? Date else {return nil}
         
-        self.init(name: name, color: color, appleUserUUID: appleUserUUID, uuid: UUID(uuidString: record.recordID.recordName)!, lastModified: lastModified, context: context)
+        self.init(name: name, color: color, appleUser: appleUser, uuid: UUID(uuidString: record.recordID.recordName)!, lastModified: lastModified, context: context)
     }
 }
 
 extension CKRecord {
     convenience init?(user: User) {
-        self.init(recordType: User.typeKey, recordID: CKRecord.ID(recordName: user.uuid!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)))
+        self.init(recordType: User.typeKey, recordID: CKRecord.ID(recordName: user.uuid!.uuidString))
         
-        let appleUserRef = CKRecord.Reference(recordID: CKRecord.ID(recordName: user.appleUser!, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)) , action: .deleteSelf)
+        let appleUserRef = CKRecord.Reference(recordID: CKRecord.ID(recordName: user.appleUser!) , action: .deleteSelf)
         
         guard let appleUser = user.appleUser else {return nil}
         

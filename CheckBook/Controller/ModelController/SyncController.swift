@@ -42,7 +42,7 @@ class SyncController {
                         let categoryUUID = recordFromCK[Purchase.categoryKey] as? String,
                         let userUUID = recordFromCK[Purchase.userKey] as? String,
                         let methodName = recordFromCK[Purchase.methodNameKey] as? String,
-                        let appleUserUUID = recordFromCK[Purchase.appleUserKey] as? String,
+                        let appleUser = recordFromCK[Purchase.appleUserKey] as? String,
                         let lastModified = recordFromCK[Purchase.lastModifiedKey] as? Date,
                         let storeName = recordFromCK[Purchase.storeNameKey] as? String else {return}
                     
@@ -87,7 +87,7 @@ class SyncController {
                                     if let foundUser = foundUser {
                                         userOfOPurchase = foundUser
                                     } else {
-                                        userOfOPurchase = User(name: "", appleUserUUID: appleUserUUID, uuid: UUID(uuidString: userUUID)!, context: CoreDataStack.childContext)
+                                        userOfOPurchase = User(name: "", appleUser: appleUser, uuid: UUID(uuidString: userUUID)!, context: CoreDataStack.childContext)
                                     }
                                     
                                     

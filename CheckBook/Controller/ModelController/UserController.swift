@@ -20,12 +20,12 @@ class UserController {
     /// - parameter name: The name of the User.
     func createNewUserWith(name: String) {
         guard let appleUserID = CloudKitController.shared.appleUserID else {return}
-        let newUser = User(name: name, appleUserUUID: appleUserID.recordName)
+        let newUser = User(name: name, appleUser: appleUserID.recordName)
         CoreDataController.shared.saveToPersistentStore()
         
         guard let newRecord = CKRecord(user: newUser) else {return}
         
-        CloudKitController.shared.create(record: newRecord) { (isSuccess, newPurchase) in
+        CloudKitController.shared.create(record: newRecord, inDataBase: CloudKitController.shared.publicDB) { (isSuccess, newPurchase) in
             if !isSuccess {
                 guard let uuid = newUser.uuid else {return}
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)

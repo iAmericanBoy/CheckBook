@@ -18,7 +18,8 @@ class CloudKitController {
     //MARK: - Properties
     /// The private Database of the User.
     fileprivate let privateDB = CKContainer.default().privateCloudDatabase
-    
+    let publicDB = CKContainer.default().publicCloudDatabase
+
     var appleUserID: CKRecord.ID?
     
     //MARK: - INIT
@@ -41,12 +42,12 @@ class CloudKitController {
     //MARK: - CRUD
     /// Creates new Record in CloudKit.
     /// - parameter record: The record to be created
+    /// - parameter database: The database where the record should be saved in
     /// - parameter completion: Handler for when the purchase has been created.
     /// - parameter isSuccess: Confirms the new purchase was created.
     /// - parameter newRecord: The new Record or nil.
-    func create(record: CKRecord, completion: @escaping (_ isSuccess: Bool, _ newRecord: CKRecord?) -> Void) {
-        
-        saveChangestoCK(recordsToUpdate: [record], purchasesToDelete: []) { (isSuccess, savedRecords, _) in
+    func create(record: CKRecord, inDataBase dataBase: CKDatabase = CloudKitController.shared.privateDB, completion: @escaping (_ isSuccess: Bool, _ newRecord: CKRecord?) -> Void) {
+        saveChangestoCK(recordsToUpdate: [record], purchasesToDelete: [], toDataBase: dataBase) { (isSuccess, savedRecords, _) in
             if isSuccess {
                 guard let newRecord = savedRecords?.first , newRecord.recordID == record.recordID else {
                     completion(false, nil)
@@ -289,11 +290,12 @@ class CloudKitController {
     /// Updates and Deletes changes to CloudKit.
     /// - parameter records: Records that where updated or created.
     /// - parameter recordIDs: RecordIDs of record that need deleted.
+    /// - parameter database: The database to save the changes to
     /// - parameter completion: Handler for when the Record has been deleted or updated/saved.
     /// - parameter isSuccess: Confirms that the change has synced to CloudKit.
     /// - parameter savedRecords: The saved records (can be nil).
     /// - parameter deletedRecordIDs: The deleted recordIDs (can be nil).
-    func saveChangestoCK(recordsToUpdate records: [CKRecord], purchasesToDelete recordIDs: [CKRecord.ID], completion: @escaping (_ isSuccess: Bool,_ savedRecords: [CKRecord]?, _ deletedRecordIDs: [CKRecord.ID]?) -> Void) {
+    func saveChangestoCK(recordsToUpdate records: [CKRecord], purchasesToDelete recordIDs: [CKRecord.ID], toDataBase dataBase: CKDatabase = CloudKitController.shared.privateDB, completion: @escaping (_ isSuccess: Bool,_ savedRecords: [CKRecord]?, _ deletedRecordIDs: [CKRecord.ID]?) -> Void) {
         let operation = CKModifyRecordsOperation(recordsToSave: records, recordIDsToDelete: recordIDs)
         operation.savePolicy = .changedKeys
         operation.modifyRecordsCompletionBlock = { (savedRecords,deletedRecords,error) in
@@ -305,6 +307,6 @@ class CloudKitController {
             guard let saved = savedRecords, let deleted = deletedRecords else {completion(false,savedRecords,deletedRecords); return}
             completion(true,saved,deleted)
         }
-        privateDB.add(operation)
+        dataBase.add(operation)
     }
 }
