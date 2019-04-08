@@ -24,8 +24,8 @@ class PurchaseController {
     /// - parameter method: The method of payment of the purchase.
     /// - parameter ledger: The leger of the purchase.
     /// - parameter category: The category of the purchase.
-    func createNewPurchaseWith(amount: NSDecimalNumber, date: Date, item: String, storeName:String, purchaseMethod: PurchaseMethod, ledger: Ledger, category: Category) {
-        let purchase = Purchase(amount: amount, date: date, item: item, storeName: storeName, purchaseMethod: purchaseMethod, category: category, ledger: ledger)
+    func createNewPurchaseWith(amount: NSDecimalNumber, date: Date, item: String, storeName:String, purchaseMethod: PurchaseMethod, ledger: Ledger, category: Category, user: User) {
+        let purchase = Purchase(amount: amount, date: date, item: item, storeName: storeName, purchaseMethod: purchaseMethod, category: category, user: user,ledger: ledger)
         CoreDataController.shared.saveToPersistentStore()
         
         guard let recordToCreate = CKRecord(purchase: purchase) else {return}
