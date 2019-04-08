@@ -32,6 +32,14 @@ class CoreDataController {
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
     }()
     
+    ///FetchController to fetch all the Categories.
+    let categoryFetchResultsController: NSFetchedResultsController<Category> = {
+        let fetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
+    }()
+    
     ///FetchController to fetch all the PurchaseMethods.
     let purchasesOfPurchaseMethodFetchResultsController: NSFetchedResultsController<Purchase> = {
         let fetchRequest: NSFetchRequest<Purchase> = Purchase.fetchRequest()

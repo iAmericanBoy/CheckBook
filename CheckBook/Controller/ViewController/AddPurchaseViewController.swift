@@ -228,6 +228,8 @@ extension AddPurchaseViewController: UIPickerViewDelegate, UIPickerViewDataSourc
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         if pickerView.tag == 1111 {
             return CoreDataController.shared.purchaseMethodFetchResultsController.sections?.count ?? 1
+        } else if pickerView.tag == 2222 {
+            return CoreDataController.shared.categoryFetchResultsController.sections?.count ?? 1
         } else {
             return 0
         }
@@ -236,6 +238,8 @@ extension AddPurchaseViewController: UIPickerViewDelegate, UIPickerViewDataSourc
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if pickerView.tag == 1111 {
             return CoreDataController.shared.purchaseMethodFetchResultsController.sections?[component].numberOfObjects ?? 0
+        } else if pickerView.tag == 2222 {
+            return CoreDataController.shared.categoryFetchResultsController.sections?[component].numberOfObjects ?? 0
         } else {
             return 0
         }
@@ -244,6 +248,8 @@ extension AddPurchaseViewController: UIPickerViewDelegate, UIPickerViewDataSourc
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if pickerView.tag == 1111 {
             return CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: row, section: component)).name
+        } else if pickerView.tag == 2222 {
+            return CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: row, section: component)).name
         } else {
             return ""
         }
@@ -252,7 +258,10 @@ extension AddPurchaseViewController: UIPickerViewDelegate, UIPickerViewDataSourc
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if pickerView.tag == 1111 {
             methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: row, section: component)).name
+        } else if pickerView.tag == 2222 {
+            methodTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: row, section: component)).name
         } else {
+            
         }
     }
 }
