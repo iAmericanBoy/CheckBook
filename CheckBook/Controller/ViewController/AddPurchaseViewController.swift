@@ -108,7 +108,12 @@ class AddPurchaseViewController: UIViewController {
     }
     
     @IBAction func newCategoryButtonTapped(_ sender: UIBarButtonItem) {
-        //TODO: PresentAlert
+        self.addNewCategoryAlert {
+            DispatchQueue.main.async {
+                try! CoreDataController.shared.categoryFetchResultsController.performFetch()
+                self.categoryPickerView.reloadAllComponents()
+            }
+        }
     }
     
     @IBAction func doneButtonTapped(_ sender: UIBarButtonItem) {
@@ -144,11 +149,16 @@ class AddPurchaseViewController: UIViewController {
         categoryTextField.inputView = categoryPickerView
         categoryPickerView.dataSource = self
         categoryPickerView.delegate = self
+        if CoreDataController.shared.categoryFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
+            categoryTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
+        }
         
         methodTextField.delegate = self
         methodTextField.inputAccessoryView = paymentMethodToolBar
         methodTextField.inputView = methodPickerView
-        methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
+        if CoreDataController.shared.purchaseMethodFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
+            methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
+        }
 
         methodPickerView.delegate = self
         methodPickerView.dataSource = self
@@ -175,6 +185,7 @@ class AddPurchaseViewController: UIViewController {
         methodTextField.resignFirstResponder()
         amountTextField.resignFirstResponder()
         dateTextField.resignFirstResponder()
+        categoryTextField.resignFirstResponder()
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
