@@ -38,6 +38,7 @@
 		B6EF3BED225514340009BC2A /* Ledger+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EF3BEC225514340009BC2A /* Ledger+MagicStrings.swift */; };
 		B6EFE184225BC7DD00CB65AF /* User+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EFE183225BC7DD00CB65AF /* User+convenience.swift */; };
 		B6EFE186225BC83F00CB65AF /* User+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EFE185225BC83F00CB65AF /* User+MagicStrings.swift */; };
+		B6EFE188225BDCAE00CB65AF /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EFE187225BDCAE00CB65AF /* UserController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,6 +76,7 @@
 		B6EF3BEC225514340009BC2A /* Ledger+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ledger+MagicStrings.swift"; sourceTree = "<group>"; };
 		B6EFE183225BC7DD00CB65AF /* User+convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+convenience.swift"; sourceTree = "<group>"; };
 		B6EFE185225BC83F00CB65AF /* User+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+MagicStrings.swift"; sourceTree = "<group>"; };
+		B6EFE187225BDCAE00CB65AF /* UserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,11 +180,12 @@
 				B6BF9FF6222F3FDA00DFCE8C /* PurchaseController.swift */,
 				B6E332A32234CD5F0088D6FF /* PurchaseMethodController.swift */,
 				B674FB0722580BD3000A5815 /* LedgerController.swift */,
+				B6EAF4ED225BA453002C783D /* CategoryController.swift */,
+				B6EFE187225BDCAE00CB65AF /* UserController.swift */,
 				B6DE00AE223030F400C76A40 /* CoreDataController.swift */,
 				B6DE00B02230345600C76A40 /* CloudKitController.swift */,
 				B6EA85F2223316C200211068 /* CloudKitController+MagicStrings.swift */,
 				B6920AD0223045D000A63EC8 /* SyncController.swift */,
-				B6EAF4ED225BA453002C783D /* CategoryController.swift */,
 			);
 			path = ModelController;
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 				B69D87F922555CEC0019E694 /* AddPurchaseViewController.swift in Sources */,
 				B6BF9FD3222F160300DFCE8C /* AppDelegate.swift in Sources */,
 				B6E332A42234CD5F0088D6FF /* PurchaseMethodController.swift in Sources */,
+				B6EFE188225BDCAE00CB65AF /* UserController.swift in Sources */,
 				B674FB0822580BD3000A5815 /* LedgerController.swift in Sources */,
 				B652BD66225810440066AD8A /* PurchaseTableViewCell.swift in Sources */,
 				B6E332A12234CBFB0088D6FF /* PurchaseMethod+MagicStrings.swift in Sources */,

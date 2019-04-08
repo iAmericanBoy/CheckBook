@@ -19,11 +19,21 @@ class CloudKitController {
     /// The private Database of the User.
     fileprivate let privateDB = CKContainer.default().privateCloudDatabase
     
+    var appleUserID: CKRecord.ID?
+    
     //MARK: - INIT
     init() {
         createZone(withName: Purchase.privateRecordZoneName) { (isSuccess, newZone) in
             if !isSuccess {
                 print("Could not create new zone.")
+            }
+        }
+        
+        fetchUserRecordID { (isSuccess) in
+            if isSuccess {
+                print("AppleUserID found")
+            } else {
+                print("AppleUserID not found")
             }
         }
     }
@@ -70,6 +80,24 @@ class CloudKitController {
         }
         
         privateDB.add(fetch)
+    }
+    
+    ///Fetches the UserRecordID.
+    /// - parameter completion: Handler for when the UserRecord could be found.
+    /// - parameter isSuccess: Confirms the record could be found.
+    /// - parameter newRecord: The recordID or nil.
+    func fetchUserRecordID(_ completion: @escaping (_ isSuccess:Bool) -> Void) {
+        CKContainer.default().fetchUserRecordID { (appleUserRecord, error) in
+            if let error = error {
+                print("There was an error fetching users appleID from cloudkit: \(error)")
+                completion(false)
+                return
+            }
+            guard let appleUserRecord = appleUserRecord else {completion(false); return}
+            self.appleUserID = appleUserRecord
+
+            completion(true)
+        }
     }
 
     
