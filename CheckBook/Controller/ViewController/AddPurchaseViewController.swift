@@ -96,12 +96,17 @@ class AddPurchaseViewController: UIViewController {
             let newLedger = LedgerController.shared.createNewLedgerWith(name: "Hello")
             PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: newLedger, category: category)
         }
-        
     }
     
     @IBAction func addNewCardButtonTapped(_ sender: UIBarButtonItem) {
-        //TODO: Present Alert
+        self.addNewPurchaseMethodAlert {
+            DispatchQueue.main.async {
+                try! CoreDataController.shared.purchaseMethodFetchResultsController.performFetch()
+                self.methodPickerView.reloadAllComponents()
+            }
+        }
     }
+    
     @IBAction func newCategoryButtonTapped(_ sender: UIBarButtonItem) {
         //TODO: PresentAlert
     }
