@@ -39,6 +39,7 @@ class SyncController {
                         let item = recordFromCK[Purchase.itemKey] as? String,
                         let methodUUID = recordFromCK[Purchase.methodKey] as? String,
                         let ledgerUUID = recordFromCK[Purchase.ledgerKey] as? String,
+                        let categoryUUID = recordFromCK[Purchase.categoryKey] as? String,
                         let methodName = recordFromCK[Purchase.methodNameKey] as? String,
                         let lastModified = recordFromCK[Purchase.lastModifiedKey] as? Date,
                         let storeName = recordFromCK[Purchase.storeNameKey] as? String else {return}
@@ -65,26 +66,41 @@ class SyncController {
                             }
                             
                             guard let ledger = ledgerOfPurchase else {return}
-                            if let purchaseFromCD = purchaseFromCD {
-                                //update
-                                if Calendar.current.compare(lastModified, to: purchaseFromCD.lastModified!, toGranularity: Calendar.Component.second).rawValue > 0 {
-                                    
-                                    purchaseFromCD.amount = NSDecimalNumber(value: amount)
-                                    purchaseFromCD.date = date
-                                    purchaseFromCD.item = item
-                                    purchaseFromCD.storeName = storeName
-                                    purchaseFromCD.uuid = uuid
-                                    purchaseFromCD.purchaseMethod = method
-                                    purchaseFromCD.methodName = method.name
-                                    purchaseFromCD.methodUUID = method.uuid
-                                    purchaseFromCD.ledger = ledger
-                                    purchaseFromCD.ledgerUUID = ledger.uuid
-                                    purchaseFromCD.lastModified = lastModified
+                            
+                            CoreDataController.shared.findCategoryWith(uuid: UUID(uuidString: categoryUUID)!, inContext: CoreDataStack.childContext, completion: { (foundCategory) in
+                                let categoryOfPurchase: Category?
+                                
+                                if let foundCategory = foundCategory {
+                                    categoryOfPurchase = foundCategory
+                                } else {
+                                    categoryOfPurchase = Category(name: "", uuid: UUID(uuidString: categoryUUID)!, context: CoreDataStack.childContext)
                                 }
-                            } else {
-                                //create new Purchase in ChildContext
-                                Purchase(amount: NSDecimalNumber(value: amount), date: date, item: item, storeName: storeName, uuid: uuid, lastModified: lastModified, purchaseMethod: method, ledger: ledger, context: CoreDataStack.childContext)
-                            }
+                                
+                                guard let category = categoryOfPurchase else {return}
+                                
+                                if let purchaseFromCD = purchaseFromCD {
+                                    //update
+                                    if Calendar.current.compare(lastModified, to: purchaseFromCD.lastModified!, toGranularity: Calendar.Component.second).rawValue > 0 {
+                                        
+                                        purchaseFromCD.amount = NSDecimalNumber(value: amount)
+                                        purchaseFromCD.date = date
+                                        purchaseFromCD.item = item
+                                        purchaseFromCD.storeName = storeName
+                                        purchaseFromCD.uuid = uuid
+                                        purchaseFromCD.purchaseMethod = method
+                                        purchaseFromCD.methodName = method.name
+                                        purchaseFromCD.methodUUID = method.uuid
+                                        purchaseFromCD.ledger = ledger
+                                        purchaseFromCD.ledgerUUID = ledger.uuid
+                                        purchaseFromCD.category = category
+                                        purchaseFromCD.categoryUUID = category.uuid
+                                        purchaseFromCD.lastModified = lastModified
+                                    }
+                                } else {
+                                    //create new Purchase in ChildContext
+                                    Purchase(amount: NSDecimalNumber(value: amount), date: date, item: item, storeName: storeName, uuid: uuid, lastModified: lastModified, purchaseMethod: method, category: category, ledger: ledger, context: CoreDataStack.childContext)
+                                }
+                            })
                         })
                     })
                 })
@@ -126,6 +142,27 @@ class SyncController {
                         Ledger(name: name, uuid: uuid, lastModified: lastModified, context: CoreDataStack.childContext)
                     }
                 })
+            } else if recordFromCK.recordType == Category.typeKey {
+                CoreDataController.shared.findCategoryWith(uuid: uuid, completion: { (foundCategory) in
+                    
+                    guard let name = recordFromCK[Category.nameKey] as? String,
+                        let color = recordFromCK[Category.colorKey] as? String?,
+                        let lastModified = recordFromCK[Category.lastModifiedKey] as? Date else {return}
+                    
+                    if let foundCategory = foundCategory {
+                        //update foundCategory
+                        if Calendar.current.compare(lastModified, to: foundCategory.lastModified!, toGranularity: Calendar.Component.second).rawValue > 0 {
+                            
+                            foundCategory.name = name
+                            foundCategory.uuid = uuid
+                            foundCategory.color = color
+                            foundCategory.lastModified = lastModified
+                        }
+                    } else {
+                        //create new Category in ChildContext
+                        Category(name: name, color: color, uuid: uuid, lastModified: lastModified, context: CoreDataStack.childContext)
+                    }
+                })
             }
         }
         
@@ -146,7 +183,11 @@ class SyncController {
                     CoreDataController.shared.remove(object: ledger)
                 }
             })
-            
+            CoreDataController.shared.findCategoryWith(uuid: UUID(uuidString: recordID.recordName)!, inContext: CoreDataStack.childContext, completion: { (categoryToDelete) in
+                if let category = categoryToDelete {
+                    CoreDataController.shared.remove(object: category)
+                }
+            })
         }
         
         //save
@@ -180,6 +221,7 @@ class SyncController {
         cachedPurchases.forEach { (cachedPurchase) in
             //TODO: FIND PURCHASE METHOD
             //TODO: FIND LEDGER
+            //TODO: FIND CATEGORY
             CoreDataController.shared.findPurchaseWith(uuid: cachedPurchase.uuid, completion: { (purchaseFromCD) in
                 if let purchase = purchaseFromCD {
                     //sent update to CK
