@@ -128,6 +128,28 @@ class CoreDataController {
         }
     }
     
+    /// Looks in the Context for a Category with a given UUID.
+    /// - parameter uuid: The UUID of the category that is being searched for.
+    /// - parameter context: The context where we should check for the Object with the given UUID.
+    /// - parameter completion: Handler for when the Category has been found.
+    /// - parameter foundCategory: The Category that was found or nil.
+    func findCategoryWith(uuid: UUID?, inContext context: NSManagedObjectContext = CoreDataStack.context, completion: @escaping (_ foundCategory: Category?) -> Void ) {
+        guard let uuid = uuid else {
+            completion(nil)
+            return
+        }
+        let request: NSFetchRequest<Category> = Category.fetchRequest()
+        request.fetchLimit = 1
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(Category.uuid), uuid as CVarArg)
+        do {
+            let categories = try CoreDataStack.context.fetch(request)
+            completion(categories.first)
+        } catch {
+            print("No Categorie with UUID found: \(error), \(error.localizedDescription)")
+            completion(nil)
+        }
+    }
+    
     //MARK: - Delete
     /// Removes the Object from the Context.
     /// - parameter object: The object to remove.
