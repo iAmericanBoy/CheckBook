@@ -90,11 +90,23 @@ class AddPurchaseViewController: UIViewController {
         let method = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(row: methodRow, section: 0))
         let category = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(row: categoryRow, section: 0))
         
+        let userForPurchase: User?
+        if CoreDataController.shared.userFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
+            userForPurchase = CoreDataController.shared.userFetchResultsController.fetchedObjects?.first(where: { $0.appleUserUUID?.uuidString == CloudKitController.shared.appleUserID?.recordName})
+        } else {
+            UserController.shared.createNewUserWith(name: "New User")
+            try! CoreDataController.shared.userFetchResultsController.performFetch()
+            userForPurchase = CoreDataController.shared.userFetchResultsController.fetchedObjects?.first(where: { $0.appleUserUUID?.uuidString == CloudKitController.shared.appleUserID?.recordName})
+        }
+        
+        guard let user = userForPurchase else {return}
+        
+        
         if let ledger = CoreDataController.shared.ledgerFetchResultsController.fetchedObjects?.first {
-            PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger, category: category, user: <#User#>)
+            PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger, category: category, user: user)
         } else {
             let newLedger = LedgerController.shared.createNewLedgerWith(name: "Hello")
-            PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: newLedger, category: category, user: <#User#>)
+            PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: newLedger, category: category, user: user)
         }
     }
     
