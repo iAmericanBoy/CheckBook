@@ -31,5 +31,6 @@ class PurchaseTableViewCell: UITableViewCell {
         numberFormatter.numberStyle = .currency
         amountLabel.text = numberFormatter.string(from: purchase.amount!)
         storeNameLabel.text = purchase.storeName
+        categoryLabel.text = purchase.category?.name
     }
 }
