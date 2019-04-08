@@ -92,11 +92,11 @@ class AddPurchaseViewController: UIViewController {
         
         let userForPurchase: User?
         if CoreDataController.shared.userFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
-            userForPurchase = CoreDataController.shared.userFetchResultsController.fetchedObjects?.first(where: { $0.appleUserUUID?.uuidString == CloudKitController.shared.appleUserID?.recordName})
+            userForPurchase = CoreDataController.shared.userFetchResultsController.fetchedObjects?.first(where: { $0.appleUser == CloudKitController.shared.appleUserID?.recordName})
         } else {
             UserController.shared.createNewUserWith(name: "New User")
             try! CoreDataController.shared.userFetchResultsController.performFetch()
-            userForPurchase = CoreDataController.shared.userFetchResultsController.fetchedObjects?.first(where: { $0.appleUserUUID?.uuidString == CloudKitController.shared.appleUserID?.recordName})
+            userForPurchase = CoreDataController.shared.userFetchResultsController.fetchedObjects?.first(where: { $0.appleUser == CloudKitController.shared.appleUserID?.recordName})
         }
         
         guard let user = userForPurchase else {return}

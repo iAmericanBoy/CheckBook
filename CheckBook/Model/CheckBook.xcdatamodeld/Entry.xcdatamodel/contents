@@ -19,7 +19,7 @@
     </entity>
     <entity name="Purchase" representedClassName="Purchase" syncable="YES" codeGenerationType="class">
         <attribute name="amount" attributeType="Decimal" defaultValueString="0" syncable="YES"/>
-        <attribute name="appleUserUUID" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="appleUser" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="categoryUUID" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="date" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="item" attributeType="String" syncable="YES"/>
@@ -42,7 +42,7 @@
         <relationship name="purchases" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Purchase" inverseName="purchaseMethod" inverseEntity="Purchase" syncable="YES"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">
-        <attribute name="appleUserUUID" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="appleUser" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="color" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastModified" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -53,8 +53,8 @@
         <element name="CachePurchase" positionX="-346.76953125" positionY="-234.8828125" width="128" height="75"/>
         <element name="Category" positionX="24.9140625" positionY="64.83203125" width="128" height="120"/>
         <element name="Ledger" positionX="-539.03515625" positionY="80.484375" width="129.0859375" height="103"/>
-        <element name="Purchase" positionX="-338.11328125" positionY="-39.5625" width="128" height="283"/>
+        <element name="Purchase" positionX="-338.11328125" positionY="-39.5625" width="128" height="285"/>
         <element name="PurchaseMethod" positionX="25.3203125" positionY="110.17578125" width="128" height="103"/>
-        <element name="User" positionX="22.21484375" positionY="-204.10546875" width="128" height="133"/>
+        <element name="User" positionX="22.21484375" positionY="-204.10546875" width="128" height="135"/>
     </elements>
 </model>

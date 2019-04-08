@@ -20,7 +20,7 @@ class UserController {
     /// - parameter name: The name of the User.
     func createNewUserWith(name: String) {
         guard let appleUserID = CloudKitController.shared.appleUserID else {return}
-        let newUser = User(name: name, appleUserUUID: UUID(uuidString: appleUserID.recordName)!)
+        let newUser = User(name: name, appleUserUUID: appleUserID.recordName)
         CoreDataController.shared.saveToPersistentStore()
         
         guard let newRecord = CKRecord(user: newUser) else {return}

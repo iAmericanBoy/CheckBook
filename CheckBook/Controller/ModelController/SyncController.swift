@@ -87,7 +87,7 @@ class SyncController {
                                     if let foundUser = foundUser {
                                         userOfOPurchase = foundUser
                                     } else {
-                                        userOfOPurchase = User(name: "", appleUserUUID: UUID(uuidString: appleUserUUID)!, uuid: UUID(uuidString: userUUID)!, context: CoreDataStack.childContext)
+                                        userOfOPurchase = User(name: "", appleUserUUID: appleUserUUID, uuid: UUID(uuidString: userUUID)!, context: CoreDataStack.childContext)
                                     }
                                     
                                     
@@ -111,7 +111,7 @@ class SyncController {
                                             purchaseFromCD.categoryUUID = category.uuid
                                             purchaseFromCD.user = user
                                             purchaseFromCD.userUUID = user.uuid
-                                            purchaseFromCD.appleUserUUID = user.appleUserUUID
+                                            purchaseFromCD.appleUser = user.appleUser
                                             purchaseFromCD.lastModified = lastModified
                                         }
                                     } else {

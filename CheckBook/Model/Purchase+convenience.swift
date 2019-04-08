@@ -40,7 +40,7 @@ extension Purchase {
         self.ledgerUUID = ledger.uuid
         self.categoryUUID = category.uuid
         self.userUUID = user.uuid
-        self.appleUserUUID = user.appleUserUUID
+        self.appleUser = user.appleUser
         
         self.lastModified = lastModified
         self.uuid = uuid
@@ -59,7 +59,7 @@ extension CKRecord {
         
         let userReference = CKRecord.Reference(recordID: CKRecord.ID(recordName: purchase.userUUID!.uuidString), action: .none)
 
-        guard let methodUUID = purchase.purchaseMethod?.uuid, let methodName = purchase.purchaseMethod?.name, let ledgerUUID = purchase.ledger?.uuid, let categoryUUID = purchase.category?.uuid, let appleUserUUID = purchase.user?.appleUserUUID, let userUUID = purchase.user?.uuid else {return nil}
+        guard let methodUUID = purchase.purchaseMethod?.uuid, let methodName = purchase.purchaseMethod?.name, let ledgerUUID = purchase.ledger?.uuid, let categoryUUID = purchase.category?.uuid, let appleUserUUID = purchase.user?.appleUser, let userUUID = purchase.user?.uuid else {return nil}
         
         setValue(purchase.amount, forKey: Purchase.amountKey)
         setValue(purchaseMethodReference, forKey: Purchase.methodReferenceKey)
@@ -71,7 +71,7 @@ extension CKRecord {
         setValue(methodUUID.uuidString, forKey: Purchase.methodKey)
         setValue(ledgerUUID.uuidString, forKey: Purchase.ledgerKey)
         setValue(categoryUUID.uuidString, forKey: Purchase.categoryKey)
-        setValue(appleUserUUID.uuidString, forKey: Purchase.appleUserKey)
+        setValue(appleUserUUID, forKey: Purchase.appleUserKey)
         setValue(userUUID.uuidString, forKey: Purchase.userKey)
         setValue(methodName, forKey: Purchase.methodNameKey)
         setValue(purchase.lastModified, forKey: Purchase.lastModifiedKey)
