@@ -17,7 +17,7 @@ class PurchaseMethodController {
     
     //MARK: - CRUD
     /// Creates new PurchaseMethod using the convenience initilizer inside the CoredataStack.context and tries to uploads it to CloudKit. If the upload fails the new PurchaseMethod gets added to the CacheContext for a later try.
-    /// - parameter name: The amount of the purchase.
+    /// - parameter name: The name of the purchaseMethod.
     func createNewPurchaseWith(name: String) -> PurchaseMethod {
         let newPurchaseMethod = PurchaseMethod(name: name)
         CoreDataController.shared.saveToPersistentStore()
@@ -35,7 +35,7 @@ class PurchaseMethodController {
     
     /// Updates the PurchaseMethod and resets the last modified parameter and updates the object in the CoredataStack.context. It tries to upload it to CloudKit.If the upload fails the new PurchaseMethod gets added to the CacheContext for a later try.
     /// - parameter purchaseMethod: The PurchaseMethod to update.
-    /// - parameter name: The updated name of the purchase.
+    /// - parameter name: The updated name of the purchaseMethod.
     func update(purchaseMethod: PurchaseMethod, name:String?) {
         if let name = name {purchaseMethod.name = name}
         purchaseMethod.lastModified = Date()
@@ -49,23 +49,12 @@ class PurchaseMethodController {
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
             }
         }
-        
-        let purchaseRecords = purchaseMethod.purchases?.compactMap({ CKRecord(purchase: $0 as! Purchase )})
-        
-        CloudKitController.shared.saveChangestoCK(recordsToUpdate: purchaseRecords!, purchasesToDelete: []) { (isSuccess, updatedRecords, _) in
-            if !isSuccess {
-                purchaseRecords?.forEach({ (record) in
-                    guard let uuid = UUID(uuidString: record.recordID.recordName) else {return}
-                    SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
-                })
-            }
-        }
     }
     
     ///Changes to current PurchaseMethod reference to a different PurchaseMethod and saves the change to CloudKit.
-    /// - parameter oldPurchaseMethod: The purchase to delete.
-    /// - parameter purchase: The purchase to delete.
-    /// - parameter newPurchaseMethod: The purchase to delete.
+    /// - parameter oldPurchaseMethod: The old purchaseMethod.
+    /// - parameter purchase: The purchase to update.
+    /// - parameter newPurchaseMethod: The new purchaseMethod.
     func change(purchaseMethod oldPurchaseMethod: PurchaseMethod, ofPurchase purchase: Purchase, toPurchaseMethod newPurchaseMethod: PurchaseMethod) {
         
         oldPurchaseMethod.removeFromPurchases(purchase)
@@ -93,7 +82,7 @@ class PurchaseMethodController {
     }
     
     /// Deletes the PurchaseMethod, deletes it from Cotext and CloudKit. If the CK delete Fails the PurchaseMethod gets added to the cache for uploading at a later date.
-    /// - parameter purchase: The purchase to delete.
+    /// - parameter purchase: The purchaseMethod to delete.
     func delete(purchaseMethod: PurchaseMethod) {
         
         guard let recordToDelete = CKRecord(purchaseMethod: purchaseMethod) else {return}
