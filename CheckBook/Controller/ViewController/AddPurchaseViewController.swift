@@ -80,6 +80,9 @@ class AddPurchaseViewController: UIViewController {
         guard let storeName = storeNameTextField.text, !storeName.isEmpty,
             let amount = amountTextField.text, let amountNumber = numberFormatter.number(from: amount),
             let methodText = methodTextField.text, !methodText.isEmpty else {return}
+        
+        //Empty TextFields
+        
         let method = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(row: row, section: 0))
         if let ledger = CoreDataController.shared.ledgerFetchResultsController.fetchedObjects?.first {
             PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger)
@@ -87,6 +90,7 @@ class AddPurchaseViewController: UIViewController {
             let newLedger = LedgerController.shared.createNewLedgerWith(name: "Hello")
             PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: newLedger)
         }
+        
     }
     
     @IBAction func addNewCardButtonTapped(_ sender: UIBarButtonItem) {
@@ -111,11 +115,9 @@ class AddPurchaseViewController: UIViewController {
     fileprivate func updateViews() {
         switch currentState {
         case .open:
-            addPurchaseButton.setTitle("Save", for: .normal)
-            addPurchaseButton.contentHorizontalAlignment = .right
+            addPurchaseButton.setTitle("Save Purchase", for: .normal)
         case .closed:
             addPurchaseButton.setTitle("Add Purchase", for: .normal)
-            addPurchaseButton.contentHorizontalAlignment = .center
         }
     }
     

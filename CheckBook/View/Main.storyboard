@@ -209,13 +209,13 @@
                                     </textField>
                                 </subviews>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="fill" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4F5-bc-uGJ">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="fill" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4F5-bc-uGJ">
                                 <rect key="frame" x="16" y="44" width="343" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="fvx-sM-6VB"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
-                                <state key="normal" title="Save"/>
+                                <state key="normal" title="Save Purchase"/>
                                 <connections>
                                     <action selector="addPurchaseButtonTapped:" destination="MYC-vt-QZt" eventType="touchUpInside" id="ciR-5b-1dZ"/>
                                 </connections>
