@@ -81,8 +81,10 @@ class AddPurchaseViewController: UIViewController {
             let amount = amountTextField.text, let amountNumber = numberFormatter.number(from: amount),
             let methodText = methodTextField.text, !methodText.isEmpty else {return}
         
-        //Empty TextFields
-        
+        //Set TextFields to Empty
+        amountTextField.text = NumberFormatter.localizedString(from: 0, number: .currency)
+        storeNameTextField.text = ""
+
         let method = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(row: row, section: 0))
         if let ledger = CoreDataController.shared.ledgerFetchResultsController.fetchedObjects?.first {
             PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger)
