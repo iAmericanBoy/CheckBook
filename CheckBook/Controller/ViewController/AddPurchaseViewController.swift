@@ -75,22 +75,26 @@ class AddPurchaseViewController: UIViewController {
         updateViews()
         dismissKeyBoards()
         
-        let row = methodPickerView.selectedRow(inComponent: 0)
+        let methodRow = methodPickerView.selectedRow(inComponent: 0)
+        let categoryRow = categoryPickerView.selectedRow(inComponent: 0)
         let date = datePicker.date
         guard let storeName = storeNameTextField.text, !storeName.isEmpty,
             let amount = amountTextField.text, let amountNumber = numberFormatter.number(from: amount),
-            let methodText = methodTextField.text, !methodText.isEmpty else {return}
+            let methodText = methodTextField.text, !methodText.isEmpty,
+            let categoryText = methodTextField.text, !categoryText.isEmpty else {return}
         
         //Set TextFields to Empty
         amountTextField.text = NumberFormatter.localizedString(from: 0, number: .currency)
         storeNameTextField.text = ""
 
-        let method = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(row: row, section: 0))
+        let method = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(row: methodRow, section: 0))
+        let category = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(row: categoryRow, section: 0))
+        
         if let ledger = CoreDataController.shared.ledgerFetchResultsController.fetchedObjects?.first {
-            PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger)
+            PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger, category: category)
         } else {
             let newLedger = LedgerController.shared.createNewLedgerWith(name: "Hello")
-            PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: newLedger)
+            PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: newLedger, category: category)
         }
         
     }
