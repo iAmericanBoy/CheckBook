@@ -54,11 +54,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CheckBook/Controller/ViewController/AddPurchaseViewController.swift"
-            timestampString = "576522441.023183"
+            timestampString = "576522669.646443"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
             landmarkName = "addPurchaseButtonTapped(_:)"
             landmarkType = "7">
          </BreakpointContent>

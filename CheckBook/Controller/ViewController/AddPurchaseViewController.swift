@@ -78,6 +78,7 @@ class AddPurchaseViewController: UIViewController {
 
     @IBAction func addPurchaseButtonTapped(_ sender: UIButton) {
         currentState = delegate?.userDidInteractWithCard() ?? State.closed
+        dismissKeyBoards()
 
         let methodRow = methodPickerView.selectedRow(inComponent: 0)
         let categoryRow = categoryPickerView.selectedRow(inComponent: 0)
@@ -85,7 +86,7 @@ class AddPurchaseViewController: UIViewController {
         guard let storeName = storeNameTextField.text, !storeName.isEmpty,
             let amount = amountTextField.text, let amountNumber = numberFormatter.number(from: amount),
             let methodText = methodTextField.text, !methodText.isEmpty,
-            let categoryText = methodTextField.text, !categoryText.isEmpty else {return}
+            let categoryText = methodTextField.text, !categoryText.isEmpty else {updateViews(); return}
         
         //Set TextFields to Empty
         amountTextField.text = NumberFormatter.localizedString(from: 0, number: .currency)
@@ -107,7 +108,6 @@ class AddPurchaseViewController: UIViewController {
         }
         
         updateViews()
-        dismissKeyBoards()
     }
     
     @IBAction func addNewCardButtonTapped(_ sender: UIBarButtonItem) {
