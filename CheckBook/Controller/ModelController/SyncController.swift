@@ -101,7 +101,7 @@ class SyncController {
                                     }
                                 } else {
                                     //create new Purchase in ChildContext
-                                    Purchase(amount: NSDecimalNumber(value: amount), date: date, item: item, storeName: storeName, uuid: uuid, lastModified: lastModified, purchaseMethod: method, category: category, user: user, ledger: ledger, context: CoreDataStack.childContext)
+                                    Purchase(amount: NSDecimalNumber(value: amount), date: date, item: item, storeName: storeName, uuid: uuid, lastModified: lastModified, purchaseMethod: method, category: category, appleUserRecordName: appleUserRef.recordID.recordName, ledger: ledger, context: CoreDataStack.childContext)
                                 }
                             })
                         })
