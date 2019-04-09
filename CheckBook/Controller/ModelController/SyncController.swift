@@ -118,11 +118,12 @@ class SyncController {
                             
                             foundPurchaseMethod.name = name
                             foundPurchaseMethod.uuid = uuid
+                            foundPurchaseMethod.color = recordFromCK[PurchaseMethod.colorKey] as? String
                             foundPurchaseMethod.lastModified = lastModified
                         }
                     } else {
                         //create new Purchase in ChildContext
-                        PurchaseMethod(name: name, uuid: uuid, lastModified: lastModified, context: CoreDataStack.childContext)
+                        PurchaseMethod(record: recordFromCK, context: CoreDataStack.childContext)
                     }
                 })
             } else if recordFromCK.recordType == Ledger.typeKey {

@@ -13,6 +13,8 @@ extension PurchaseMethod {
     static let typeKey = "purchaseMethod"
     /// "name"
     static let nameKey = "name"
+    /// "color"
+    static let colorKey = "color"
     /// "lastModified"
     static let lastModifiedKey = "lastModified"
 }
