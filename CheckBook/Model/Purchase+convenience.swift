@@ -20,7 +20,7 @@ extension Purchase {
                      lastModified: Date = Date(),
                      purchaseMethod: PurchaseMethod,
                      category: Category,
-                     user: User,
+                     appleUserRecordName: String,
                      ledger: Ledger,
                      context: NSManagedObjectContext = CoreDataStack.context) {
         
@@ -33,14 +33,12 @@ extension Purchase {
         self.purchaseMethod = purchaseMethod
         self.ledger = ledger
         self.category = category
-        self.user = user
+        self.appleUserRecordName = appleUserRecordName
         
         self.methodName = purchaseMethod.name
         self.methodUUID = purchaseMethod.uuid
         self.ledgerUUID = ledger.uuid
         self.categoryUUID = category.uuid
-        self.userUUID = user.uuid
-        self.appleUser = user.appleUser
         
         self.lastModified = lastModified
         self.uuid = uuid
@@ -57,22 +55,20 @@ extension CKRecord {
         
         let categoryReference = CKRecord.Reference(recordID: CKRecord.ID(recordName: purchase.categoryUUID!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)), action: .none)
         
-        let userReference = CKRecord.Reference(recordID: CKRecord.ID(recordName: purchase.userUUID!.uuidString), action: .none)
+        let appleUserReference = CKRecord.Reference(recordID: CKRecord.ID(recordName: purchase.appleUserRecordName!), action: .deleteSelf)
 
-        guard let methodUUID = purchase.purchaseMethod?.uuid, let methodName = purchase.purchaseMethod?.name, let ledgerUUID = purchase.ledger?.uuid, let categoryUUID = purchase.category?.uuid, let appleUserUUID = purchase.user?.appleUser, let userUUID = purchase.user?.uuid else {return nil}
+        guard let methodUUID = purchase.purchaseMethod?.uuid, let methodName = purchase.purchaseMethod?.name, let ledgerUUID = purchase.ledger?.uuid, let categoryUUID = purchase.category?.uuid else {return nil}
         
         setValue(purchase.amount, forKey: Purchase.amountKey)
         setValue(purchaseMethodReference, forKey: Purchase.methodReferenceKey)
         setValue(ledgerReference, forKey: Purchase.ledgerReferenceKey)
         setValue(categoryReference, forKey: Purchase.categoryReferenceKey)
-        setValue(userReference, forKey: Purchase.userReferenceKey)
+        setValue(appleUserReference, forKey: Purchase.appleUserReferenceKey)
         setValue(purchase.date, forKey: Purchase.dateKey)
         setValue(purchase.item, forKey: Purchase.itemKey)
         setValue(methodUUID.uuidString, forKey: Purchase.methodKey)
         setValue(ledgerUUID.uuidString, forKey: Purchase.ledgerKey)
         setValue(categoryUUID.uuidString, forKey: Purchase.categoryKey)
-        setValue(appleUserUUID, forKey: Purchase.appleUserKey)
-        setValue(userUUID.uuidString, forKey: Purchase.userKey)
         setValue(methodName, forKey: Purchase.methodNameKey)
         setValue(purchase.lastModified, forKey: Purchase.lastModifiedKey)
         setValue(purchase.storeName, forKey: Purchase.storeNameKey)

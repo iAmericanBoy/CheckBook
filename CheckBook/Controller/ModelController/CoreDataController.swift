@@ -56,13 +56,6 @@ class CoreDataController {
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
     }()
     
-    ///FetchController to fetch all the Users.
-    let userFetchResultsController: NSFetchedResultsController<User> = {
-        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
-    }()
     
     //MARK: - init
     ///Simple initializer to set up the fetchResultsController.
@@ -72,7 +65,6 @@ class CoreDataController {
             try purchaseMethodFetchResultsController.performFetch()
             try ledgerFetchResultsController.performFetch()
             try categoryFetchResultsController.performFetch()
-            try userFetchResultsController.performFetch()
 
         } catch {
             print("Error loading fetchResultsControllers. \(String(describing: error)), \(error.localizedDescription)")
@@ -162,28 +154,6 @@ class CoreDataController {
         do {
             let categories = try CoreDataStack.context.fetch(request)
             completion(categories.first)
-        } catch {
-            print("No Categorie with UUID found: \(error), \(error.localizedDescription)")
-            completion(nil)
-        }
-    }
-    
-    /// Looks in the Context for a User with a given UUID.
-    /// - parameter uuid: The UUID of the User that is being searched for.
-    /// - parameter context: The context where we should check for the Object with the given UUID.
-    /// - parameter completion: Handler for when the User has been found.
-    /// - parameter foundCategory: The User that was found or nil.
-    func findUserWith(uuid: UUID?, inContext context: NSManagedObjectContext = CoreDataStack.context, completion: @escaping (_ foundCategory: User?) -> Void ) {
-        guard let uuid = uuid else {
-            completion(nil)
-            return
-        }
-        let request: NSFetchRequest<User> = User.fetchRequest()
-        request.fetchLimit = 1
-        request.predicate = NSPredicate(format: "%K == %@", #keyPath(User.uuid), uuid as CVarArg)
-        do {
-            let users = try CoreDataStack.context.fetch(request)
-            completion(users.first)
         } catch {
             print("No Categorie with UUID found: \(error), \(error.localizedDescription)")
             completion(nil)
