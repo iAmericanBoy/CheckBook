@@ -86,11 +86,14 @@ class PurchaseListViewController: UIViewController {
 
                 animatedView.layoutIfNeeded()
             }
-            self.impact.prepare()
-            self.impact.impactOccurred()
+
 
             self.view.layoutIfNeeded()
         }
+        transitionAnimator.addAnimations({
+            self.impact.prepare()
+            self.impact.impactOccurred()
+        }, delayFactor: 1.0)
         
         transitionAnimator.addCompletion { (position) in
 
