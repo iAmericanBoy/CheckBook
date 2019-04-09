@@ -7,9 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B652BD66225810440066AD8A /* PurchaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */; };
+		B674FB0822580BD3000A5815 /* LedgerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B674FB0722580BD3000A5815 /* LedgerController.swift */; };
+		B681ED94225BA2E000B64623 /* Category+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B681ED93225BA2E000B64623 /* Category+convenience.swift */; };
+		B681ED96225BA32800B64623 /* Category+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B681ED95225BA32800B64623 /* Category+MagicStrings.swift */; };
+		B691DACF225BB73E00245BB2 /* UIViewController+Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B691DACE225BB73E00245BB2 /* UIViewController+Alerts.swift */; };
 		B6920AD1223045D000A63EC8 /* SyncController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6920AD0223045D000A63EC8 /* SyncController.swift */; };
+		B69D87F5225554D60019E694 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B69D87F4225554D60019E694 /* Main.storyboard */; };
+		B69D87F722555CD60019E694 /* PurchaseListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69D87F622555CD60019E694 /* PurchaseListViewController.swift */; };
+		B69D87F922555CEC0019E694 /* AddPurchaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69D87F822555CEC0019E694 /* AddPurchaseViewController.swift */; };
+		B6A7E2242255136C0078174E /* Ledger+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A7E2232255136C0078174E /* Ledger+convenience.swift */; };
 		B6BF9FD3222F160300DFCE8C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FD2222F160300DFCE8C /* AppDelegate.swift */; };
-		B6BF9FD8222F160300DFCE8C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6BF9FD6222F160300DFCE8C /* Main.storyboard */; };
 		B6BF9FDA222F160700DFCE8C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B6BF9FD9222F160700DFCE8C /* Assets.xcassets */; };
 		B6BF9FDD222F160700DFCE8C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6BF9FDB222F160700DFCE8C /* LaunchScreen.storyboard */; };
 		B6BF9FE8222F187600DFCE8C /* CheckBook.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FE6222F187600DFCE8C /* CheckBook.xcdatamodeld */; };
@@ -20,13 +28,29 @@
 		B6BF9FF7222F3FDA00DFCE8C /* PurchaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FF6222F3FDA00DFCE8C /* PurchaseController.swift */; };
 		B6DE00AF223030F400C76A40 /* CoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE00AE223030F400C76A40 /* CoreDataController.swift */; };
 		B6DE00B12230345600C76A40 /* CloudKitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE00B02230345600C76A40 /* CloudKitController.swift */; };
+		B6E3329F2234CAD80088D6FF /* PurchaseMethod+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E3329E2234CAD80088D6FF /* PurchaseMethod+convenience.swift */; };
+		B6E332A12234CBFB0088D6FF /* PurchaseMethod+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E332A02234CBFA0088D6FF /* PurchaseMethod+MagicStrings.swift */; };
+		B6E332A42234CD5F0088D6FF /* PurchaseMethodController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E332A32234CD5F0088D6FF /* PurchaseMethodController.swift */; };
+		B6EA85C122322C8900211068 /* CachePurchase+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EA85C022322C8900211068 /* CachePurchase+convenience.swift */; };
+		B6EA85C322323B7A00211068 /* CachePurchase+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EA85C222323B7A00211068 /* CachePurchase+MagicStrings.swift */; };
+		B6EA85F3223316C200211068 /* CloudKitController+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EA85F2223316C200211068 /* CloudKitController+MagicStrings.swift */; };
+		B6EAF4EE225BA453002C783D /* CategoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EAF4ED225BA453002C783D /* CategoryController.swift */; };
+		B6EF3BED225514340009BC2A /* Ledger+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EF3BEC225514340009BC2A /* Ledger+MagicStrings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseTableViewCell.swift; sourceTree = "<group>"; };
+		B674FB0722580BD3000A5815 /* LedgerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LedgerController.swift; sourceTree = "<group>"; };
+		B681ED93225BA2E000B64623 /* Category+convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+convenience.swift"; sourceTree = "<group>"; };
+		B681ED95225BA32800B64623 /* Category+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+MagicStrings.swift"; sourceTree = "<group>"; };
+		B691DACE225BB73E00245BB2 /* UIViewController+Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alerts.swift"; sourceTree = "<group>"; };
 		B6920AD0223045D000A63EC8 /* SyncController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncController.swift; sourceTree = "<group>"; };
+		B69D87F4225554D60019E694 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		B69D87F622555CD60019E694 /* PurchaseListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseListViewController.swift; sourceTree = "<group>"; };
+		B69D87F822555CEC0019E694 /* AddPurchaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPurchaseViewController.swift; sourceTree = "<group>"; };
+		B6A7E2232255136C0078174E /* Ledger+convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ledger+convenience.swift"; sourceTree = "<group>"; };
 		B6BF9FCF222F160300DFCE8C /* CheckBook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CheckBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6BF9FD2222F160300DFCE8C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		B6BF9FD7222F160300DFCE8C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B6BF9FD9222F160700DFCE8C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B6BF9FDC222F160700DFCE8C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B6BF9FDE222F160700DFCE8C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -39,6 +63,14 @@
 		B6BF9FF6222F3FDA00DFCE8C /* PurchaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseController.swift; sourceTree = "<group>"; };
 		B6DE00AE223030F400C76A40 /* CoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataController.swift; sourceTree = "<group>"; };
 		B6DE00B02230345600C76A40 /* CloudKitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitController.swift; sourceTree = "<group>"; };
+		B6E3329E2234CAD80088D6FF /* PurchaseMethod+convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PurchaseMethod+convenience.swift"; sourceTree = "<group>"; };
+		B6E332A02234CBFA0088D6FF /* PurchaseMethod+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PurchaseMethod+MagicStrings.swift"; sourceTree = "<group>"; };
+		B6E332A32234CD5F0088D6FF /* PurchaseMethodController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseMethodController.swift; sourceTree = "<group>"; };
+		B6EA85C022322C8900211068 /* CachePurchase+convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CachePurchase+convenience.swift"; sourceTree = "<group>"; };
+		B6EA85C222323B7A00211068 /* CachePurchase+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CachePurchase+MagicStrings.swift"; sourceTree = "<group>"; };
+		B6EA85F2223316C200211068 /* CloudKitController+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CloudKitController+MagicStrings.swift"; sourceTree = "<group>"; };
+		B6EAF4ED225BA453002C783D /* CategoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryController.swift; sourceTree = "<group>"; };
+		B6EF3BEC225514340009BC2A /* Ledger+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ledger+MagicStrings.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +85,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B6920AD42231796700A63EC8 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				B69D87F622555CD60019E694 /* PurchaseListViewController.swift */,
+				B69D87F822555CEC0019E694 /* AddPurchaseViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
 		B6BF9FC6222F160200DFCE8C = {
 			isa = PBXGroup;
 			children = (
@@ -79,6 +120,7 @@
 				B6BF9FE5222F163200DFCE8C /* View */,
 				B6BF9FF9222F3FF000DFCE8C /* Controller */,
 				B6BF9FE4222F162200DFCE8C /* Resources */,
+				B691DACE225BB73E00245BB2 /* UIViewController+Alerts.swift */,
 			);
 			path = CheckBook;
 			sourceTree = "<group>";
@@ -96,7 +138,8 @@
 		B6BF9FE5222F163200DFCE8C /* View */ = {
 			isa = PBXGroup;
 			children = (
-				B6BF9FD6222F160300DFCE8C /* Main.storyboard */,
+				B69D87F4225554D60019E694 /* Main.storyboard */,
+				B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -104,10 +147,14 @@
 		B6BF9FE9222F187F00DFCE8C /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				B6BF9FED222F257300DFCE8C /* CoreDataStack.swift */,
 				B6BF9FE6222F187600DFCE8C /* CheckBook.xcdatamodeld */,
 				B6BF9FEF222F266100DFCE8C /* Purchase+convenience.swift */,
-				B6BF9FF1222F315D00DFCE8C /* Purchase+MagicStrings.swift */,
-				B6BF9FED222F257300DFCE8C /* CoreDataStack.swift */,
+				B6EA85C022322C8900211068 /* CachePurchase+convenience.swift */,
+				B6E3329E2234CAD80088D6FF /* PurchaseMethod+convenience.swift */,
+				B6A7E2232255136C0078174E /* Ledger+convenience.swift */,
+				B681ED93225BA2E000B64623 /* Category+convenience.swift */,
+				B6E332A22234CC0D0088D6FF /* MagicStrings */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -124,8 +171,12 @@
 			isa = PBXGroup;
 			children = (
 				B6BF9FF6222F3FDA00DFCE8C /* PurchaseController.swift */,
+				B6E332A32234CD5F0088D6FF /* PurchaseMethodController.swift */,
+				B674FB0722580BD3000A5815 /* LedgerController.swift */,
+				B6EAF4ED225BA453002C783D /* CategoryController.swift */,
 				B6DE00AE223030F400C76A40 /* CoreDataController.swift */,
 				B6DE00B02230345600C76A40 /* CloudKitController.swift */,
+				B6EA85F2223316C200211068 /* CloudKitController+MagicStrings.swift */,
 				B6920AD0223045D000A63EC8 /* SyncController.swift */,
 			);
 			path = ModelController;
@@ -135,8 +186,21 @@
 			isa = PBXGroup;
 			children = (
 				B6BF9FF8222F3FDF00DFCE8C /* ModelController */,
+				B6920AD42231796700A63EC8 /* ViewController */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		B6E332A22234CC0D0088D6FF /* MagicStrings */ = {
+			isa = PBXGroup;
+			children = (
+				B6BF9FF1222F315D00DFCE8C /* Purchase+MagicStrings.swift */,
+				B6EA85C222323B7A00211068 /* CachePurchase+MagicStrings.swift */,
+				B6E332A02234CBFA0088D6FF /* PurchaseMethod+MagicStrings.swift */,
+				B681ED95225BA32800B64623 /* Category+MagicStrings.swift */,
+				B6EF3BEC225514340009BC2A /* Ledger+MagicStrings.swift */,
+			);
+			path = MagicStrings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -208,9 +272,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B69D87F5225554D60019E694 /* Main.storyboard in Resources */,
 				B6BF9FDD222F160700DFCE8C /* LaunchScreen.storyboard in Resources */,
 				B6BF9FDA222F160700DFCE8C /* Assets.xcassets in Resources */,
-				B6BF9FD8222F160300DFCE8C /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,13 +286,29 @@
 			buildActionMask = 2147483647;
 			files = (
 				B6BF9FEE222F257300DFCE8C /* CoreDataStack.swift in Sources */,
+				B681ED96225BA32800B64623 /* Category+MagicStrings.swift in Sources */,
+				B681ED94225BA2E000B64623 /* Category+convenience.swift in Sources */,
+				B6EA85F3223316C200211068 /* CloudKitController+MagicStrings.swift in Sources */,
+				B69D87F722555CD60019E694 /* PurchaseListViewController.swift in Sources */,
+				B6EAF4EE225BA453002C783D /* CategoryController.swift in Sources */,
+				B6EA85C122322C8900211068 /* CachePurchase+convenience.swift in Sources */,
 				B6BF9FE8222F187600DFCE8C /* CheckBook.xcdatamodeld in Sources */,
+				B691DACF225BB73E00245BB2 /* UIViewController+Alerts.swift in Sources */,
 				B6BF9FF2222F315D00DFCE8C /* Purchase+MagicStrings.swift in Sources */,
 				B6920AD1223045D000A63EC8 /* SyncController.swift in Sources */,
 				B6DE00AF223030F400C76A40 /* CoreDataController.swift in Sources */,
+				B6EA85C322323B7A00211068 /* CachePurchase+MagicStrings.swift in Sources */,
+				B69D87F922555CEC0019E694 /* AddPurchaseViewController.swift in Sources */,
 				B6BF9FD3222F160300DFCE8C /* AppDelegate.swift in Sources */,
+				B6E332A42234CD5F0088D6FF /* PurchaseMethodController.swift in Sources */,
+				B674FB0822580BD3000A5815 /* LedgerController.swift in Sources */,
+				B652BD66225810440066AD8A /* PurchaseTableViewCell.swift in Sources */,
+				B6E332A12234CBFB0088D6FF /* PurchaseMethod+MagicStrings.swift in Sources */,
+				B6E3329F2234CAD80088D6FF /* PurchaseMethod+convenience.swift in Sources */,
 				B6BF9FF7222F3FDA00DFCE8C /* PurchaseController.swift in Sources */,
 				B6DE00B12230345600C76A40 /* CloudKitController.swift in Sources */,
+				B6A7E2242255136C0078174E /* Ledger+convenience.swift in Sources */,
+				B6EF3BED225514340009BC2A /* Ledger+MagicStrings.swift in Sources */,
 				B6BF9FF0222F266100DFCE8C /* Purchase+convenience.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -236,14 +316,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		B6BF9FD6222F160300DFCE8C /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B6BF9FD7222F160300DFCE8C /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		B6BF9FDB222F160700DFCE8C /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -290,6 +362,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -351,6 +424,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
