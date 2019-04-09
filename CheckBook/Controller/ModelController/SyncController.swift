@@ -221,9 +221,6 @@ class SyncController {
         }
         
         cachedPurchases.forEach { (cachedPurchase) in
-            //TODO: FIND PURCHASE METHOD
-            //TODO: FIND LEDGER
-            //TODO: FIND CATEGORY
             CoreDataController.shared.findPurchaseWith(uuid: cachedPurchase.uuid, completion: { (purchaseFromCD) in
                 if let purchase = purchaseFromCD {
                     //sent update to CK
@@ -236,22 +233,57 @@ class SyncController {
                 }
             })
             
+            CoreDataController.shared.findLedgerWith(uuid: cachedPurchase.uuid, completion: { (ledgerFromCD) in
+                if let ledger = ledgerFromCD {
+                    //sent update to CK
+                    recordsToUpdate.append(CKRecord(ledger: ledger)!)
+                } else {
+                    //sentdeleteToCK
+                    if let uuid = cachedPurchase.uuid?.uuidString {
+                        recordsToDelete.append(CKRecord.ID(recordName: uuid))
+                    }
+                }
+            })
+            
+            CoreDataController.shared.findCategoryWith(uuid: cachedPurchase.uuid, completion: { (categoryFromCD) in
+                if let category = categoryFromCD {
+                    //sent update to CK
+                    recordsToUpdate.append(CKRecord(category: category)!)
+                } else {
+                    //sentdeleteToCK
+                    if let uuid = cachedPurchase.uuid?.uuidString {
+                        recordsToDelete.append(CKRecord.ID(recordName: uuid))
+                    }
+                }
+            })
+            
+            CoreDataController.shared.findPurchaseMethodWith(uuid: cachedPurchase.uuid, completion: { (methodFromCD) in
+                if let method = methodFromCD {
+                    //sent update to CK
+                    recordsToUpdate.append(CKRecord(purchaseMethod: method)!)
+                } else {
+                    //sentdeleteToCK
+                    if let uuid = cachedPurchase.uuid?.uuidString {
+                        recordsToDelete.append(CKRecord.ID(recordName: uuid))
+                    }
+                }
+            })
         }
-        
-        //FIX THIS FUNCTION YOU NEED TO FIND THE CACHE
         
         CloudKitController.shared.saveChangestoCK(recordsToUpdate: recordsToUpdate, purchasesToDelete: recordsToDelete) { (isSuccess, savedRecords, deletedRecordIDs) in
             guard let savedRecords = savedRecords, let deletedRecordIDs = deletedRecordIDs, isSuccess else {return}
             savedRecords.forEach({ (record) in
-                CoreDataController.shared.findPurchaseWith(uuid: UUID(uuidString: record.recordID.recordName), completion: { (cachePurchase) in
-                    guard let cachePurchase = cachePurchase else {return}
-                    CoreDataController.shared.remove(object: cachePurchase)
+                
+                CoreDataController.shared.findCacheWith(uuid: UUID(uuidString: record.recordID.recordName), completion: { (foundCache) in
+                    guard let cacheObject = foundCache else {return}
+                    CoreDataController.shared.remove(object: cacheObject)
                 })
             })
+            
             deletedRecordIDs.forEach({ (recordID) in
-                CoreDataController.shared.findPurchaseWith(uuid: UUID(uuidString: recordID.recordName), completion: { (cachePurchase) in
-                    guard let cachePurchase = cachePurchase else {return}
-                    CoreDataController.shared.remove(object: cachePurchase)
+                CoreDataController.shared.findCacheWith(uuid: UUID(uuidString: recordID.recordName), completion: { (foundCache) in
+                    guard let cacheObject = foundCache else {return}
+                    CoreDataController.shared.remove(object: cacheObject)
                 })
             })
         }

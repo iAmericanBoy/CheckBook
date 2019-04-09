@@ -138,6 +138,28 @@ class CoreDataController {
         }
     }
     
+    /// Looks in the Context for a Cacheobject with a given UUID.
+    /// - parameter uuid: The UUID of the ledger that is being searched for.
+    /// - parameter context: The context where we should check for the Object with the given UUID.
+    /// - parameter completion: Handler for when the ledger has been found.
+    /// - parameter foundLedger: The ledger that was found or nil.
+    func findCacheWith(uuid: UUID?, inContext context: NSManagedObjectContext = CoreDataStack.context, completion: @escaping (_ foundLedger:CachePurchase?) -> Void ) {
+        guard let uuid = uuid else {
+            completion(nil)
+            return
+        }
+        let request: NSFetchRequest<CachePurchase> = CachePurchase.fetchRequest()
+        request.fetchLimit = 1
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(CachePurchase.uuid), uuid as CVarArg)
+        do {
+            let caches = try CoreDataStack.context.fetch(request)
+            completion(caches.first)
+        } catch {
+            print("No Cache with UUID found: \(error), \(error.localizedDescription)")
+            completion(nil)
+        }
+    }
+    
     /// Looks in the Context for a Category with a given UUID.
     /// - parameter uuid: The UUID of the category that is being searched for.
     /// - parameter context: The context where we should check for the Object with the given UUID.
