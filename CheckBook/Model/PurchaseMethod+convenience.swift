@@ -30,7 +30,7 @@ extension PurchaseMethod {
     convenience init?(record: CKRecord, context: NSManagedObjectContext = CoreDataStack.context) {
         guard let name = record[PurchaseMethod.nameKey] as? String,
             let lastModified = record[PurchaseMethod.lastModifiedKey] as? Date else {return nil}
-        
+
         self.init(name: name, uuid: UUID(uuidString: record.recordID.recordName)!, lastModified: lastModified)
     }
 }

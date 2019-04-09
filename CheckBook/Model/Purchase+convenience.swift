@@ -20,7 +20,7 @@ extension Purchase {
                      lastModified: Date = Date(),
                      purchaseMethod: PurchaseMethod,
                      category: Category,
-                     appleUserRecordName: String,
+                     appleUserRecordName: String?,
                      ledger: Ledger,
                      context: NSManagedObjectContext = CoreDataStack.context) {
         
@@ -54,8 +54,6 @@ extension CKRecord {
         let ledgerReference = CKRecord.Reference(recordID: CKRecord.ID(recordName: purchase.ledgerUUID!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)), action: .none)
         
         let categoryReference = CKRecord.Reference(recordID: CKRecord.ID(recordName: purchase.categoryUUID!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)), action: .none)
-        
-        let appleUserReference = CKRecord.Reference(recordID: CKRecord.ID(recordName: purchase.appleUserRecordName!), action: .deleteSelf)
 
         guard let methodUUID = purchase.purchaseMethod?.uuid, let methodName = purchase.purchaseMethod?.name, let ledgerUUID = purchase.ledger?.uuid, let categoryUUID = purchase.category?.uuid else {return nil}
         
@@ -63,7 +61,6 @@ extension CKRecord {
         setValue(purchaseMethodReference, forKey: Purchase.methodReferenceKey)
         setValue(ledgerReference, forKey: Purchase.ledgerReferenceKey)
         setValue(categoryReference, forKey: Purchase.categoryReferenceKey)
-        setValue(appleUserReference, forKey: Purchase.appleUserReferenceKey)
         setValue(purchase.date, forKey: Purchase.dateKey)
         setValue(purchase.item, forKey: Purchase.itemKey)
         setValue(methodUUID.uuidString, forKey: Purchase.methodKey)

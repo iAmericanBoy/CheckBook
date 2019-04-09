@@ -90,8 +90,6 @@ class AddPurchaseViewController: UIViewController {
         let method = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(row: methodRow, section: 0))
         let category = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(row: categoryRow, section: 0))
         
-        
-        
         if let ledger = CoreDataController.shared.ledgerFetchResultsController.fetchedObjects?.first {
             PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger, category: category)
         } else {

@@ -41,7 +41,6 @@ class SyncController {
                         let ledgerUUID = recordFromCK[Purchase.ledgerKey] as? String,
                         let categoryUUID = recordFromCK[Purchase.categoryKey] as? String,
                         let methodName = recordFromCK[Purchase.methodNameKey] as? String,
-                        let appleUserRef = recordFromCK[Purchase.appleUserReferenceKey] as? CKRecord.Reference,
                         let lastModified = recordFromCK[Purchase.lastModifiedKey] as? Date,
                         let storeName = recordFromCK[Purchase.storeNameKey] as? String else {return}
                     
@@ -96,12 +95,12 @@ class SyncController {
                                         purchaseFromCD.ledgerUUID = ledger.uuid
                                         purchaseFromCD.category = category
                                         purchaseFromCD.categoryUUID = category.uuid
-                                        purchaseFromCD.appleUserRecordName = appleUserRef.recordID.recordName
+                                        purchaseFromCD.appleUserRecordName = recordFromCK.creatorUserRecordID?.recordName
                                         purchaseFromCD.lastModified = lastModified
                                     }
                                 } else {
                                     //create new Purchase in ChildContext
-                                    Purchase(amount: NSDecimalNumber(value: amount), date: date, item: item, storeName: storeName, uuid: uuid, lastModified: lastModified, purchaseMethod: method, category: category, appleUserRecordName: appleUserRef.recordID.recordName, ledger: ledger, context: CoreDataStack.childContext)
+                                    Purchase(amount: NSDecimalNumber(value: amount), date: date, item: item, storeName: storeName, uuid: uuid, lastModified: lastModified, purchaseMethod: method, category: category, appleUserRecordName: recordFromCK.creatorUserRecordID?.recordName, ledger: ledger, context: CoreDataStack.childContext)
                                 }
                             })
                         })

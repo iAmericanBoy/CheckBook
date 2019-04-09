@@ -35,8 +35,6 @@ extension Purchase {
     static let categoryReferenceKey = "categoryReferenceKey"
     /// "methodName"
     static let methodNameKey = "methodName"
-    /// "appleUserReference"
-    static let appleUserReferenceKey = "appleUserReference"
     /// "storeName"
     static let storeNameKey = "storeName"
     /// "lastModified"
