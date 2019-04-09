@@ -106,7 +106,8 @@ class AddPurchaseViewController: UIViewController {
                 PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: newLedger, category: category)
             }
         }
-        
+        purchase = nil
+
         updateViews()
     }
     
@@ -316,7 +317,7 @@ extension AddPurchaseViewController: UIPickerViewDelegate, UIPickerViewDataSourc
         if pickerView.tag == 1111 {
             methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: row, section: component)).name
         } else if pickerView.tag == 2222 {
-            methodTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: row, section: component)).name
+            categoryTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: row, section: component)).name
         } else {
             
         }
