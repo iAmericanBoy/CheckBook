@@ -52,7 +52,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="moa-AL-0ZY">
-                                <rect key="frame" x="0.0" y="94" width="375" height="624"/>
+                                <rect key="frame" x="0.0" y="94" width="375" height="644"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="purchaseCell" rowHeight="104" id="vjU-S1-OU1" customClass="PurchaseTableViewCell" customModule="CheckBook" customModuleProvider="target">
@@ -121,13 +121,13 @@
                         <constraints>
                             <constraint firstItem="moa-AL-0ZY" firstAttribute="top" secondItem="3zW-7J-Wdy" secondAttribute="bottom" id="41P-ME-USD"/>
                             <constraint firstItem="RWZ-CH-ypH" firstAttribute="height" secondItem="PtZ-E8-WJ0" secondAttribute="height" id="5Ry-Pg-beD"/>
-                            <constraint firstItem="moa-AL-0ZY" firstAttribute="centerY" secondItem="PtZ-E8-WJ0" secondAttribute="centerY" id="92U-kL-EHq"/>
                             <constraint firstAttribute="bottom" secondItem="0oe-sS-ZTM" secondAttribute="bottom" id="EBw-TP-e9d"/>
                             <constraint firstItem="0oe-sS-ZTM" firstAttribute="leading" secondItem="bVv-mj-cpu" secondAttribute="leading" id="FOS-Tf-zJg"/>
                             <constraint firstItem="3zW-7J-Wdy" firstAttribute="leading" secondItem="bVv-mj-cpu" secondAttribute="leading" id="HKa-GX-DK4"/>
                             <constraint firstItem="moa-AL-0ZY" firstAttribute="centerX" secondItem="PtZ-E8-WJ0" secondAttribute="centerX" id="Iaa-PX-3oe"/>
                             <constraint firstItem="moa-AL-0ZY" firstAttribute="leading" secondItem="bVv-mj-cpu" secondAttribute="leading" id="MhC-Rq-swz"/>
                             <constraint firstItem="RWZ-CH-ypH" firstAttribute="top" secondItem="PtZ-E8-WJ0" secondAttribute="top" id="YII-Uk-lPf"/>
+                            <constraint firstItem="bVv-mj-cpu" firstAttribute="bottom" secondItem="moa-AL-0ZY" secondAttribute="bottom" constant="40" id="d07-nN-Lw8"/>
                             <constraint firstItem="bVv-mj-cpu" firstAttribute="trailing" secondItem="moa-AL-0ZY" secondAttribute="trailing" id="e08-cT-pgd"/>
                             <constraint firstItem="bVv-mj-cpu" firstAttribute="trailing" secondItem="3zW-7J-Wdy" secondAttribute="trailing" id="fFS-xu-XE9"/>
                             <constraint firstItem="0oe-sS-ZTM" firstAttribute="centerX" secondItem="PtZ-E8-WJ0" secondAttribute="centerX" id="hHQ-hx-r4H"/>
