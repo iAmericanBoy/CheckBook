@@ -36,6 +36,8 @@ class PurchaseListViewController: UIViewController {
     //MARK: - Properties
     /// The current state of the animation. This variable is changed only when an animation completes.
     private var currentState: State = .closed
+    var impact = UIImpactFeedbackGenerator(style: .light)
+
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -84,11 +86,14 @@ class PurchaseListViewController: UIViewController {
 
                 animatedView.layoutIfNeeded()
             }
+            self.impact.prepare()
+            self.impact.impactOccurred()
 
             self.view.layoutIfNeeded()
         }
         
         transitionAnimator.addCompletion { (position) in
+
             // update the state
             switch position {
             case .start:
