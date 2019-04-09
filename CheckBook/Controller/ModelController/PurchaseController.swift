@@ -45,12 +45,15 @@ class PurchaseController {
     /// - parameter item: The updated itemName of the purchase.
     /// - parameter storeName: updated The storeName of the purchase.
     /// - parameter method: The updated method of payment of the purchase.
-    func update(purchase: Purchase, amount:Decimal?, date: Date?, item: String?, storeName: String?, purchaseMethod: PurchaseMethod?) {
+    /// - parameter category: The updated category of the purchase.
+    func update(purchase: Purchase, amount:Decimal?, date: Date?, item: String?, storeName: String?, purchaseMethod: PurchaseMethod?, category: Category?) {
         if let amount = amount {purchase.amount = amount as NSDecimalNumber}
         if let date = date {purchase.date = date}
         if let item = item {purchase.item = item}
         if let storeName = storeName {purchase.storeName = storeName}
         if let purchaseMethod = purchaseMethod {purchase.purchaseMethod = purchaseMethod}
+        if let category = category {purchase.category = category}
+
         purchase.lastModified = Date()
         CoreDataController.shared.saveToPersistentStore()
         guard let recordToUpdate = CKRecord(purchase: purchase) else {return}

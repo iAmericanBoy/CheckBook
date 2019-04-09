@@ -200,6 +200,12 @@ extension PurchaseListViewController: UITableViewDelegate, UITableViewDataSource
             PurchaseController.shared.delete(purchase: purchase)
         }
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let purchase = CoreDataController.shared.purchaseFetchResultsController.object(at: indexPath)
+        self.addPurchaseViewController?.purchase = purchase
+        self.showCard()
+    }
 }
 
 //MARK: - NSFetchedResultsControllerDelegate

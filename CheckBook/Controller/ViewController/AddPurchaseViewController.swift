@@ -37,6 +37,12 @@ class AddPurchaseViewController: UIViewController {
     /// The current state of the card.
     var currentState: State = .open
     let numberFormatter = NumberFormatter()
+    var purchase: Purchase? {
+        didSet {
+            currentState = .open
+            updateViews()
+        }
+    }
 
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -71,10 +77,6 @@ class AddPurchaseViewController: UIViewController {
     }
 
     @IBAction func addPurchaseButtonTapped(_ sender: UIButton) {
-        currentState = delegate?.userDidInteractWithCard() ?? State.closed
-        updateViews()
-        dismissKeyBoards()
-        
         let methodRow = methodPickerView.selectedRow(inComponent: 0)
         let categoryRow = categoryPickerView.selectedRow(inComponent: 0)
         let date = datePicker.date
@@ -90,12 +92,21 @@ class AddPurchaseViewController: UIViewController {
         let method = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(row: methodRow, section: 0))
         let category = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(row: categoryRow, section: 0))
         
-        if let ledger = CoreDataController.shared.ledgerFetchResultsController.fetchedObjects?.first {
-            PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger, category: category)
+        
+        if let purchase = purchase {
+            PurchaseController.shared.update(purchase: purchase, amount: NSDecimalNumber(decimal: amountNumber.decimalValue) as Decimal, date: date, item: "", storeName: storeName, purchaseMethod: method, category: category)
         } else {
-            let newLedger = LedgerController.shared.createNewLedgerWith(name: "Hello")
-            PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: newLedger, category: category)
+            if let ledger = CoreDataController.shared.ledgerFetchResultsController.fetchedObjects?.first {
+                PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger, category: category)
+            } else {
+                let newLedger = LedgerController.shared.createNewLedgerWith(name: "Hello")
+                PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: newLedger, category: category)
+            }
         }
+        
+        currentState = delegate?.userDidInteractWithCard() ?? State.closed
+        updateViews()
+        dismissKeyBoards()
     }
     
     @IBAction func addNewCardButtonTapped(_ sender: UIBarButtonItem) {
@@ -134,6 +145,31 @@ class AddPurchaseViewController: UIViewController {
             addPurchaseButton.setTitle("Save Purchase", for: .normal)
         case .closed:
             addPurchaseButton.setTitle("Add Purchase", for: .normal)
+        }
+        
+        if let purchase = purchase {
+            //updatePurchaseMode
+            switch currentState {
+            case .open:
+                addPurchaseButton.setTitle("Update Purchase", for: .normal)
+            case .closed:
+                addPurchaseButton.setTitle("Add Purchase", for: .normal)
+            }
+            storeNameTextField.text = purchase.storeName
+            amountTextField.text = NumberFormatter.localizedString(from: purchase.amount ?? 0, number: .currency)
+            categoryTextField.text = purchase.category?.name
+            if let categoryIndex = CoreDataController.shared.categoryFetchResultsController.indexPath(forObject: purchase.category!) {
+                categoryPickerView.selectRow(categoryIndex.row, inComponent: categoryIndex.section, animated: true)
+            }
+            methodTextField.text = purchase.purchaseMethod?.name
+            if let purchaseMethodIndex = CoreDataController.shared.purchaseMethodFetchResultsController.indexPath(forObject: purchase.purchaseMethod!) {
+                methodPickerView.selectRow(purchaseMethodIndex.row, inComponent: purchaseMethodIndex.section, animated: true)
+            }
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Locale.autoupdatingCurrent
+            dateFormatter.dateStyle = .medium
+            datePicker.date = purchase.date ?? Date()
+            dateTextField.text = dateFormatter.string(from: purchase.date ?? Date())
         }
     }
     
