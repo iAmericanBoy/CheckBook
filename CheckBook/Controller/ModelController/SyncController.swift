@@ -142,7 +142,7 @@ class SyncController {
                         }
                     } else {
                         //create new Ledger in ChildContext
-                        Ledger(name: name, uuid: uuid, lastModified: lastModified, context: CoreDataStack.childContext)
+                        Ledger(record: recordFromCK, context: CoreDataStack.childContext)
                     }
                 })
             } else if recordFromCK.recordType == Category.typeKey {
@@ -163,7 +163,7 @@ class SyncController {
                         }
                     } else {
                         //create new Category in ChildContext
-                        Category(name: name, color: color, uuid: uuid, lastModified: lastModified, context: CoreDataStack.childContext)
+                        Category(record: recordFromCK, context: CoreDataStack.childContext)
                     }
                 })
             }

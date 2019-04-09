@@ -29,6 +29,7 @@ extension Category {
         self.lastModified = lastModified
     }
     
+    @discardableResult
     convenience init?(record: CKRecord, context: NSManagedObjectContext = CoreDataStack.context) {
         guard let name = record[Category.nameKey] as? String,
             let color = record[Category.colorKey] as? String,
