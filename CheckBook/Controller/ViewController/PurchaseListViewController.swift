@@ -191,6 +191,14 @@ extension UISpringTimingParameters {
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
 extension PurchaseListViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return CoreDataController.shared.purchaseFetchResultsController.sections?.count ?? 0
+    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 5.0
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return CoreDataController.shared.purchaseFetchResultsController.sections?[section].numberOfObjects ?? 0
     }

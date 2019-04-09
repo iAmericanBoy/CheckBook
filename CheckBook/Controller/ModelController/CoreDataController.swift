@@ -19,9 +19,9 @@ class CoreDataController {
     ///FetchController to fetch all the Purchases.
     let purchaseFetchResultsController: NSFetchedResultsController<Purchase> = {
         let fetchRequest: NSFetchRequest<Purchase> = Purchase.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "item", ascending: true)
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
-        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: "date", cacheName: nil)
     }()
     
     ///FetchController to fetch all the PurchaseMethods.
