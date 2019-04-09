@@ -77,6 +77,8 @@ class AddPurchaseViewController: UIViewController {
     }
 
     @IBAction func addPurchaseButtonTapped(_ sender: UIButton) {
+        currentState = delegate?.userDidInteractWithCard() ?? State.closed
+
         let methodRow = methodPickerView.selectedRow(inComponent: 0)
         let categoryRow = categoryPickerView.selectedRow(inComponent: 0)
         let date = datePicker.date
@@ -104,7 +106,6 @@ class AddPurchaseViewController: UIViewController {
             }
         }
         
-        currentState = delegate?.userDidInteractWithCard() ?? State.closed
         updateViews()
         dismissKeyBoards()
     }
