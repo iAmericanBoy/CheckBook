@@ -159,7 +159,57 @@
                     <view key="view" contentMode="scaleToFill" id="Crv-hX-8y0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="XEv-mF-1Wb">
+                                <rect key="frame" x="0.0" y="88" width="375" height="690"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="settingsCell" rowHeight="156" id="Vqh-Ri-MTc" customClass="SettingsTableViewCell" customModule="CheckBook" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="156"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Vqh-Ri-MTc" id="1QO-KR-nl1">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="155.66666666666666"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="AGu-eV-kXj">
+                                                    <rect key="frame" x="15" y="11" width="345" height="134"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dNM-v6-23o">
+                                                            <rect key="frame" x="0.0" y="57.000000000000007" width="296" height="20.333333333333336"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B0Z-UP-vF9">
+                                                            <rect key="frame" x="296" y="51.666666666666657" width="51" height="31"/>
+                                                            <connections>
+                                                                <action selector="switchValueChanged:" destination="Vqh-Ri-MTc" eventType="valueChanged" id="bms-kj-wvq"/>
+                                                            </connections>
+                                                        </switch>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="AGu-eV-kXj" secondAttribute="trailing" id="DzI-Ck-oWO"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="AGu-eV-kXj" secondAttribute="bottom" id="arl-pY-k1N"/>
+                                                <constraint firstItem="AGu-eV-kXj" firstAttribute="leading" secondItem="1QO-KR-nl1" secondAttribute="leadingMargin" id="fkB-Ys-W0g"/>
+                                                <constraint firstItem="AGu-eV-kXj" firstAttribute="top" secondItem="1QO-KR-nl1" secondAttribute="topMargin" id="xNU-9O-8O2"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="nameLabel" destination="dNM-v6-23o" id="7DY-RR-cY3"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="WaJ-B4-28q" firstAttribute="bottom" secondItem="XEv-mF-1Wb" secondAttribute="bottom" id="3Po-hg-rxi"/>
+                            <constraint firstItem="XEv-mF-1Wb" firstAttribute="leading" secondItem="WaJ-B4-28q" secondAttribute="leading" id="cJh-71-0W6"/>
+                            <constraint firstItem="XEv-mF-1Wb" firstAttribute="top" secondItem="WaJ-B4-28q" secondAttribute="top" id="o4o-Be-lsM"/>
+                            <constraint firstItem="WaJ-B4-28q" firstAttribute="trailing" secondItem="XEv-mF-1Wb" secondAttribute="trailing" id="seQ-OB-TRz"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="WaJ-B4-28q"/>
                     </view>
                     <navigationItem key="navigationItem" id="1rS-SQ-n5G">
@@ -169,10 +219,13 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="tableView" destination="XEv-mF-1Wb" id="oKO-VI-jCR"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zeR-fe-b03" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4482" y="265"/>
+            <point key="canvasLocation" x="4480.8000000000002" y="264.53201970443348"/>
         </scene>
         <!--Add Purchase View Controller-->
         <scene sceneID="j48-7q-nzx">

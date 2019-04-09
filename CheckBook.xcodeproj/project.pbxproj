@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B63871CA225D3B6E00BAE0D9 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63871C9225D3B6E00BAE0D9 /* Setting.swift */; };
+		B63871CC225D3FBB00BAE0D9 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63871CB225D3FBB00BAE0D9 /* SettingsTableViewCell.swift */; };
 		B652BD66225810440066AD8A /* PurchaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */; };
 		B674FB0822580BD3000A5815 /* LedgerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B674FB0722580BD3000A5815 /* LedgerController.swift */; };
 		B681ED94225BA2E000B64623 /* Category+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B681ED93225BA2E000B64623 /* Category+convenience.swift */; };
@@ -40,6 +42,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B63871C9225D3B6E00BAE0D9 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
+		B63871CB225D3FBB00BAE0D9 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseTableViewCell.swift; sourceTree = "<group>"; };
 		B674FB0722580BD3000A5815 /* LedgerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LedgerController.swift; sourceTree = "<group>"; };
 		B681ED93225BA2E000B64623 /* Category+convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+convenience.swift"; sourceTree = "<group>"; };
@@ -143,6 +147,7 @@
 			children = (
 				B69D87F4225554D60019E694 /* Main.storyboard */,
 				B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */,
+				B63871CB225D3FBB00BAE0D9 /* SettingsTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -157,6 +162,7 @@
 				B6E3329E2234CAD80088D6FF /* PurchaseMethod+convenience.swift */,
 				B6A7E2232255136C0078174E /* Ledger+convenience.swift */,
 				B681ED93225BA2E000B64623 /* Category+convenience.swift */,
+				B63871C9225D3B6E00BAE0D9 /* Setting.swift */,
 				B6E332A22234CC0D0088D6FF /* MagicStrings */,
 			);
 			path = Model;
@@ -306,12 +312,14 @@
 				B6E332A42234CD5F0088D6FF /* PurchaseMethodController.swift in Sources */,
 				B674FB0822580BD3000A5815 /* LedgerController.swift in Sources */,
 				B652BD66225810440066AD8A /* PurchaseTableViewCell.swift in Sources */,
+				B63871CC225D3FBB00BAE0D9 /* SettingsTableViewCell.swift in Sources */,
 				B6E332A12234CBFB0088D6FF /* PurchaseMethod+MagicStrings.swift in Sources */,
 				B6E3329F2234CAD80088D6FF /* PurchaseMethod+convenience.swift in Sources */,
 				B6BF9FF7222F3FDA00DFCE8C /* PurchaseController.swift in Sources */,
 				B6DE00B12230345600C76A40 /* CloudKitController.swift in Sources */,
 				B6A7E2242255136C0078174E /* Ledger+convenience.swift in Sources */,
 				B6C87A7C225D38CB00086F3B /* SettingsViewController.swift in Sources */,
+				B63871CA225D3B6E00BAE0D9 /* Setting.swift in Sources */,
 				B6EF3BED225514340009BC2A /* Ledger+MagicStrings.swift in Sources */,
 				B6BF9FF0222F266100DFCE8C /* Purchase+convenience.swift in Sources */,
 			);
