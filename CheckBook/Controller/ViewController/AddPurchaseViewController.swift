@@ -150,8 +150,19 @@ class AddPurchaseViewController: UIViewController {
         switch currentState {
         case .open:
             addPurchaseButton.setTitle("Save Purchase", for: .normal)
+            categoryTextField.isHidden = false
+            methodTextField.isHidden = false
+            storeNameTextField.isHidden = false
+            dateTextField.isHidden = false
+            amountTextField.isHidden = false
         case .closed:
             addPurchaseButton.setTitle("Add Purchase", for: .normal)
+            categoryTextField.isHidden = true
+            methodTextField.isHidden = true
+            storeNameTextField.isHidden = true
+            dateTextField.isHidden = true
+            amountTextField.isHidden = true
+
         }
         
         if let purchase = purchase {
