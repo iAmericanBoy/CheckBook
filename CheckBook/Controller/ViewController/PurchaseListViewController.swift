@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import AVFoundation
+import CloudKit
 
 // MARK: - State
 enum State {
@@ -43,6 +44,7 @@ class PurchaseListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        fetchChangesFromCK()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -135,6 +137,20 @@ class PurchaseListViewController: UIViewController {
         cardView.layer.shadowColor = UIColor.black.cgColor
         cardView.layer.shadowOpacity = 0.1
         cardView.layer.shadowRadius = 10
+    }
+    
+    fileprivate func fetchChangesFromCK() {
+        //Check for updates from Ck
+        //-> If there are updates update Context
+        //-> after that try to upload cached Purchases to CK
+        CloudKitController.shared.fetchUpdatedRecordsFromCK { (isSuccess, recordsToUpdate, recordIDsToDelete) in
+            if isSuccess {
+                SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
+            }
+        }
+        SyncController.shared.saveCachedPurchasesToCK()
+        
+        CloudKitController.shared.subscribeToNewChanges(forRecodZone: CKRecordZone(zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)))
     }
 }
 
