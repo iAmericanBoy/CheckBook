@@ -8,6 +8,8 @@
 
 import UIKit
 import CoreData
+import AVFoundation
+import CloudKit
 
 // MARK: - State
 enum State {
@@ -35,11 +37,20 @@ class PurchaseListViewController: UIViewController {
     //MARK: - Properties
     /// The current state of the animation. This variable is changed only when an animation completes.
     private var currentState: State = .closed
+    var impact = UIImpactFeedbackGenerator(style: .light)
+
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        fetchChangesFromCK()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(forName: Notification.syncFinished.name, object: nil, queue: .main) { (_) in
+            self.purchaseList.reloadData()
+        }
     }
     
     func hideCard() {
@@ -84,10 +95,16 @@ class PurchaseListViewController: UIViewController {
                 animatedView.layoutIfNeeded()
             }
 
+
             self.view.layoutIfNeeded()
         }
+        transitionAnimator.addAnimations({
+            self.impact.prepare()
+            self.impact.impactOccurred()
+        }, delayFactor: 1.0)
         
         transitionAnimator.addCompletion { (position) in
+
             // update the state
             switch position {
             case .start:
@@ -120,6 +137,20 @@ class PurchaseListViewController: UIViewController {
         cardView.layer.shadowColor = UIColor.black.cgColor
         cardView.layer.shadowOpacity = 0.1
         cardView.layer.shadowRadius = 10
+    }
+    
+    fileprivate func fetchChangesFromCK() {
+        //Check for updates from Ck
+        //-> If there are updates update Context
+        //-> after that try to upload cached Purchases to CK
+        CloudKitController.shared.fetchUpdatedRecordsFromCK { (isSuccess, recordsToUpdate, recordIDsToDelete) in
+            if isSuccess {
+                SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
+            }
+        }
+        SyncController.shared.saveCachedPurchasesToCK()
+        
+        CloudKitController.shared.subscribeToNewChanges(forRecodZone: CKRecordZone(zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)))
     }
 }
 
@@ -182,6 +213,14 @@ extension UISpringTimingParameters {
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
 extension PurchaseListViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return CoreDataController.shared.purchaseFetchResultsController.sections?.count ?? 0
+    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 5.0
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return CoreDataController.shared.purchaseFetchResultsController.sections?[section].numberOfObjects ?? 0
     }

@@ -27,6 +27,7 @@ extension Ledger {
         self.lastModified = lastModified
     }
     
+    @discardableResult
     convenience init?(record: CKRecord, context: NSManagedObjectContext = CoreDataStack.context) {
         guard let name = record[Ledger.nameKey] as? String,
             let lastModified = record[Ledger.lastModifiedKey] as? Date else {return nil}

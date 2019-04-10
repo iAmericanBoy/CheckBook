@@ -249,6 +249,7 @@ class CloudKitController {
             }
         }
     }
+    
     //MARK: - Subscribtion
     ///Subscribes to all new changes in the given CKRecordZone.
     /// - parameter zone: The zone to subrscribe to changes to.
@@ -276,13 +277,13 @@ class CloudKitController {
     /// - parameter subscribtionID: The zone to subrscribe to changes to.
     func removeSubscribtion(withSubscribtionID subscribtionID: String) {
         
-//        let modifyOperation = CKModifySubscriptionsOperation(subscriptionsToSave: <#T##[CKSubscription]?#>, subscriptionIDsToDelete: <#T##[CKSubscription.ID]?#>)
-//
-//        modifyOperation.modifySubscriptionsCompletionBlock = { (_,_,_) in
-//
-//        }
-//
-//        privateDB.add(modifyOperation)
+        let modifyOperation = CKModifySubscriptionsOperation(subscriptionsToSave: [], subscriptionIDsToDelete: [subscribtionID])
+
+        modifyOperation.modifySubscriptionsCompletionBlock = { (_,_,_) in
+
+        }
+
+        privateDB.add(modifyOperation)
         
     }
     

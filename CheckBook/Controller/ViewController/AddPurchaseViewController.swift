@@ -48,8 +48,13 @@ class AddPurchaseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification,object: nil)
         updateViews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification,object: nil)
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -77,13 +82,16 @@ class AddPurchaseViewController: UIViewController {
     }
 
     @IBAction func addPurchaseButtonTapped(_ sender: UIButton) {
+        currentState = delegate?.userDidInteractWithCard() ?? State.closed
+        dismissKeyBoards()
+
         let methodRow = methodPickerView.selectedRow(inComponent: 0)
         let categoryRow = categoryPickerView.selectedRow(inComponent: 0)
         let date = datePicker.date
         guard let storeName = storeNameTextField.text, !storeName.isEmpty,
             let amount = amountTextField.text, let amountNumber = numberFormatter.number(from: amount),
             let methodText = methodTextField.text, !methodText.isEmpty,
-            let categoryText = methodTextField.text, !categoryText.isEmpty else {return}
+            let categoryText = methodTextField.text, !categoryText.isEmpty else {updateViews(); return}
         
         //Set TextFields to Empty
         amountTextField.text = NumberFormatter.localizedString(from: 0, number: .currency)
@@ -103,10 +111,9 @@ class AddPurchaseViewController: UIViewController {
                 PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: newLedger, category: category)
             }
         }
-        
-        currentState = delegate?.userDidInteractWithCard() ?? State.closed
+        purchase = nil
+
         updateViews()
-        dismissKeyBoards()
     }
     
     @IBAction func addNewCardButtonTapped(_ sender: UIBarButtonItem) {
@@ -143,8 +150,19 @@ class AddPurchaseViewController: UIViewController {
         switch currentState {
         case .open:
             addPurchaseButton.setTitle("Save Purchase", for: .normal)
+            categoryTextField.isHidden = false
+            methodTextField.isHidden = false
+            storeNameTextField.isHidden = false
+            dateTextField.isHidden = false
+            amountTextField.isHidden = false
         case .closed:
             addPurchaseButton.setTitle("Add Purchase", for: .normal)
+            categoryTextField.isHidden = true
+            methodTextField.isHidden = true
+            storeNameTextField.isHidden = true
+            dateTextField.isHidden = true
+            amountTextField.isHidden = true
+
         }
         
         if let purchase = purchase {
@@ -315,7 +333,7 @@ extension AddPurchaseViewController: UIPickerViewDelegate, UIPickerViewDataSourc
         if pickerView.tag == 1111 {
             methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: row, section: component)).name
         } else if pickerView.tag == 2222 {
-            methodTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: row, section: component)).name
+            categoryTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: row, section: component)).name
         } else {
             
         }

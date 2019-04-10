@@ -17,17 +17,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        //Check for updates from Ck
-        //-> If there are updates update Context
-        //-> after that try to upload cached Purchases to CK
-        CloudKitController.shared.fetchUpdatedRecordsFromCK { (isSuccess, recordsToUpdate, recordIDsToDelete) in
-            if isSuccess {
-                SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
-            }
-        }
-        SyncController.shared.saveCachedPurchasesToCK()
+        
+        
+
 
         return true
     }
+    
+    
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        print("hello World")
+        completionHandler(.newData)
+    }
 }
+
+
 

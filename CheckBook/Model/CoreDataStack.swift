@@ -29,11 +29,11 @@ enum CoreDataStack {
     
     static var context: NSManagedObjectContext { return container.viewContext }
     
-    static var childContext: NSManagedObjectContext {
-        let childContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        childContext.automaticallyMergesChangesFromParent = true
-        childContext.parent = context
-        
-        return childContext
-    }
+//    static var childContext: NSManagedObjectContext {
+//        let childContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+//        childContext.automaticallyMergesChangesFromParent = true
+//        childContext.parent = context
+//        
+//        return childContext
+//    }
 }

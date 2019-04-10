@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B63871CA225D3B6E00BAE0D9 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63871C9225D3B6E00BAE0D9 /* Setting.swift */; };
+		B63871CC225D3FBB00BAE0D9 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63871CB225D3FBB00BAE0D9 /* SettingsTableViewCell.swift */; };
 		B652BD66225810440066AD8A /* PurchaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */; };
 		B674FB0822580BD3000A5815 /* LedgerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B674FB0722580BD3000A5815 /* LedgerController.swift */; };
 		B681ED94225BA2E000B64623 /* Category+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B681ED93225BA2E000B64623 /* Category+convenience.swift */; };
@@ -26,6 +28,8 @@
 		B6BF9FF2222F315D00DFCE8C /* Purchase+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FF1222F315D00DFCE8C /* Purchase+MagicStrings.swift */; };
 		B6BF9FF5222F322300DFCE8C /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6BF9FF4222F322300DFCE8C /* CloudKit.framework */; };
 		B6BF9FF7222F3FDA00DFCE8C /* PurchaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9FF6222F3FDA00DFCE8C /* PurchaseController.swift */; };
+		B6C87A7C225D38CB00086F3B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C87A7B225D38CA00086F3B /* SettingsViewController.swift */; };
+		B6D7D3C4225E4934005EF44C /* Notification+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D7D3C3225E4934005EF44C /* Notification+Extension.swift */; };
 		B6DE00AF223030F400C76A40 /* CoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE00AE223030F400C76A40 /* CoreDataController.swift */; };
 		B6DE00B12230345600C76A40 /* CloudKitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE00B02230345600C76A40 /* CloudKitController.swift */; };
 		B6E3329F2234CAD80088D6FF /* PurchaseMethod+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E3329E2234CAD80088D6FF /* PurchaseMethod+convenience.swift */; };
@@ -39,6 +43,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B63871C9225D3B6E00BAE0D9 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
+		B63871CB225D3FBB00BAE0D9 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseTableViewCell.swift; sourceTree = "<group>"; };
 		B674FB0722580BD3000A5815 /* LedgerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LedgerController.swift; sourceTree = "<group>"; };
 		B681ED93225BA2E000B64623 /* Category+convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+convenience.swift"; sourceTree = "<group>"; };
@@ -61,6 +67,8 @@
 		B6BF9FF1222F315D00DFCE8C /* Purchase+MagicStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Purchase+MagicStrings.swift"; sourceTree = "<group>"; };
 		B6BF9FF4222F322300DFCE8C /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		B6BF9FF6222F3FDA00DFCE8C /* PurchaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseController.swift; sourceTree = "<group>"; };
+		B6C87A7B225D38CA00086F3B /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		B6D7D3C3225E4934005EF44C /* Notification+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extension.swift"; sourceTree = "<group>"; };
 		B6DE00AE223030F400C76A40 /* CoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataController.swift; sourceTree = "<group>"; };
 		B6DE00B02230345600C76A40 /* CloudKitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitController.swift; sourceTree = "<group>"; };
 		B6E3329E2234CAD80088D6FF /* PurchaseMethod+convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PurchaseMethod+convenience.swift"; sourceTree = "<group>"; };
@@ -90,6 +98,7 @@
 			children = (
 				B69D87F622555CD60019E694 /* PurchaseListViewController.swift */,
 				B69D87F822555CEC0019E694 /* AddPurchaseViewController.swift */,
+				B6C87A7B225D38CA00086F3B /* SettingsViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -121,6 +130,7 @@
 				B6BF9FF9222F3FF000DFCE8C /* Controller */,
 				B6BF9FE4222F162200DFCE8C /* Resources */,
 				B691DACE225BB73E00245BB2 /* UIViewController+Alerts.swift */,
+				B6D7D3C3225E4934005EF44C /* Notification+Extension.swift */,
 			);
 			path = CheckBook;
 			sourceTree = "<group>";
@@ -140,6 +150,7 @@
 			children = (
 				B69D87F4225554D60019E694 /* Main.storyboard */,
 				B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */,
+				B63871CB225D3FBB00BAE0D9 /* SettingsTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -154,6 +165,7 @@
 				B6E3329E2234CAD80088D6FF /* PurchaseMethod+convenience.swift */,
 				B6A7E2232255136C0078174E /* Ledger+convenience.swift */,
 				B681ED93225BA2E000B64623 /* Category+convenience.swift */,
+				B63871C9225D3B6E00BAE0D9 /* Setting.swift */,
 				B6E332A22234CC0D0088D6FF /* MagicStrings */,
 			);
 			path = Model;
@@ -289,6 +301,7 @@
 				B681ED96225BA32800B64623 /* Category+MagicStrings.swift in Sources */,
 				B681ED94225BA2E000B64623 /* Category+convenience.swift in Sources */,
 				B6EA85F3223316C200211068 /* CloudKitController+MagicStrings.swift in Sources */,
+				B6D7D3C4225E4934005EF44C /* Notification+Extension.swift in Sources */,
 				B69D87F722555CD60019E694 /* PurchaseListViewController.swift in Sources */,
 				B6EAF4EE225BA453002C783D /* CategoryController.swift in Sources */,
 				B6EA85C122322C8900211068 /* CachePurchase+convenience.swift in Sources */,
@@ -303,11 +316,14 @@
 				B6E332A42234CD5F0088D6FF /* PurchaseMethodController.swift in Sources */,
 				B674FB0822580BD3000A5815 /* LedgerController.swift in Sources */,
 				B652BD66225810440066AD8A /* PurchaseTableViewCell.swift in Sources */,
+				B63871CC225D3FBB00BAE0D9 /* SettingsTableViewCell.swift in Sources */,
 				B6E332A12234CBFB0088D6FF /* PurchaseMethod+MagicStrings.swift in Sources */,
 				B6E3329F2234CAD80088D6FF /* PurchaseMethod+convenience.swift in Sources */,
 				B6BF9FF7222F3FDA00DFCE8C /* PurchaseController.swift in Sources */,
 				B6DE00B12230345600C76A40 /* CloudKitController.swift in Sources */,
 				B6A7E2242255136C0078174E /* Ledger+convenience.swift in Sources */,
+				B6C87A7C225D38CB00086F3B /* SettingsViewController.swift in Sources */,
+				B63871CA225D3B6E00BAE0D9 /* Setting.swift in Sources */,
 				B6EF3BED225514340009BC2A /* Ledger+MagicStrings.swift in Sources */,
 				B6BF9FF0222F266100DFCE8C /* Purchase+convenience.swift in Sources */,
 			);
@@ -460,7 +476,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = oskman.CheckBook;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -479,7 +495,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = oskman.CheckBook;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
