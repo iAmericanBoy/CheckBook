@@ -25,12 +25,15 @@ class AddPurchaseViewController: UIViewController {
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var categoryTextField: UITextField!
-    @IBOutlet var toolBar: UIToolbar!
+    @IBOutlet weak var ledgerTextField: UITextField!
+    @IBOutlet var dateToolBar: UIToolbar!
     @IBOutlet var datePicker: UIDatePicker!
     @IBOutlet var methodPickerView: UIPickerView!
     @IBOutlet var paymentMethodToolBar: UIToolbar!
     @IBOutlet var categoryToolBar: UIToolbar!
     @IBOutlet var categoryPickerView: UIPickerView!
+    @IBOutlet var ledgerToolBar: UIToolbar!
+    @IBOutlet var ledgerPickerView: UIPickerView!
     
     //MARK: - Properties
     var delegate: AddPurchaseCardDelegate?
@@ -219,12 +222,17 @@ class AddPurchaseViewController: UIViewController {
         if CoreDataController.shared.purchaseMethodFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
             methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
         }
+        
+        ledgerTextField.delegate = self
+        ledgerTextField.inputAccessoryView = ledgerToolBar
+        ledgerTextField.inputView = ledgerPickerView
+        
 
         methodPickerView.delegate = self
         methodPickerView.dataSource = self
         
         dateTextField.delegate = self
-        dateTextField.inputAccessoryView = toolBar
+        dateTextField.inputAccessoryView = dateToolBar
         dateTextField.inputView = datePicker
         
         let dateFormatter = DateFormatter()
@@ -232,7 +240,7 @@ class AddPurchaseViewController: UIViewController {
         dateFormatter.dateStyle = .medium
         dateTextField.text = dateFormatter.string(from: Date())
         
-        amountTextField.inputAccessoryView = toolBar
+        amountTextField.inputAccessoryView = dateToolBar
         
         view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         view.layer.cornerRadius = 20
