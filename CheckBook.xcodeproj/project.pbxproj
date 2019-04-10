@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B614B1B9225E63F4005B7C1C /* CBNotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B614B1B8225E63F4005B7C1C /* CBNotificationDelegate.swift */; };
 		B63871CA225D3B6E00BAE0D9 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63871C9225D3B6E00BAE0D9 /* Setting.swift */; };
 		B63871CC225D3FBB00BAE0D9 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63871CB225D3FBB00BAE0D9 /* SettingsTableViewCell.swift */; };
 		B652BD66225810440066AD8A /* PurchaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */; };
@@ -43,6 +44,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B614B1B8225E63F4005B7C1C /* CBNotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBNotificationDelegate.swift; sourceTree = "<group>"; };
 		B63871C9225D3B6E00BAE0D9 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
 		B63871CB225D3FBB00BAE0D9 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseTableViewCell.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				B6BF9FE4222F162200DFCE8C /* Resources */,
 				B691DACE225BB73E00245BB2 /* UIViewController+Alerts.swift */,
 				B6D7D3C3225E4934005EF44C /* Notification+Extension.swift */,
+				B614B1B8225E63F4005B7C1C /* CBNotificationDelegate.swift */,
 			);
 			path = CheckBook;
 			sourceTree = "<group>";
@@ -297,6 +300,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B614B1B9225E63F4005B7C1C /* CBNotificationDelegate.swift in Sources */,
 				B6BF9FEE222F257300DFCE8C /* CoreDataStack.swift in Sources */,
 				B681ED96225BA32800B64623 /* Category+MagicStrings.swift in Sources */,
 				B681ED94225BA2E000B64623 /* Category+convenience.swift in Sources */,

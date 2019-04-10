@@ -150,7 +150,6 @@ class PurchaseListViewController: UIViewController {
         }
         SyncController.shared.saveCachedPurchasesToCK()
         
-        CloudKitController.shared.subscribeToNewChanges(forRecodZone: CKRecordZone(zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)))
     }
 }
 

@@ -54,7 +54,13 @@ class AddPurchaseViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification,object: nil)
+        NotificationCenter.default.addObserver(forName: Notification.syncFinished.name, object: nil, queue: .main) { (_) in
+            self.methodPickerView.reloadAllComponents()
+            self.categoryPickerView.reloadAllComponents()
+            self.categoryTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
+            self.methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
 
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

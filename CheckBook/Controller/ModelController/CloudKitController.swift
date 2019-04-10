@@ -262,6 +262,8 @@ class CloudKitController {
         let notificationInfo = CKSubscription.NotificationInfo()
         notificationInfo.title = "New Record"
         notificationInfo.alertBody = "New Record available"
+        notificationInfo.shouldSendContentAvailable = true
+
         
         subscription.notificationInfo = notificationInfo
         
