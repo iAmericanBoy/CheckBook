@@ -19,7 +19,7 @@ class LedgerController {
     /// Creates new Ledger using the convenience initilizer inside the CoredataStack.context and tries to uploads it to CloudKit. If the upload fails the new Ledger gets added to the CacheContext for a later try.
     /// - parameter name: The name of the Ledger.
     func createNewLedgerWith(name: String) -> Ledger {
-        let ledger = Ledger(name: name)
+        let ledger = Ledger(name: name, appleUserRecordName: CloudKitController.shared.appleUserID?.recordName)
         CoreDataController.shared.saveToPersistentStore()
         
         guard let newRecord = CKRecord(ledger: ledger) else {return ledger}

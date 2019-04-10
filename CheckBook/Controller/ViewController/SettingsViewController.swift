@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CloudKit
 
 class SettingsViewController: UIViewController {
     
@@ -44,8 +45,6 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
 //MARK: - SettingsDelegate
 extension SettingsViewController: SettingsDelegate {
     func shareLedger() {
-        print("SHARE!")
+        
     }
-    
-    
 }

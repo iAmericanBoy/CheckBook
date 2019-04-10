@@ -14,6 +14,7 @@ extension Ledger {
     @discardableResult
     convenience init(name: String,
                      uuid: UUID = UUID(),
+                     appleUserRecordName: String?,
                      purchases: NSOrderedSet = NSOrderedSet(),
                      lastModified: Date = Date(),
                      context: NSManagedObjectContext = CoreDataStack.context) {
@@ -23,6 +24,7 @@ extension Ledger {
         self.name = name
         self.uuid = uuid
         self.purchases = purchases
+        self.appleUserRecordName = appleUserRecordName
         
         self.lastModified = lastModified
     }
@@ -32,7 +34,7 @@ extension Ledger {
         guard let name = record[Ledger.nameKey] as? String,
             let lastModified = record[Ledger.lastModifiedKey] as? Date else {return nil}
         
-        self.init(name: name, uuid: UUID(uuidString: record.recordID.recordName)!, lastModified: lastModified)
+        self.init(name: name, uuid: UUID(uuidString: record.recordID.recordName)!, appleUserRecordName: record.creatorUserRecordID?.recordName, lastModified: lastModified, context: context)
     }
 }
 

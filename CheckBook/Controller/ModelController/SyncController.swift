@@ -63,7 +63,7 @@ class SyncController {
                             if let foundLedger = foundLedger {
                                 ledgerOfPurchase = foundLedger
                             } else {
-                                ledgerOfPurchase = Ledger(name: "", uuid: UUID(uuidString: ledgerUUID)!, lastModified: Date(timeIntervalSince1970: 0), context: CoreDataStack.context)
+                                ledgerOfPurchase = Ledger(name: "", uuid: UUID(uuidString: ledgerUUID)!, appleUserRecordName: nil, lastModified: Date(timeIntervalSince1970: 0), context: CoreDataStack.context)
                             }
 
                             
