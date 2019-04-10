@@ -18,10 +18,10 @@ extension Purchase {
                      storeName: String,
                      uuid: UUID = UUID(),
                      lastModified: Date = Date(),
-                     purchaseMethod: PurchaseMethod,
-                     category: Category,
+                     purchaseMethod: PurchaseMethod?,
+                     category: Category?,
                      appleUserRecordName: String?,
-                     ledger: Ledger,
+                     ledger: Ledger?,
                      context: NSManagedObjectContext = CoreDataStack.context) {
         
         self.init(context: context)
@@ -35,10 +35,10 @@ extension Purchase {
         self.category = category
         self.appleUserRecordName = appleUserRecordName
         
-        self.methodName = purchaseMethod.name
-        self.methodUUID = purchaseMethod.uuid
-        self.ledgerUUID = ledger.uuid
-        self.categoryUUID = category.uuid
+        self.methodName = purchaseMethod?.name
+        self.methodUUID = purchaseMethod?.uuid
+        self.ledgerUUID = ledger?.uuid
+        self.categoryUUID = category?.uuid
         
         self.lastModified = lastModified
         self.uuid = uuid
@@ -71,3 +71,10 @@ extension CKRecord {
         setValue(purchase.storeName, forKey: Purchase.storeNameKey)
     }
 }
+
+//extension Purchase {
+//    var day: Date? {
+//        let dateComponents = Calendar.current.dateComponents([.day,.month,.year], from: self.date!)
+//        return dateComponents.date
+//    }
+//}

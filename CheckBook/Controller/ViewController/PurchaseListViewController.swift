@@ -44,6 +44,12 @@ class PurchaseListViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(forName: Notification.syncFinished.name, object: nil, queue: .main) { (_) in
+            self.purchaseList.reloadData()
+        }
+    }
     
     func hideCard() {
         guard let addPurchaseCard = addPurchaseViewController else {return}

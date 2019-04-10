@@ -32,10 +32,9 @@ extension Category {
     @discardableResult
     convenience init?(record: CKRecord, context: NSManagedObjectContext = CoreDataStack.context) {
         guard let name = record[Category.nameKey] as? String,
-            let color = record[Category.colorKey] as? String,
             let lastModified = record[Category.lastModifiedKey] as? Date else {return nil}
         
-        self.init(name: name, color: color, uuid: UUID(uuidString: record.recordID.recordName)!, lastModified: lastModified)
+        self.init(name: name, color: record[Category.colorKey] as? String, uuid: UUID(uuidString: record.recordID.recordName)!, lastModified: lastModified)
     }
 }
 extension CKRecord {
