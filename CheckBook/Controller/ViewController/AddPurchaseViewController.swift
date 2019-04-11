@@ -179,6 +179,7 @@ class AddPurchaseViewController: UIViewController {
             storeNameTextField.isHidden = false
             dateTextField.isHidden = false
             amountTextField.isHidden = false
+            ledgerPickerView.isHidden = false
         case .closed:
             addPurchaseButton.setTitle("Add Purchase", for: .normal)
             categoryTextField.isHidden = true
@@ -186,7 +187,7 @@ class AddPurchaseViewController: UIViewController {
             storeNameTextField.isHidden = true
             dateTextField.isHidden = true
             amountTextField.isHidden = true
-
+            ledgerPickerView.isHidden = true
         }
         
         if let purchase = purchase {
@@ -216,17 +217,24 @@ class AddPurchaseViewController: UIViewController {
     }
     
     fileprivate func setupViews() {
+        methodPickerView.delegate = self
+        methodPickerView.dataSource = self
+        ledgerPickerView.delegate = self
+        ledgerPickerView.dataSource = self
+        categoryPickerView.dataSource = self
+        categoryPickerView.delegate = self
+        
         numberFormatter.numberStyle = .currency
-
+        
         storeNameTextField.delegate = self
+        
         amountTextField.delegate = self
         amountTextField.text = NumberFormatter.localizedString(from: 0, number: .currency)
         
         categoryTextField.delegate = self
         categoryTextField.inputAccessoryView = categoryToolBar
         categoryTextField.inputView = categoryPickerView
-        categoryPickerView.dataSource = self
-        categoryPickerView.delegate = self
+
         if CoreDataController.shared.categoryFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
             categoryTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
         }
@@ -244,10 +252,6 @@ class AddPurchaseViewController: UIViewController {
         if CoreDataController.shared.ledgerFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
             ledgerTextField.text = CoreDataController.shared.ledgerFetchResultsController.object(at: IndexPath(row: 0, section: 0)).name
         }
-        
-
-        methodPickerView.delegate = self
-        methodPickerView.dataSource = self
         
         dateTextField.delegate = self
         dateTextField.inputAccessoryView = dateToolBar
@@ -272,7 +276,7 @@ class AddPurchaseViewController: UIViewController {
         amountTextField.resignFirstResponder()
         dateTextField.resignFirstResponder()
         categoryTextField.resignFirstResponder()
-        ledgerPickerView.resignFirstResponder()
+        ledgerTextField.resignFirstResponder()
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
@@ -322,7 +326,7 @@ extension AddPurchaseViewController: UITextFieldDelegate {
         self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         switch currentState {
         case .open:
-            if let purchase = purchase {
+            if  purchase != nil {
                 addPurchaseButton.setTitle("Update Purchase", for: .normal)
             } else {
                 addPurchaseButton.setTitle("Save Purchase", for: .normal)
@@ -347,6 +351,8 @@ extension AddPurchaseViewController: UIPickerViewDelegate, UIPickerViewDataSourc
             return CoreDataController.shared.purchaseMethodFetchResultsController.sections?.count ?? 1
         } else if pickerView.tag == 2222 {
             return CoreDataController.shared.categoryFetchResultsController.sections?.count ?? 1
+        } else if pickerView.tag == 3333 {
+            return CoreDataController.shared.ledgerFetchResultsController.sections?.count ?? 1
         } else {
             return 0
         }
