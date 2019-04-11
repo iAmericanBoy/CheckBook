@@ -60,9 +60,12 @@ class AddPurchaseViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: Notification.syncFinished.name, object: nil, queue: .main) { (_) in
             self.methodPickerView.reloadAllComponents()
             self.categoryPickerView.reloadAllComponents()
-//            self.categoryTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
-//            self.methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
-
+            if CoreDataController.shared.categoryFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
+                self.categoryTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
+            }
+            if CoreDataController.shared.purchaseMethodFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
+                self.methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
+            }
         }
     }
     
