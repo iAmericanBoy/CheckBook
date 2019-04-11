@@ -272,6 +272,7 @@ class AddPurchaseViewController: UIViewController {
         amountTextField.resignFirstResponder()
         dateTextField.resignFirstResponder()
         categoryTextField.resignFirstResponder()
+        ledgerPickerView.resignFirstResponder()
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {

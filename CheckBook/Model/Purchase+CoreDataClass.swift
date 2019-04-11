@@ -13,12 +13,8 @@ import CoreData
 @objc(Purchase)
 public class Purchase: NSManagedObject {
     
-    public var day: NSDate? {
-        get {
-            let dateComponents = Calendar.current.dateComponents([.day,.month,.year], from: self.date! as Date)
-            let newdate = dateComponents.date as NSDate?
-            print(newdate)
-            return newdate
-        }
+    @objc public var day: NSDate? {
+        let dateComponents = Calendar.current.dateComponents([.day,.month,.year], from: self.date! as Date)
+        return Calendar.current.date(from: dateComponents) as NSDate?
     }
 }
