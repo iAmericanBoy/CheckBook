@@ -60,11 +60,15 @@ class AddPurchaseViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: Notification.syncFinished.name, object: nil, queue: .main) { (_) in
             self.methodPickerView.reloadAllComponents()
             self.categoryPickerView.reloadAllComponents()
+            self.ledgerPickerView.reloadAllComponents()
             if CoreDataController.shared.categoryFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
                 self.categoryTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
             }
             if CoreDataController.shared.purchaseMethodFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
                 self.methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
+            }
+            if CoreDataController.shared.ledgerFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
+                self.ledgerTextField.text = CoreDataController.shared.ledgerFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
             }
         }
     }
@@ -99,10 +103,13 @@ class AddPurchaseViewController: UIViewController {
 
         let methodRow = methodPickerView.selectedRow(inComponent: 0)
         let categoryRow = categoryPickerView.selectedRow(inComponent: 0)
+        let ledgerRow = ledgerPickerView.selectedRow(inComponent: 0)
+        
         let date = datePicker.date
         guard let storeName = storeNameTextField.text, !storeName.isEmpty,
             let amount = amountTextField.text, let amountNumber = numberFormatter.number(from: amount),
             let methodText = methodTextField.text, !methodText.isEmpty,
+            let ledgerText = ledgerTextField.text, !ledgerText.isEmpty,
             let categoryText = methodTextField.text, !categoryText.isEmpty else {updateViews(); return}
         
         //Set TextFields to Empty
@@ -111,17 +118,13 @@ class AddPurchaseViewController: UIViewController {
 
         let method = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(row: methodRow, section: 0))
         let category = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(row: categoryRow, section: 0))
+        let ledger = CoreDataController.shared.ledgerFetchResultsController.object(at: IndexPath(row: ledgerRow, section: 0))
         
         
         if let purchase = purchase {
             PurchaseController.shared.update(purchase: purchase, amount: NSDecimalNumber(decimal: amountNumber.decimalValue) as Decimal, date: date, item: "", storeName: storeName, purchaseMethod: method, category: category)
         } else {
-            if let ledger = CoreDataController.shared.ledgerFetchResultsController.fetchedObjects?.first {
-                PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger, category: category)
-            } else {
-                let newLedger = LedgerController.shared.createNewLedgerWith(name: "Hello")
-                PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: newLedger, category: category)
-            }
+            PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger, category: category)
         }
         purchase = nil
 
@@ -142,6 +145,15 @@ class AddPurchaseViewController: UIViewController {
             DispatchQueue.main.async {
                 try! CoreDataController.shared.categoryFetchResultsController.performFetch()
                 self.categoryPickerView.reloadAllComponents()
+            }
+        }
+    }
+    
+    @IBAction func addNewLedgerButtonTapped(_ sender: UIBarButtonItem) {
+        self.addNewLedgerAlert {
+            DispatchQueue.main.async {
+                try! CoreDataController.shared.ledgerFetchResultsController.performFetch()
+                self.ledgerPickerView.reloadAllComponents()
             }
         }
     }
@@ -229,6 +241,9 @@ class AddPurchaseViewController: UIViewController {
         ledgerTextField.delegate = self
         ledgerTextField.inputAccessoryView = ledgerToolBar
         ledgerTextField.inputView = ledgerPickerView
+        if CoreDataController.shared.ledgerFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
+            ledgerTextField.text = CoreDataController.shared.ledgerFetchResultsController.object(at: IndexPath(row: 0, section: 0)).name
+        }
         
 
         methodPickerView.delegate = self
@@ -264,6 +279,7 @@ class AddPurchaseViewController: UIViewController {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
             self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight - 22, right: 0)
+            self.addPurchaseButton.setTitle("", for: .normal)
         }
     }
 }
@@ -301,10 +317,19 @@ extension AddPurchaseViewController: UITextFieldDelegate {
         }
     }
     
-    
-    
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        switch currentState {
+        case .open:
+            if let purchase = purchase {
+                addPurchaseButton.setTitle("Update Purchase", for: .normal)
+            } else {
+                addPurchaseButton.setTitle("Save Purchase", for: .normal)
+            }
+
+        case .closed:
+            addPurchaseButton.setTitle("Add Purchase", for: .normal)
+        }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -331,6 +356,8 @@ extension AddPurchaseViewController: UIPickerViewDelegate, UIPickerViewDataSourc
             return CoreDataController.shared.purchaseMethodFetchResultsController.sections?[component].numberOfObjects ?? 0
         } else if pickerView.tag == 2222 {
             return CoreDataController.shared.categoryFetchResultsController.sections?[component].numberOfObjects ?? 0
+        } else if pickerView.tag == 3333 {
+            return CoreDataController.shared.ledgerFetchResultsController.sections?[component].numberOfObjects ?? 0
         } else {
             return 0
         }
@@ -341,6 +368,8 @@ extension AddPurchaseViewController: UIPickerViewDelegate, UIPickerViewDataSourc
             return CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: row, section: component)).name
         } else if pickerView.tag == 2222 {
             return CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: row, section: component)).name
+        } else if pickerView.tag == 3333 {
+            return CoreDataController.shared.ledgerFetchResultsController.object(at: IndexPath(item: row, section: component)).name
         } else {
             return ""
         }
@@ -351,6 +380,8 @@ extension AddPurchaseViewController: UIPickerViewDelegate, UIPickerViewDataSourc
             methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: row, section: component)).name
         } else if pickerView.tag == 2222 {
             categoryTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: row, section: component)).name
+        } else if pickerView.tag == 3333 {
+            categoryTextField.text = CoreDataController.shared.ledgerFetchResultsController.object(at: IndexPath(item: row, section: component)).name
         } else {
             
         }
