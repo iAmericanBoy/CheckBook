@@ -27,7 +27,7 @@ extension Purchase {
         self.init(context: context)
         
         self.amount = amount
-        self.date = date
+        self.date = date as NSDate
         self.item = item
         self.storeName = storeName
         self.purchaseMethod = purchaseMethod
@@ -40,7 +40,7 @@ extension Purchase {
         self.ledgerUUID = ledger?.uuid
         self.categoryUUID = category?.uuid
         
-        self.lastModified = lastModified
+        self.lastModified = lastModified as NSDate
         self.uuid = uuid
     }
 }
@@ -71,10 +71,3 @@ extension CKRecord {
         setValue(purchase.storeName, forKey: Purchase.storeNameKey)
     }
 }
-
-//extension Purchase {
-//    var day: Date? {
-//        let dateComponents = Calendar.current.dateComponents([.day,.month,.year], from: self.date!)
-//        return dateComponents.date
-//    }
-//}

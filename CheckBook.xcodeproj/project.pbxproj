@@ -10,6 +10,8 @@
 		B614B1B9225E63F4005B7C1C /* CBNotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B614B1B8225E63F4005B7C1C /* CBNotificationDelegate.swift */; };
 		B63871CA225D3B6E00BAE0D9 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63871C9225D3B6E00BAE0D9 /* Setting.swift */; };
 		B63871CC225D3FBB00BAE0D9 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63871CB225D3FBB00BAE0D9 /* SettingsTableViewCell.swift */; };
+		B64EDEA9225EA7C100DC2098 /* Purchase+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64EDEA7225EA7C100DC2098 /* Purchase+CoreDataClass.swift */; };
+		B64EDEAA225EA7C100DC2098 /* Purchase+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64EDEA8225EA7C100DC2098 /* Purchase+CoreDataProperties.swift */; };
 		B652BD66225810440066AD8A /* PurchaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */; };
 		B674FB0822580BD3000A5815 /* LedgerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B674FB0722580BD3000A5815 /* LedgerController.swift */; };
 		B681ED94225BA2E000B64623 /* Category+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = B681ED93225BA2E000B64623 /* Category+convenience.swift */; };
@@ -47,6 +49,8 @@
 		B614B1B8225E63F4005B7C1C /* CBNotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBNotificationDelegate.swift; sourceTree = "<group>"; };
 		B63871C9225D3B6E00BAE0D9 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
 		B63871CB225D3FBB00BAE0D9 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
+		B64EDEA7225EA7C100DC2098 /* Purchase+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Purchase+CoreDataClass.swift"; sourceTree = "<group>"; };
+		B64EDEA8225EA7C100DC2098 /* Purchase+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Purchase+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseTableViewCell.swift; sourceTree = "<group>"; };
 		B674FB0722580BD3000A5815 /* LedgerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LedgerController.swift; sourceTree = "<group>"; };
 		B681ED93225BA2E000B64623 /* Category+convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+convenience.swift"; sourceTree = "<group>"; };
@@ -161,6 +165,8 @@
 		B6BF9FE9222F187F00DFCE8C /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				B64EDEA7225EA7C100DC2098 /* Purchase+CoreDataClass.swift */,
+				B64EDEA8225EA7C100DC2098 /* Purchase+CoreDataProperties.swift */,
 				B6BF9FED222F257300DFCE8C /* CoreDataStack.swift */,
 				B6BF9FE6222F187600DFCE8C /* CheckBook.xcdatamodeld */,
 				B6BF9FEF222F266100DFCE8C /* Purchase+convenience.swift */,
@@ -322,7 +328,9 @@
 				B652BD66225810440066AD8A /* PurchaseTableViewCell.swift in Sources */,
 				B63871CC225D3FBB00BAE0D9 /* SettingsTableViewCell.swift in Sources */,
 				B6E332A12234CBFB0088D6FF /* PurchaseMethod+MagicStrings.swift in Sources */,
+				B64EDEAA225EA7C100DC2098 /* Purchase+CoreDataProperties.swift in Sources */,
 				B6E3329F2234CAD80088D6FF /* PurchaseMethod+convenience.swift in Sources */,
+				B64EDEA9225EA7C100DC2098 /* Purchase+CoreDataClass.swift in Sources */,
 				B6BF9FF7222F3FDA00DFCE8C /* PurchaseController.swift in Sources */,
 				B6DE00B12230345600C76A40 /* CloudKitController.swift in Sources */,
 				B6A7E2242255136C0078174E /* Ledger+convenience.swift in Sources */,

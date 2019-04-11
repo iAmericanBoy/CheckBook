@@ -62,7 +62,7 @@ class CategoryController {
         oldCategory.removeFromPurchases(purchase)
         purchase.category = newCategory
         newCategory.addToPurchases(purchase)
-        purchase.lastModified = Date()
+        purchase.lastModified = Date() as NSDate
         newCategory.lastModified = Date()
         oldCategory.lastModified = Date()
         

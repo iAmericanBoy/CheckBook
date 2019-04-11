@@ -60,7 +60,7 @@ class PurchaseMethodController {
         oldPurchaseMethod.removeFromPurchases(purchase)
         purchase.purchaseMethod = newPurchaseMethod
         newPurchaseMethod.addToPurchases(purchase)
-        purchase.lastModified = Date()
+        purchase.lastModified = Date() as NSDate
         newPurchaseMethod.lastModified = Date()
         oldPurchaseMethod.lastModified = Date()
 

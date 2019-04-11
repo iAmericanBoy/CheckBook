@@ -21,7 +21,7 @@ class CoreDataController {
         let fetchRequest: NSFetchRequest<Purchase> = Purchase.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
-        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: "date", cacheName: nil)
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: "day", cacheName: nil)
     }()
     
     ///FetchController to fetch all the PurchaseMethods.

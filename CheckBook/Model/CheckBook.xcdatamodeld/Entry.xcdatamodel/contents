@@ -18,7 +18,7 @@
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="purchases" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Purchase" inverseName="ledger" inverseEntity="Purchase" syncable="YES"/>
     </entity>
-    <entity name="Purchase" representedClassName="Purchase" syncable="YES" codeGenerationType="class">
+    <entity name="Purchase" representedClassName="Purchase" syncable="YES">
         <attribute name="amount" attributeType="Decimal" defaultValueString="0" syncable="YES"/>
         <attribute name="appleUserRecordName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="categoryUUID" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>

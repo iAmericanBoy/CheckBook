@@ -84,10 +84,10 @@ class SyncController {
                                 
                                 if let purchaseFromCD = purchaseFromCD {
                                     //update
-                                    if Calendar.current.compare(lastModified, to: purchaseFromCD.lastModified!, toGranularity: Calendar.Component.second).rawValue > 0 {
+                                    if Calendar.current.compare(lastModified, to: purchaseFromCD.lastModified! as Date, toGranularity: Calendar.Component.second).rawValue > 0 {
                                         
                                         purchaseFromCD.amount = NSDecimalNumber(value: amount)
-                                        purchaseFromCD.date = date
+                                        purchaseFromCD.date = date as NSDate
                                         purchaseFromCD.item = item
                                         purchaseFromCD.storeName = storeName
                                         purchaseFromCD.uuid = uuid
@@ -99,7 +99,7 @@ class SyncController {
                                         purchaseFromCD.category = category
                                         purchaseFromCD.categoryUUID = category.uuid
                                         purchaseFromCD.appleUserRecordName = recordFromCK.creatorUserRecordID?.recordName
-                                        purchaseFromCD.lastModified = lastModified
+                                        purchaseFromCD.lastModified = lastModified as NSDate
                                     }
                                 } else {
                                     //create new Purchase in ChildContext
