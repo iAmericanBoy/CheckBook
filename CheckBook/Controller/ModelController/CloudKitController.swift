@@ -20,7 +20,11 @@ class CloudKitController {
     fileprivate let privateDB = CKContainer.default().privateCloudDatabase
     let publicDB = CKContainer.default().publicCloudDatabase
 
-    var appleUserID: CKRecord.ID?
+    var appleUserID: CKRecord.ID? {
+        didSet {
+            NotificationCenter.default.post(Notification.appleIdFound)
+        }
+    }
     
     //MARK: - INIT
     init() {

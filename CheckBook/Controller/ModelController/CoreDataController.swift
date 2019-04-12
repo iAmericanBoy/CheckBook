@@ -49,13 +49,14 @@ class CoreDataController {
     }()
     
     ///FetchController to fetch all the Ledgers.
-    let ledgerFetchResultsController: NSFetchedResultsController<Ledger> = {
+    let ledgersFetchResultsController: NSFetchedResultsController<Ledger> = {
         let fetchRequest: NSFetchRequest<Ledger> = Ledger.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
     }()
     
+    var personalLedger: Ledger?
     
     //MARK: - init
     ///Simple initializer to set up the fetchResultsController.
@@ -63,7 +64,7 @@ class CoreDataController {
         do{
             try purchaseFetchResultsController.performFetch()
             try purchaseMethodFetchResultsController.performFetch()
-            try ledgerFetchResultsController.performFetch()
+            try ledgersFetchResultsController.performFetch()
             try categoryFetchResultsController.performFetch()
 
         } catch {
@@ -135,6 +136,19 @@ class CoreDataController {
         } catch {
             print("No Ledger with UUID found: \(error), \(error.localizedDescription)")
             completion(nil)
+        }
+    }
+    func findPersonalLedger(){
+        guard let recordName = CloudKitController.shared.appleUserID else {return }
+        let request: NSFetchRequest<Ledger> = Ledger.fetchRequest()
+        request.fetchLimit = 1
+        request.predicate = NSPredicate(format: "%K == %@", argumentArray: [#keyPath(Ledger.appleUserRecordName), recordName])
+        
+        do {
+            let ledger = try CoreDataStack.context.fetch(request)
+            personalLedger = ledger.first
+        } catch {
+            print("Error fetching personal Ledger has occured: \(error.localizedDescription)")
         }
     }
     

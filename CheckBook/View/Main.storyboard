@@ -240,7 +240,7 @@
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="bcZ-Wj-o5e">
-                                <rect key="frame" x="12" y="202.33333333333334" width="351" height="378.66666666666663"/>
+                                <rect key="frame" x="12" y="196.33333333333334" width="351" height="378.66666666666663"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" horizontalHuggingPriority="249" verticalHuggingPriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="XSR-dV-iaU">
                                         <rect key="frame" x="0.0" y="0.0" width="351" height="186.66666666666666"/>
@@ -353,7 +353,7 @@
                             <constraint firstItem="4F5-bc-uGJ" firstAttribute="leading" secondItem="hgU-b3-rG5" secondAttribute="leading" constant="16" id="IYW-mL-lu6"/>
                             <constraint firstItem="bcZ-Wj-o5e" firstAttribute="leading" secondItem="hgU-b3-rG5" secondAttribute="leading" constant="12" id="RRK-mL-gGr"/>
                             <constraint firstItem="hgU-b3-rG5" firstAttribute="trailing" secondItem="4F5-bc-uGJ" secondAttribute="trailing" constant="16" id="U4Q-Rq-BT7"/>
-                            <constraint firstItem="hgU-b3-rG5" firstAttribute="bottom" secondItem="bcZ-Wj-o5e" secondAttribute="bottom" constant="-6" id="gEh-ag-Lno"/>
+                            <constraint firstItem="hgU-b3-rG5" firstAttribute="bottom" secondItem="bcZ-Wj-o5e" secondAttribute="bottom" id="gEh-ag-Lno"/>
                             <constraint firstItem="4F5-bc-uGJ" firstAttribute="top" secondItem="hgU-b3-rG5" secondAttribute="top" id="hje-pE-O24"/>
                             <constraint firstItem="bcZ-Wj-o5e" firstAttribute="height" secondItem="QUX-nd-ifU" secondAttribute="height" multiplier="0.62" constant="1" id="iS4-MR-T2a"/>
                             <constraint firstItem="Tjs-mr-6hM" firstAttribute="top" secondItem="hgU-b3-rG5" secondAttribute="top" constant="8" id="nn5-ZD-UxJ"/>
@@ -367,6 +367,7 @@
                         </connections>
                     </view>
                     <connections>
+                        <outlet property="addLedgerButton" destination="gZo-tY-GBN" id="Zal-As-8AQ"/>
                         <outlet property="addPurchaseButton" destination="4F5-bc-uGJ" id="JrV-w8-u3I"/>
                         <outlet property="amountTextField" destination="EdB-MH-P9Q" id="n77-cr-la4"/>
                         <outlet property="categoryPickerView" destination="a97-Qr-3Z8" id="UkZ-CM-UZN"/>

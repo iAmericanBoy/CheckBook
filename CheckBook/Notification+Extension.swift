@@ -11,4 +11,6 @@ import Foundation
 
 extension Notification {
     static let syncFinished = Notification(name: Notification.Name("syncFinished"))
+    static let appleIdFound = Notification(name: Notification.Name("appleIDFound"))
+
 }
