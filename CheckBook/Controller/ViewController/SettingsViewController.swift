@@ -46,5 +46,60 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
 extension SettingsViewController: SettingsDelegate {
     func shareLedger() {
         
+        
+        if let share = CloudKitController.shared.currentShare {
+            let sharingViewController = UICloudSharingController(share: share, container: CKContainer.default())
+            sharingViewController.delegate = self
+            
+            self.present(sharingViewController, animated: true)
+            
+        } else {
+//            guard let ledger = CoreDataController.shared.personalLedger, let record = CKRecord(ledger: ledger) else {return}
+            
+            guard let ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first, let record = CKRecord(ledger: ledger) else {return}
+            let share = CKShare(rootRecord: record)
+            share.publicPermission = .readWrite
+            
+            let sharingViewController = UICloudSharingController(preparationHandler: {(UICloudSharingController, handler: @escaping (CKShare?, CKContainer?, Error?) -> Void) in
+                let operation = CKModifyRecordsOperation(recordsToSave: [record,share], recordIDsToDelete: nil)
+                operation.savePolicy = .changedKeys
+                
+                operation.modifyRecordsCompletionBlock = { (savedRecord, _,error) in
+                    handler(share, CKContainer.default(), error)
+                }
+                
+                operation.perRecordCompletionBlock = { (savedRecord,error) in
+                    if let error = error {
+                        print(error)
+                    }
+                }
+                CloudKitController.shared.privateDB.add(operation)
+            })
+            
+            sharingViewController.delegate = self
+            
+            self.present(sharingViewController, animated: true)
+        }
     }
 }
+
+//MARK: - UICloudSharingControllerDelegate
+extension SettingsViewController: UICloudSharingControllerDelegate {
+    func cloudSharingControllerDidSaveShare(_ csc: UICloudSharingController) {
+        print("Succesfully added Url to Challenge")
+        print(csc.share?.url)
+    }
+    
+    func cloudSharingController(_ csc: UICloudSharingController, failedToSaveShareWithError error: Error) {
+        print("failed to save ckshare: \(error),\(error.localizedDescription)")
+    }
+    
+    func itemThumbnailData(for csc: UICloudSharingController) -> Data? {
+        return nil //You can set a hero image in your share sheet. Nil uses the default.
+    }
+    
+    func itemTitle(for csc: UICloudSharingController) -> String? {
+        return CoreDataController.shared.personalLedger?.name
+    }
+}
+

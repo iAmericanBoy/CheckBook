@@ -17,8 +17,10 @@ class CloudKitController {
     
     //MARK: - Properties
     /// The private Database of the User.
-    fileprivate let privateDB = CKContainer.default().privateCloudDatabase
+    let privateDB = CKContainer.default().privateCloudDatabase
     let publicDB = CKContainer.default().publicCloudDatabase
+    
+    var currentShare: CKShare?
 
     var appleUserID: CKRecord.ID? {
         didSet {
