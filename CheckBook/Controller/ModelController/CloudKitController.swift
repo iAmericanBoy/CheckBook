@@ -171,7 +171,7 @@ class CloudKitController {
         
         let key = database == privateDB ? CloudKitController.updatesInPrivateZoneServerToken : CloudKitController.updatesInSharedZoneServerToken
         
-        fetchUpdatedZone { (isSuccess, updatedZoneID) in
+        fetchUpdatedZone(inDataBase: database) { (isSuccess, updatedZoneID) in
             if isSuccess {
                 guard let updatedZoneID = updatedZoneID else {return}
                 

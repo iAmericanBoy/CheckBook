@@ -13,10 +13,10 @@ import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
-
+    
     var window: UIWindow?
-
-
+    
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         registerForPushNotifications()
@@ -34,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             if isSuccess {
                 SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
                 completionHandler(.newData)
-
+                
             } else {
                 completionHandler(.failed)
             }
@@ -53,8 +53,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func registerForPushNotifications() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert]) {
-                granted, error in
-                print("Permission granted: \(granted)")
+            granted, error in
+            print("Permission granted: \(granted)")
             if granted {
                 DispatchQueue.main.async {
                     UIApplication.shared.registerForRemoteNotifications()
@@ -71,12 +71,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func application(_ application: UIApplication, userDidAcceptCloudKitShareWith cloudKitShareMetadata: CKShare.Metadata) {
-        //download everything
+        let acceptSharing: CKAcceptSharesOperation = CKAcceptSharesOperation(shareMetadatas: [cloudKitShareMetadata])
         
+        acceptSharing.qualityOfService = .userInteractive
+        acceptSharing.perShareCompletionBlock = { meta, share, error in
+            if let error = error {
+                print("An error accepting a CKShare has occured: \(error), \(error.localizedDescription)")
+            }
+            
+            //download everything
+            CloudKitController.shared.fetchUpdatedRecordsFromCK(inDatatBase: CloudKitController.shared.shareDB) { (isSuccess, recordsToUpdate, recordIDsToDelete) in
+                if isSuccess {
+                    SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
+                }
+            }
+            CloudKitController.shared.fetchUpdatedRecordsFromCK { (isSuccess, recordsToUpdate, recordIDsToDelete) in
+                if isSuccess {
+                    SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
+                    
+                }
+            }
+            
+            //subscribe to changes
+            CloudKitController.shared.subscribeToNewChanges(forRecodZone: cloudKitShareMetadata.rootRecordID.zoneID, inDataBase: CloudKitController.shared.shareDB)
+            
+        }
         
-        //subscribe to changes
-        CloudKitController.shared.subscribeToNewChanges(forRecodZone: cloudKitShareMetadata.rootRecordID.zoneID, inDataBase: CloudKitController.shared.shareDB)
-        
-        //update the check for updates function
+        acceptSharing.acceptSharesCompletionBlock = { error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+        CKContainer(identifier: cloudKitShareMetadata.containerIdentifier).add(acceptSharing)
     }
 }
