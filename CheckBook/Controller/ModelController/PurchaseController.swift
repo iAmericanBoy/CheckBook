@@ -57,7 +57,7 @@ class PurchaseController {
         purchase.lastModified = Date() as NSDate
         CoreDataController.shared.saveToPersistentStore()
         guard let recordToUpdate = CKRecord(purchase: purchase) else {return}
-        CloudKitController.shared.update(record: recordToUpdate) { (isSuccess, updatedPurchase) in
+        CloudKitController.shared.update(record: recordToUpdate, inDataBase: <#CKDatabase#>) { (isSuccess, updatedPurchase) in
             if !isSuccess {
                 guard let uuid = purchase.uuid else {return}
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
