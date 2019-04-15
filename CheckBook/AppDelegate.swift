@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         print("yay")
-        CloudKitController.shared.subscribeToNewChanges(forRecodZone: CKRecordZone(zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)))
+        CloudKitController.shared.subscribeToNewChanges(forRecodZone: nil)
     }
     
     
@@ -60,7 +60,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     UIApplication.shared.registerForRemoteNotifications()
                 }
             }
-
         }
     }
     
@@ -69,5 +68,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         //show alert to the user
         completionHandler([.alert])
+    }
+    
+    func application(_ application: UIApplication, userDidAcceptCloudKitShareWith cloudKitShareMetadata: CKShare.Metadata) {
+        //download everything
+        
+        
+        //subscribe to changes
+        CloudKitController.shared.subscribeToNewChanges(forRecodZone: cloudKitShareMetadata.rootRecordID.zoneID, inDataBase: CloudKitController.shared.shareDB)
     }
 }

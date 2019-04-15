@@ -308,12 +308,16 @@ class CloudKitController {
     
     //MARK: - Subscribtion
     ///Subscribes to all new changes in the given CKRecordZone.
-    /// - parameter zone: The zone to subrscribe to changes to.
-    func subscribeToNewChanges(forRecodZone zone: CKRecordZone) {
-        let privateZoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
+    /// - parameter zone: The zone to subscribe to changes to.
+    func subscribeToNewChanges(forRecodZone zone: CKRecordZone.ID? , inDataBase dataBase: CKDatabase = CloudKitController.shared.privateDB) {
+        var subscription: CKRecordZoneSubscription
         
-        let subscription = CKRecordZoneSubscription(zoneID: zone.zoneID, subscriptionID: CloudKitController.privateSubID)
-        
+        if let zone = zone {
+            subscription = CKRecordZoneSubscription(zoneID: zone, subscriptionID: CloudKitController.shareSubscribtionID)
+        } else {
+            let privateZoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
+            subscription = CKRecordZoneSubscription(zoneID: privateZoneID, subscriptionID: CloudKitController.privateSubID)
+        }
         
         let notificationInfo = CKSubscription.NotificationInfo()
         notificationInfo.title = "New Record"
@@ -323,26 +327,12 @@ class CloudKitController {
         
         subscription.notificationInfo = notificationInfo
         
-        privateDB.save(subscription) { (_, error) in
+        dataBase.save(subscription) { (_, error) in
             if let error = error {
                 print("An Error signing up for a subscribtion has occured: \(error), \(error.localizedDescription)")
                 return
             }
         }
-    }
-    
-    ///Removes Subscribtion with given ID.
-    /// - parameter subscribtionID: The zone to subrscribe to changes to.
-    func removeSubscribtion(withSubscribtionID subscribtionID: String) {
-        
-        let modifyOperation = CKModifySubscriptionsOperation(subscriptionsToSave: [], subscriptionIDsToDelete: [subscribtionID])
-
-        modifyOperation.modifySubscriptionsCompletionBlock = { (_,_,_) in
-
-        }
-
-        privateDB.add(modifyOperation)
-        
     }
     
     //MARK: - Save
