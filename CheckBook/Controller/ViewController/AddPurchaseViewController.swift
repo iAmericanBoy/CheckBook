@@ -39,11 +39,10 @@ class AddPurchaseViewController: UIViewController {
     //MARK: - Properties
     var delegate: AddPurchaseCardDelegate?
     /// The current state of the card.
-    var currentState: State = .open
+    var currentState = State.open
     let numberFormatter = NumberFormatter()
     var purchase: Purchase? {
         didSet {
-            currentState = .open
             updateViews()
         }
     }
