@@ -165,7 +165,7 @@ class CloudKitController {
     /// - parameter isSuccess: Confirms that records where able to be fetched.
     /// - parameter updatedPurchases: The updated records (can be empty).
     /// - parameter updatedPurchases: The deleted recordIDS (can be empty).
-    func fetchUpdatedRecordsFromCK(inDatatBase database: CKDatabase = shared.privateDB ,completion: @escaping(_ isSuccess: Bool,_ updatedPurchases:[CKRecord], _ deletedPurchases: [CKRecord.ID])-> Void ) {
+    func fetchUpdatedRecordsFromCK(inDataBase database: CKDatabase = shared.privateDB ,completion: @escaping(_ isSuccess: Bool,_ updatedPurchases:[CKRecord], _ deletedPurchases: [CKRecord.ID])-> Void ) {
         var deletedRecordIDs: [CKRecord.ID] = []
         var updatedRecords: [CKRecord] = []
         
@@ -231,7 +231,7 @@ class CloudKitController {
     /// - parameter completion: Handler for when the record has been updated.
     /// - parameter isSuccess: Confirms the new record was updated.
     /// - parameter updatedRecord: The updated record or nil if the record could not be updated in CloudKit.
-    func update(record: CKRecord, inDataBase dataBase: CKDatabase, completion: @escaping (_ isSuccess: Bool, _ updatedRecord: CKRecord?) -> Void) {
+    func update(record: CKRecord, inDataBase dataBase: CKDatabase = shared.privateDB, completion: @escaping (_ isSuccess: Bool, _ updatedRecord: CKRecord?) -> Void) {
 
         saveChangestoCK(recordsToUpdate: [record], purchasesToDelete: [], toDataBase: dataBase) { (isSuccess, savedRecords, _) in
             if isSuccess {
@@ -269,10 +269,10 @@ class CloudKitController {
     ///Subscribes to all new changes in the given CKRecordZone.
     /// - parameter zone: The zone to subscribe to changes to.
     func subscribeToNewChanges(forRecodZone zone: CKRecordZone.ID? , inDataBase dataBase: CKDatabase = CloudKitController.shared.privateDB) {
-        var subscription: CKRecordZoneSubscription
+        var subscription: CKSubscription
         
-        if let zone = zone {
-            subscription = CKRecordZoneSubscription(zoneID: zone, subscriptionID: CloudKitController.shareSubscribtionID)
+        if zone != nil {
+            subscription = CKDatabaseSubscription(subscriptionID: CloudKitController.shareSubscribtionID)
         } else {
             let privateZoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
             subscription = CKRecordZoneSubscription(zoneID: privateZoneID, subscriptionID: CloudKitController.privateSubID)

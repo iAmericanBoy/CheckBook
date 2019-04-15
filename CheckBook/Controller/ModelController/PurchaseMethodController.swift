@@ -43,7 +43,7 @@ class PurchaseMethodController {
         
         guard let recordToUpdate = CKRecord(purchaseMethod: purchaseMethod) else {return}
 
-        CloudKitController.shared.update(record: recordToUpdate, inDataBase: <#CKDatabase#>) { (isSuccess, updatedPurchase) in
+        CloudKitController.shared.update(record: recordToUpdate) { (isSuccess, updatedPurchase) in
             if !isSuccess {
                 guard let uuid = purchaseMethod.uuid else {return}
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)

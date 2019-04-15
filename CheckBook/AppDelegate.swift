@@ -80,17 +80,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             }
             
             //download everything
-            CloudKitController.shared.fetchUpdatedRecordsFromCK(inDatatBase: CloudKitController.shared.shareDB) { (isSuccess, recordsToUpdate, recordIDsToDelete) in
+            CloudKitController.shared.fetchUpdatedRecordsFromCK(inDataBase: CloudKitController.shared.shareDB) { (isSuccess, recordsToUpdate, recordIDsToDelete) in
                 if isSuccess {
                     SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
                 }
             }
-            CloudKitController.shared.fetchUpdatedRecordsFromCK { (isSuccess, recordsToUpdate, recordIDsToDelete) in
-                if isSuccess {
-                    SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
-                    
-                }
-            }
+
             
             //subscribe to changes
             CloudKitController.shared.subscribeToNewChanges(forRecodZone: cloudKitShareMetadata.rootRecordID.zoneID, inDataBase: CloudKitController.shared.shareDB)
