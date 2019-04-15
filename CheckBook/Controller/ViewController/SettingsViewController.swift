@@ -54,9 +54,8 @@ extension SettingsViewController: SettingsDelegate {
             self.present(sharingViewController, animated: true)
             
         } else {
-//            guard let ledger = CoreDataController.shared.personalLedger, let record = CKRecord(ledger: ledger) else {return}
+            guard let ledger = CoreDataController.shared.personalLedger, let record = CKRecord(ledger: ledger) else {return}
             
-            guard let ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first, let record = CKRecord(ledger: ledger) else {return}
             let share = CKShare(rootRecord: record)
             share.publicPermission = .readWrite
             

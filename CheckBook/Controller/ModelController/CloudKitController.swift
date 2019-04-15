@@ -18,13 +18,17 @@ class CloudKitController {
     //MARK: - Properties
     /// The private Database of the User.
     let privateDB = CKContainer.default().privateCloudDatabase
+    /// The public Database of the User.
     let publicDB = CKContainer.default().publicCloudDatabase
+    /// The shared Database of the User.
+    let shareDB = CKContainer.default().sharedCloudDatabase
     
     var currentShare: CKShare?
 
     var appleUserID: CKRecord.ID? {
         didSet {
             NotificationCenter.default.post(Notification.appleIdFound)
+            CoreDataController.shared.findPersonalLedger()
         }
     }
     
@@ -215,6 +219,52 @@ class CloudKitController {
                 completion(false,updatedRecords,deletedRecordIDs)
             }
         }
+    }
+    
+
+    
+    ///Fetches all RecordZones in the sharedDatabase.
+    /// - parameter completion: Handler for when the zones where found
+    /// - parameter isSuccess: Confirms the zones where found
+    /// - parameter foundRecordZones: The found RecordZones
+    func fetchRecordZonesInTheSharedDataBase(completion: @escaping (_ isSuccess: Bool, _ foundRecordZones: [CKRecordZone]?) -> Void) {
+        shareDB.fetchAllRecordZones { (allRecordZones, error) in
+            if let error = error {
+                print("There was an error fetching all recordZones: \(error)")
+                completion(false,nil)
+                return
+            }
+            completion(true, allRecordZones)
+        }
+    }
+    
+    ///Fetches the Metadata of a share for a given URL
+    /// - parameter daturlaBase: The URL for the CKShare.
+    /// - parameter completion: Handler for when the Share.Meta was found.
+    /// - parameter isSuccess: Confirms the Share.Meta was found.
+    /// - parameter share: The CkShare associate with the Share.Meta that was found
+    func fetchShareMetadata(forURL url: URL, _ completion: @escaping (_ isSuccess:Bool, _ share: CKShare?) -> Void) {
+        
+        let operation = CKFetchShareMetadataOperation(shareURLs: [url])
+        operation.perShareMetadataBlock = { (shareUrl,fetchedMeta,error) in
+            if let error = error {
+                print("There was an error fetching the ShareMetaData for the URL: \(error)")
+                completion(false, nil)
+                return
+            }
+            
+            guard let meta = fetchedMeta, url == shareUrl else {completion(false,nil); return}
+            completion(true, meta.share)
+        }
+        
+        operation.fetchShareMetadataCompletionBlock = { error in
+            if let error = error {
+                print("There was an error fetching the ShareMetaData for the URL: \(error)")
+                completion(false, nil)
+                return
+            }
+        }
+        CKContainer.default().add(operation)
     }
     
     /// Updates the record if the record exists in the source of truth.
