@@ -70,12 +70,12 @@
                   moduleName = "CheckBook"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/dominic/Dropbox/Dokumente/Development/CheckBook/CheckBook/AppDelegate.swift"
-                  timestampString = "577057770.450515"
+                  timestampString = "577058076.311819"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "33"
                   endingLineNumber = "33"
-                  offsetFromSymbolStart = "188">
+                  offsetFromSymbolStart = "68">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -85,12 +85,12 @@
                   moduleName = "CheckBook"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/dominic/Dropbox/Dokumente/Development/CheckBook/CheckBook/AppDelegate.swift"
-                  timestampString = "577057770.453784"
+                  timestampString = "577058076.316908"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "34"
                   endingLineNumber = "34"
-                  offsetFromSymbolStart = "196">
+                  offsetFromSymbolStart = "197">
                </Location>
             </Locations>
          </BreakpointContent>

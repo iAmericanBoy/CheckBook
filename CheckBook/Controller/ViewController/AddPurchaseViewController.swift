@@ -410,7 +410,7 @@ extension AddPurchaseViewController: UIPickerViewDelegate, UIPickerViewDataSourc
         } else if pickerView.tag == 2222 {
             categoryTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: row, section: component)).name
         } else if pickerView.tag == 3333 {
-            categoryTextField.text = CoreDataController.shared.ledgersFetchResultsController.object(at: IndexPath(item: row, section: component)).name
+            ledgerTextField.text = CoreDataController.shared.ledgersFetchResultsController.object(at: IndexPath(item: row, section: component)).name
         } else {
             
         }
