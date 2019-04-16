@@ -121,6 +121,12 @@ class AddPurchaseViewController: UIViewController {
         let method = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(row: methodRow, section: 0))
         let category = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(row: categoryRow, section: 0))
         
+        let ledger: Ledger
+        if let personalLedger = CoreDataController.shared.personalLedger {
+            ledger = personalLedger
+        } else {
+            ledger = LedgerController.shared.createNewLedgerWith(name: "")
+        }
         
         if let purchase = purchase {
             PurchaseController.shared.update(purchase: purchase, amount: NSDecimalNumber(decimal: amountNumber.decimalValue) as Decimal, date: date, item: "", storeName: storeName, purchaseMethod: method, category: category)
@@ -210,7 +216,6 @@ class AddPurchaseViewController: UIViewController {
     fileprivate func setupViews() {
         methodPickerView.delegate = self
         methodPickerView.dataSource = self
-        ledgerPickerView.dataSource = self
         categoryPickerView.dataSource = self
         categoryPickerView.delegate = self
         
