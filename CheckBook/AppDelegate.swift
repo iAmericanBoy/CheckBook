@@ -71,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func application(_ application: UIApplication, userDidAcceptCloudKitShareWith cloudKitShareMetadata: CKShare.Metadata) {
-        if CoreDataStack.context.registeredObjects.count == 0 {
+        if CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.count == 0 {
             
             let acceptSharing: CKAcceptSharesOperation = CKAcceptSharesOperation(shareMetadatas: [cloudKitShareMetadata])
             
@@ -81,6 +81,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     print("An error accepting a CKShare has occured: \(error), \(error.localizedDescription)")
                 }
                 
+                CloudKitController.shared.currentShare = share
                 
                 //download everything
                 CloudKitController.shared.fetchUpdatedRecordsFromCK(inDataBase: CloudKitController.shared.shareDB) { (isSuccess, recordsToUpdate, recordIDsToDelete) in

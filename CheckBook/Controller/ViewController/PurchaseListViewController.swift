@@ -152,9 +152,17 @@ class PurchaseListViewController: UIViewController {
             if isSuccess {
                 SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
             }
+            SyncController.shared.saveCachedPurchasesToCK()
+
+            //Fetch Share
+            if let stringURL = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.url, let url = URL(string: stringURL) {
+                CloudKitController.shared.fetchShareMetadata(forURL: url) { (isSuccess, share) in
+                    if isSuccess {
+                        CloudKitController.shared.currentShare = share
+                    }
+                }
+            }
         }
-        SyncController.shared.saveCachedPurchasesToCK()
-        
     }
 }
 

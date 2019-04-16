@@ -15,6 +15,7 @@ extension Ledger {
     convenience init(name: String,
                      uuid: UUID = UUID(),
                      appleUserRecordName: String?,
+                     url: String? = nil,
                      purchases: NSOrderedSet = NSOrderedSet(),
                      lastModified: Date = Date(),
                      context: NSManagedObjectContext = CoreDataStack.context) {
@@ -25,6 +26,7 @@ extension Ledger {
         self.uuid = uuid
         self.purchases = purchases
         self.appleUserRecordName = appleUserRecordName
+        self.url = url
         
         self.lastModified = lastModified
     }
@@ -34,7 +36,7 @@ extension Ledger {
         guard let name = record[Ledger.nameKey] as? String,
             let lastModified = record[Ledger.lastModifiedKey] as? Date else {return nil}
         
-        self.init(name: name, uuid: UUID(uuidString: record.recordID.recordName)!, appleUserRecordName: record.creatorUserRecordID?.recordName, lastModified: lastModified, context: context)
+        self.init(name: name, uuid: UUID(uuidString: record.recordID.recordName)!, appleUserRecordName: record.creatorUserRecordID?.recordName, url: record[Ledger.shareURLKey] as? String , lastModified: lastModified, context: context)
     }
 }
 
@@ -42,6 +44,7 @@ extension CKRecord {
     convenience init?(ledger: Ledger) {
         self.init(recordType: Ledger.typeKey, recordID: CKRecord.ID(recordName: ledger.uuid!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)))
         
+        setValue(ledger.url, forKey: Ledger.shareURLKey)
         setValue(ledger.name, forKey: Ledger.nameKey)
         setValue(ledger.lastModified, forKey: Ledger.lastModifiedKey)
     }
