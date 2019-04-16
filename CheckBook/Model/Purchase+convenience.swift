@@ -57,6 +57,8 @@ extension CKRecord {
 
         guard let methodUUID = purchase.purchaseMethod?.uuid, let methodName = purchase.purchaseMethod?.name, let ledgerUUID = purchase.ledger?.uuid, let categoryUUID = purchase.category?.uuid else {return nil}
         
+        setParent(CKRecord.ID(recordName: purchase.ledgerUUID!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)))
+        
         setValue(purchase.amount, forKey: Purchase.amountKey)
         setValue(purchaseMethodReference, forKey: Purchase.methodReferenceKey)
         setValue(ledgerReference, forKey: Purchase.ledgerReferenceKey)

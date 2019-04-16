@@ -45,7 +45,7 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
 //MARK: - SettingsDelegate
 extension SettingsViewController: SettingsDelegate {
     func shareLedger() {
-        
+        CoreDataController.shared.findPersonalLedger()
         
         if let share = CloudKitController.shared.currentShare {
             let sharingViewController = UICloudSharingController(share: share, container: CKContainer.default())

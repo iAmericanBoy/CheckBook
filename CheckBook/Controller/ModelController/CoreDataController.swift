@@ -142,7 +142,7 @@ class CoreDataController {
         guard let recordName = CloudKitController.shared.appleUserID?.recordName else {return }
         let request: NSFetchRequest<Ledger> = Ledger.fetchRequest()
         request.fetchLimit = 1
-        request.predicate = NSPredicate(format: "%K == %@", #keyPath(Ledger.appleUserRecordName), "__defaultOwner__")
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(Ledger.appleUserRecordName), recordName)
         
         do {
             let ledger = try CoreDataStack.context.fetch(request)
