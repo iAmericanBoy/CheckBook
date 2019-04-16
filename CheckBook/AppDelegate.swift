@@ -71,32 +71,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func application(_ application: UIApplication, userDidAcceptCloudKitShareWith cloudKitShareMetadata: CKShare.Metadata) {
-        let acceptSharing: CKAcceptSharesOperation = CKAcceptSharesOperation(shareMetadatas: [cloudKitShareMetadata])
-        
-        acceptSharing.qualityOfService = .userInteractive
-        acceptSharing.perShareCompletionBlock = { meta, share, error in
-            if let error = error {
-                print("An error accepting a CKShare has occured: \(error), \(error.localizedDescription)")
+        if CoreDataStack.context.registeredObjects.count == 0 {
+            
+            let acceptSharing: CKAcceptSharesOperation = CKAcceptSharesOperation(shareMetadatas: [cloudKitShareMetadata])
+            
+            acceptSharing.qualityOfService = .userInteractive
+            acceptSharing.perShareCompletionBlock = { meta, share, error in
+                if let error = error {
+                    print("An error accepting a CKShare has occured: \(error), \(error.localizedDescription)")
+                }
+                
+                
+                //download everything
+                CloudKitController.shared.fetchUpdatedRecordsFromCK(inDataBase: CloudKitController.shared.shareDB) { (isSuccess, recordsToUpdate, recordIDsToDelete) in
+                    if isSuccess {
+                        SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
+                    }
+                }
+                
+                
+                //subscribe to changes
+                CloudKitController.shared.subscribeToNewChanges(forRecodZone: cloudKitShareMetadata.rootRecordID.zoneID, inDataBase: CloudKitController.shared.shareDB)
+                
             }
             
-            //download everything
-            CloudKitController.shared.fetchUpdatedRecordsFromCK(inDataBase: CloudKitController.shared.shareDB) { (isSuccess, recordsToUpdate, recordIDsToDelete) in
-                if isSuccess {
-                    SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
+            acceptSharing.acceptSharesCompletionBlock = { error in
+                if let error = error {
+                    print("Error: \(error.localizedDescription)")
                 }
             }
-
-            
-            //subscribe to changes
-            CloudKitController.shared.subscribeToNewChanges(forRecodZone: cloudKitShareMetadata.rootRecordID.zoneID, inDataBase: CloudKitController.shared.shareDB)
-            
+            CKContainer(identifier: cloudKitShareMetadata.containerIdentifier).add(acceptSharing)
+        } else {
+            NotificationCenter.default.post(Notification.ledgerAlreadyExists)
         }
-        
-        acceptSharing.acceptSharesCompletionBlock = { error in
-            if let error = error {
-                print("Error: \(error.localizedDescription)")
-            }
-        }
-        CKContainer(identifier: cloudKitShareMetadata.containerIdentifier).add(acceptSharing)
     }
 }

@@ -264,6 +264,26 @@ class CloudKitController {
         }
     }
     
+    /// Deletes all the recordZones and all of its contents in the private DataBase
+    func deleteRecordZones() {
+        privateDB.fetchAllRecordZones { (allZones, error) in
+            if let error = error {
+                print("An Error fetching all recordZones from CK has occured. \(error), \(error.localizedDescription)")
+                return
+            }
+            let allZoneIDs = allZones?.compactMap({ $0.zoneID })
+            let operation = CKModifyRecordZonesOperation(recordZonesToSave: [], recordZoneIDsToDelete: allZoneIDs)
+            operation.modifyRecordZonesCompletionBlock = { (_,_,error) in
+                if let error = error {
+                    print("An Error deleteing all recordZones from CK has occured. \(error), \(error.localizedDescription)")
+                    return
+                }
+            }
+            
+            self.privateDB.add(operation)
+        }
+    }
+    
     //MARK: - Subscribtion
     ///Subscribes to all new changes in the given CKRecordZone.
     /// - parameter zone: The zone to subscribe to changes to.

@@ -44,6 +44,15 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
 
 //MARK: - SettingsDelegate
 extension SettingsViewController: SettingsDelegate {
+    func deleteUserData() {
+        self.deleteUserData {
+            CoreDataController.shared.clearCoreDataStore()
+            CoreDataController.shared.clearCoreDataStore()
+            UserDefaults.standard.removePersistentDomain(forName: "group.com.oskman.DaysInARowGroup")
+            CloudKitController.shared.deleteRecordZones()
+        }
+    }
+    
     func shareLedger() {
         
         if let share = CloudKitController.shared.currentShare {

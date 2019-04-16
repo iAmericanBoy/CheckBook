@@ -75,6 +75,8 @@ class AddPurchaseViewController: UIViewController {
                 
             } else {
                 _ = LedgerController.shared.createNewLedgerWith(name: "New Ledger")
+                try! CoreDataController.shared.ledgersFetchResultsController.performFetch()
+                print("Ledger Created")
             }
         }
     }

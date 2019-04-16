@@ -191,6 +191,25 @@ class CoreDataController {
         }
     }
     
+    /// Removes all the objects in CoreDataStore
+    func clearCoreDataStore() {
+        let entities = CoreDataStack.container.managedObjectModel.entities
+        for entity in entities {
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity.name!)
+            let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+            deleteRequest.resultType = NSBatchDeleteRequestResultType.resultTypeObjectIDs
+            do {
+                let result = try CoreDataStack.context.execute(deleteRequest) as? NSBatchDeleteResult
+                
+                let objectIDArray = result?.result as? [NSManagedObjectID]
+                let changes = [NSDeletedObjectsKey : objectIDArray]
+                NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes as [AnyHashable : Any], into: [CoreDataStack.context])
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
     //MARK: - Save
     func saveToPersistentStore() {
         do {

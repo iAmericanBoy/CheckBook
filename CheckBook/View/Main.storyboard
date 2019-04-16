@@ -29,7 +29,7 @@
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" title="Settings"/>
                                                 <connections>
-                                                    <segue destination="wSr-fG-rlM" kind="show" id="eiz-ai-zUQ"/>
+                                                    <segue destination="wSr-fG-rlM" kind="show" identifier="toSettingsVC" id="eiz-ai-zUQ"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZFV-Xa-Pdr">
@@ -171,15 +171,22 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="155.66666666666666"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="AGu-eV-kXj">
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="AGu-eV-kXj">
                                                     <rect key="frame" x="15" y="11" width="345" height="134"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dNM-v6-23o">
-                                                            <rect key="frame" x="0.0" y="57.000000000000007" width="296" height="20.333333333333336"/>
+                                                            <rect key="frame" x="0.0" y="57.000000000000007" width="41.666666666666664" height="20.333333333333336"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ixC-1x-0Uw" userLabel="Cell Button">
+                                                            <rect key="frame" x="146" y="52" width="46" height="30"/>
+                                                            <state key="normal" title="Button"/>
+                                                            <connections>
+                                                                <action selector="cellButtonTapped:" destination="Vqh-Ri-MTc" eventType="touchUpInside" id="nBj-fo-LDh"/>
+                                                            </connections>
+                                                        </button>
                                                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B0Z-UP-vF9">
                                                             <rect key="frame" x="296" y="51.666666666666657" width="51" height="31"/>
                                                             <connections>
@@ -197,7 +204,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="nameLabel" destination="dNM-v6-23o" id="7DY-RR-cY3"/>
+                                            <outlet property="cellButton" destination="ixC-1x-0Uw" id="x3e-9M-ahU"/>
+                                            <outlet property="cellLabel" destination="dNM-v6-23o" id="7DY-RR-cY3"/>
+                                            <outlet property="cellSwitch" destination="B0Z-UP-vF9" id="C1i-vy-Dyl"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

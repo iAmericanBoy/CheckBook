@@ -51,6 +51,11 @@ class PurchaseListViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: Notification.syncFinished.name, object: nil, queue: .main) { (_) in
             self.purchaseList.reloadData()
         }
+        NotificationCenter.default.addObserver(forName: Notification.ledgerAlreadyExists.name, object: nil, queue: .main) { (_) in
+            self.tooManyLedgers {
+                self.performSegue(withIdentifier: "toSettingsVC", sender: nil)
+            }
+        }
     }
     
     func hideCard() {

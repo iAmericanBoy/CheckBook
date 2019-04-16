@@ -112,4 +112,34 @@ extension UIViewController {
             self.present(alertController, animated: true)
         }
     }
+    
+    func tooManyLedgers(_ completion: @escaping () -> Void) {
+        
+        let alertController = UIAlertController(title: "Subscribe to new Ledger", message: "You can only be part of 1 ledger at a time", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) in
+            completion()
+        }
+
+        alertController.addAction(cancelAction)
+        alertController.addAction(settingsAction)
+        self.present(alertController, animated: true)
+    }
+    
+    func deleteUserData(_ completion: @escaping () -> Void) {
+        
+        let alertController = UIAlertController(title: "Warning", message: "Do you really want to delete all of your data? This can't be undone and will also delete the shared Ledger if your are sharing with your Partner", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let settingsAction = UIAlertAction(title: "Confirm Delete", style: .destructive) { (_) in
+            completion()
+        }
+        
+        alertController.addAction(cancelAction)
+        alertController.addAction(settingsAction)
+        self.present(alertController, animated: true)
+    }
+    
+    
 }
