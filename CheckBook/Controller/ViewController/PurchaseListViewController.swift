@@ -241,6 +241,7 @@ extension PurchaseListViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let purchase = CoreDataController.shared.purchaseFetchResultsController.object(at: indexPath)
+        self.addPurchaseViewController?.currentState = .open
         self.addPurchaseViewController?.purchase = purchase
         self.showCard()
     }
