@@ -86,7 +86,7 @@ extension SettingsViewController: SettingsDelegate {
 extension SettingsViewController: UICloudSharingControllerDelegate {
     func cloudSharingControllerDidSaveShare(_ csc: UICloudSharingController) {
         print("Succesfully added Url to Challenge")
-        print(csc.share?.url)
+        print(csc.share?.url!)
     }
     
     func cloudSharingController(_ csc: UICloudSharingController, failedToSaveShareWithError error: Error) {

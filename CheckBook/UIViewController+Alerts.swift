@@ -51,7 +51,7 @@ extension UIViewController {
         
         let addAction = UIAlertAction(title: "Add", style: .default) { (action) in
             if let name = nameTextField?.text {
-                _ = CategoryController.shared.createNewCategoryWith(name: name)
+                _ = CategoryController.shared.createNewCategoryWith(name: name, ledgerUUID: <#UUID#>)
                 completion()
             }
         }

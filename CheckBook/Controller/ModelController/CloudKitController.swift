@@ -118,7 +118,7 @@ class CloudKitController {
     /// - parameter updatedZone: The updated Zone (can be nil).
     private func fetchUpdatedZone(inDataBase dataBase: CKDatabase = shared.privateDB , completion: @escaping (_ isSuccess: Bool, _ updatedZone: CKRecordZone.ID?) -> Void) {
         
-        var key = dataBase == privateDB ? CloudKitController.privateServerChangeToken : CloudKitController.shareSubscribtionID
+        let key = dataBase == privateDB ? CloudKitController.privateServerChangeToken : CloudKitController.shareSubscribtionID
         
         let serverChangeTokenData = UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.data(forKey: key) ?? Data()
         

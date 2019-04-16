@@ -75,7 +75,7 @@ class SyncController {
                                 if let foundCategory = foundCategory {
                                     categoryOfPurchase = foundCategory
                                 } else {
-                                    categoryOfPurchase = Category(name: "", uuid: UUID(uuidString: categoryUUID)!, lastModified: Date(timeIntervalSince1970: 0), context: CoreDataStack.context)
+                                    categoryOfPurchase = Category(name: "", uuid: UUID(uuidString: categoryUUID)!, ledgerUUID: UUID(uuidString: ledgerUUID)!, lastModified: Date(timeIntervalSince1970: 0), context: CoreDataStack.context)
                                 }
 
                                 
