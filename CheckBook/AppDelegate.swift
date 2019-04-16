@@ -39,6 +39,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 completionHandler(.failed)
             }
         }
+        CloudKitController.shared.fetchUpdatedRecordsFromCK(inDataBase: CloudKitController.shared.shareDB) { (isSuccess, recordsToUpdate, recordIDsToDelete) in
+            if isSuccess {
+                SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
+                completionHandler(.newData)
+            } else {
+                completionHandler(.failed)
+            }
+        }
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {

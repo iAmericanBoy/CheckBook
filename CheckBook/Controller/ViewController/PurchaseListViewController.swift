@@ -163,6 +163,18 @@ class PurchaseListViewController: UIViewController {
                 }
             }
         }
+        CloudKitController.shared.fetchUpdatedRecordsFromCK(inDataBase: CloudKitController.shared.shareDB) { (isSuccess, recordsToUpdate, recordIDsToDelete) in
+            if isSuccess {
+                SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
+            }
+            if let stringURL = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.url, let url = URL(string: stringURL) {
+                CloudKitController.shared.fetchShareMetadata(forURL: url) { (isSuccess, share) in
+                    if isSuccess {
+                        CloudKitController.shared.currentShare = share
+                    }
+                }
+            }
+        }
     }
 }
 
