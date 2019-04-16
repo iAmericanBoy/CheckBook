@@ -208,6 +208,16 @@ class CoreDataController {
                 print(error)
             }
         }
+        
+        do{
+            try purchaseFetchResultsController.performFetch()
+            try purchaseMethodFetchResultsController.performFetch()
+            try ledgersFetchResultsController.performFetch()
+            try categoryFetchResultsController.performFetch()
+            
+        } catch {
+            print("Error loading fetchResultsControllers. \(String(describing: error)), \(error.localizedDescription)")
+        }
     }
     
     //MARK: - Save

@@ -36,14 +36,15 @@ class CloudKitController {
         createZone(withName: Purchase.privateRecordZoneName) { (isSuccess, newZone) in
             if !isSuccess {
                 print("Could not create new zone.")
-            }
-        }
-        
-        fetchUserRecordID { (isSuccess) in
-            if isSuccess {
-                print("AppleUserID found")
             } else {
-                print("AppleUserID not found")
+                print("zone created")
+            }
+            self.fetchUserRecordID { (isSuccess) in
+                if isSuccess {
+                    print("AppleUserID found")
+                } else {
+                    print("AppleUserID not found")
+                }
             }
         }
     }
@@ -327,7 +328,7 @@ class CloudKitController {
         operation.savePolicy = .changedKeys
         operation.modifyRecordsCompletionBlock = { (savedRecords,deletedRecords,error) in
             if let error = error {
-                print("An Error updating CK has occured. \(error), \(error.localizedDescription)")
+                print("An Error updating CK with \(String(describing: records.first?.recordType)) has occured. \(error), \(error.localizedDescription)")
                 completion(false, savedRecords,deletedRecords)
                 return
             }
