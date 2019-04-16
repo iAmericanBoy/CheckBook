@@ -28,7 +28,6 @@ class CloudKitController {
     var appleUserID: CKRecord.ID? {
         didSet {
             NotificationCenter.default.post(Notification.appleIdFound)
-            CoreDataController.shared.findPersonalLedger()
         }
     }
     

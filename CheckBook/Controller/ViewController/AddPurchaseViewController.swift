@@ -65,14 +65,13 @@ class AddPurchaseViewController: UIViewController {
             }
         }
         NotificationCenter.default.addObserver(forName: Notification.appleIdFound.name, object: nil, queue: .main) { (_) in
-            CoreDataController.shared.findPersonalLedger()
             
             
-            if CoreDataController.shared.personalLedger != nil {
+            if CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.count != 0 {
                 //add button = shareButton
                 
             } else {
-                //add Button = add button
+                _ = LedgerController.shared.createNewLedgerWith(name: "New Ledger")
             }
         }
     }
@@ -122,8 +121,8 @@ class AddPurchaseViewController: UIViewController {
         let category = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(row: categoryRow, section: 0))
         
         let ledger: Ledger
-        if let personalLedger = CoreDataController.shared.personalLedger {
-            ledger = personalLedger
+        if CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.count != 0 {
+            ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects!.first!
         } else {
             ledger = LedgerController.shared.createNewLedgerWith(name: "")
         }

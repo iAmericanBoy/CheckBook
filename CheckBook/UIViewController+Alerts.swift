@@ -18,7 +18,7 @@ extension UIViewController {
         
         let addAction = UIAlertAction(title: "Add", style: .default) { (action) in
             if let name = nameTextField?.text {
-                guard let ledgerUUID = CoreDataController.shared.personalLedger?.uuid else {return}
+                guard let ledgerUUID = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.uuid else {return}
                 _ = PurchaseMethodController.shared.createNewPurchaseMethodWith(name: name, withLedgerUUID: ledgerUUID)
                 completion()
             }
@@ -52,7 +52,7 @@ extension UIViewController {
         
         let addAction = UIAlertAction(title: "Add", style: .default) { (action) in
             if let name = nameTextField?.text {
-                guard let ledgerUUID = CoreDataController.shared.personalLedger?.uuid else {return}
+                guard let ledgerUUID = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.uuid else {return}
 
                 _ = CategoryController.shared.createNewCategoryWith(name: name, ledgerUUID: ledgerUUID)
                 completion()

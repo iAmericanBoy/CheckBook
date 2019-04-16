@@ -45,7 +45,6 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
 //MARK: - SettingsDelegate
 extension SettingsViewController: SettingsDelegate {
     func shareLedger() {
-        CoreDataController.shared.findPersonalLedger()
         
         if let share = CloudKitController.shared.currentShare {
             let sharingViewController = UICloudSharingController(share: share, container: CKContainer.default())
@@ -54,7 +53,7 @@ extension SettingsViewController: SettingsDelegate {
             self.present(sharingViewController, animated: true)
             
         } else {
-            guard let ledger = CoreDataController.shared.personalLedger, let record = CKRecord(ledger: ledger) else {return}
+            guard let ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first, let record = CKRecord(ledger: ledger) else {return}
             
             let share = CKShare(rootRecord: record)
             share.publicPermission = .readWrite
@@ -98,7 +97,7 @@ extension SettingsViewController: UICloudSharingControllerDelegate {
     }
     
     func itemTitle(for csc: UICloudSharingController) -> String? {
-        return CoreDataController.shared.personalLedger?.name
+        return CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.name
     }
 }
 
