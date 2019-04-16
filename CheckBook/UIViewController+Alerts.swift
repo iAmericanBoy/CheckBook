@@ -18,7 +18,7 @@ extension UIViewController {
         
         let addAction = UIAlertAction(title: "Add", style: .default) { (action) in
             if let name = nameTextField?.text {
-                _ = PurchaseMethodController.shared.createNewPurchaseMethodWith(name: name)
+                _ = PurchaseMethodController.shared.createNewPurchaseMethodWith(name: name, withLedgerUUID: <#UUID#>)
                 completion()
             }
         }

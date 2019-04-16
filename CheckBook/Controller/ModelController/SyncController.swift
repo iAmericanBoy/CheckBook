@@ -50,7 +50,7 @@ class SyncController {
                         if let foundPurchaseMethod = foundPurchaseMethod {
                             purchaseMethod  = foundPurchaseMethod
                         } else {
-                            purchaseMethod = PurchaseMethod(name: "", uuid: UUID(uuidString: methodUUID)!, lastModified: Date(timeIntervalSince1970: 0), context: CoreDataStack.context)
+                            purchaseMethod = PurchaseMethod(name: "", uuid: UUID(uuidString: methodUUID)!, ledgerUUID:  UUID(uuidString: ledgerUUID)!, lastModified: Date(timeIntervalSince1970: 0), context: CoreDataStack.context)
                         }
 
                         
