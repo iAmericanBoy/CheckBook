@@ -55,6 +55,9 @@ class AddPurchaseViewController: UIViewController {
         super.viewWillAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification,object: nil)
         NotificationCenter.default.addObserver(forName: Notification.syncFinished.name, object: nil, queue: .main) { (_) in
+            
+            try! CoreDataController.shared.categoryFetchResultsController.performFetch()
+            try! CoreDataController.shared.purchaseMethodFetchResultsController.performFetch()
             self.methodPickerView.reloadAllComponents()
             self.categoryPickerView.reloadAllComponents()
             if CoreDataController.shared.categoryFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
