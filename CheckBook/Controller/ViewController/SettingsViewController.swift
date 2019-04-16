@@ -93,8 +93,14 @@ extension SettingsViewController: SettingsDelegate {
 //MARK: - UICloudSharingControllerDelegate
 extension SettingsViewController: UICloudSharingControllerDelegate {
     func cloudSharingControllerDidSaveShare(_ csc: UICloudSharingController) {
-        print("Succesfully added Url to Challenge")
-        print(csc.share?.url!)
+        guard let ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first, let url = csc.share?.url else {return}
+        
+        LedgerController.shared.add(stringURL: url.absoluteString, toLedger: ledger) { (isSuccess) in
+            if isSuccess {
+                print("Succesfully added Url to Ledger")
+                print(url)
+            }
+        }
     }
     
     func cloudSharingController(_ csc: UICloudSharingController, failedToSaveShareWithError error: Error) {

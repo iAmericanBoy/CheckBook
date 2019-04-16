@@ -33,6 +33,31 @@ class LedgerController {
         return ledger
     }
     
+    ///Adds the url as a string to a Ledger and saves it.
+    /// - parameter ledger: The ledger to update.
+    /// - parameter stringURL: The new URL for a ledger.
+    /// - parameter completion: Handler for when the ledger was updated
+    /// - parameter isSuccess: Confirms that the ledger was updated.
+    func add(stringURL: String, toLedger ledger: Ledger, _ completion: @escaping (_ isSuccess: Bool) -> Void) {
+        ledger.url = stringURL
+        ledger.lastModified = Date()
+        
+        CoreDataController.shared.saveToPersistentStore()
+
+        guard let record = CKRecord(ledger: ledger) else {completion(false);return}
+        
+        
+        CloudKitController.shared.saveChangestoCK(recordsToUpdate: [record], purchasesToDelete: []) { (isSuccess, updatedRecords, _) in
+            if !isSuccess {
+                guard let uuid = ledger.uuid else {return}
+                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                completion(false)
+            } else {
+                completion(true)
+            }
+        }
+    }
+    
     
     /// Deletes the Ledger, deletes it from Cotext and CloudKit. If the CK delete Fails the Ledger gets added to the cache for uploading at a later date.
     /// - parameter ledger: The ledger to delete.

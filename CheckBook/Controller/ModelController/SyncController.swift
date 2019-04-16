@@ -141,6 +141,7 @@ class SyncController {
                             
                             foundLedger.name = name
                             foundLedger.uuid = uuid
+                            foundLedger.url = recordFromCK[Ledger.shareURLKey] as? String
                             foundLedger.lastModified = lastModified
                         }
                     } else {
