@@ -136,8 +136,13 @@ class PurchaseListViewController: UIViewController {
     
     //MARK: - Private Functions
     fileprivate func setupViews() {
+        purchaseList.separatorInset = UIEdgeInsets(top: 1, left: 0, bottom: 1, right: 0)
+        purchaseList.separatorColor = .orange
+        purchaseList.separatorStyle = .singleLine
+        purchaseList.tableFooterView = UIView()
         purchaseList.delegate = self
         purchaseList.dataSource = self
+        purchaseList.register(PurchaseHeader.self, forHeaderFooterViewReuseIdentifier: PurchaseHeader.reuseIdentifier)
         CoreDataController.shared.purchaseFetchResultsController.delegate = self
         cardView.layer.shadowColor = UIColor.black.cgColor
         cardView.layer.shadowOpacity = 0.1
@@ -242,9 +247,31 @@ extension PurchaseListViewController: UITableViewDelegate, UITableViewDataSource
         return CoreDataController.shared.purchaseFetchResultsController.sections?.count ?? 0
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 10.0
+        return 40.0
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: PurchaseHeader.reuseIdentifier) as? PurchaseHeader
+        
+        let numberFormatter = NumberFormatter()
+        numberFormatter.locale = Locale.autoupdatingCurrent
+        numberFormatter.numberStyle = .currency
+        
+        
+        var total:NSDecimalNumber = 0.0
+        for purchase in CoreDataController.shared.purchaseFetchResultsController.sections?[section].objects as? [Purchase] ?? [] {
+            total = total.adding(purchase.amount ?? 0)
+        }
+        view?.amountLabel.text = numberFormatter.string(from: total)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale.autoupdatingCurrent
+        dateFormatter.dateStyle = .short
+        let sectionDate = CoreDataController.shared.purchaseFetchResultsController.object(at: IndexPath(row: 0, section: section)).day ?? Date() as NSDate
+        
+        view?.dateLabel.text = dateFormatter.string(from: sectionDate as Date)
+        return view
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return CoreDataController.shared.purchaseFetchResultsController.sections?[section].numberOfObjects ?? 0
@@ -286,26 +313,41 @@ extension PurchaseListViewController: NSFetchedResultsControllerDelegate {
         case .insert:
             guard let newIndexPath = newIndexPath else {return}
             purchaseList.insertRows(at: [newIndexPath], with: .automatic)
+            
+            if controller.sections?[newIndexPath.section].numberOfObjects ?? 1 > 1 {
+                purchaseList.reloadSections(IndexSet(arrayLiteral: newIndexPath.section), with: .automatic)
+            }
         case .delete:
             guard let indexPath = indexPath else {return}
             purchaseList.deleteRows(at: [indexPath], with: .automatic)
+            if purchaseList.numberOfRows(inSection: indexPath.section) > 1 {
+                purchaseList.reloadSections(IndexSet(arrayLiteral: indexPath.section), with: .automatic)
+            }
+
         case .move:
             guard let newIndexPath = newIndexPath, let indexPath = indexPath else {return}
             purchaseList.moveRow(at: indexPath, to: newIndexPath)
+            purchaseList.reloadSections(IndexSet(arrayLiteral: newIndexPath.section, indexPath.section), with: .automatic)
+
         case .update:
             guard let indexPath = indexPath else {return}
             purchaseList.reloadRows(at: [indexPath], with: .automatic)
+            purchaseList.reloadSections(IndexSet(arrayLiteral: indexPath.section), with: .automatic)
+
         }
     }
+    
+    
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         let indexSet = IndexSet(integer: sectionIndex)
-        switch type{
+        
+        switch type {
         case .insert:
             purchaseList.insertSections(indexSet, with: .automatic)
         case .delete:
             purchaseList.deleteSections(indexSet, with: .automatic)
         default:
-            break
+            ()
         }
     }
 }
