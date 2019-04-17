@@ -62,10 +62,11 @@ class SettingsTableViewCell: UITableViewCell {
 
         guard let setting = setting else {return}
         switch setting {
-        case .share:
+        case .share(let isSharing):
             cellLabel.text = "Share Ledger"
             cellButton.isHidden = true
             cellSwitch.isHidden = false
+            cellSwitch.setOn(isSharing, animated: true)
         case .deletePersonalData:
             cellLabel.text = "Delete all User Data"
             cellButton.isHidden = false

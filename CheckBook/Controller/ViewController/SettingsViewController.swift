@@ -36,7 +36,13 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "settingsCell", for: indexPath) as? SettingsTableViewCell
-        cell?.setting = Setting.allCases[indexPath.row]
+        switch Setting.allCases[indexPath.row] {
+        case .share(let defaultValue):
+            let savedBool = UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isSharing")
+            cell?.setting = .share(savedBool ?? defaultValue)
+        case .deletePersonalData:
+            cell?.setting = .deletePersonalData
+        }
         cell?.delegate = self
         return cell ?? UITableViewCell()
     }
@@ -109,6 +115,7 @@ extension SettingsViewController: UICloudSharingControllerDelegate {
                 print(url)
             }
         }
+        UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(true, forKey: "isSharing")
     }
     
     func cloudSharingController(_ csc: UICloudSharingController, failedToSaveShareWithError error: Error) {
