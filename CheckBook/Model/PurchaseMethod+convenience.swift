@@ -40,10 +40,10 @@ extension PurchaseMethod {
     }
 }
 extension CKRecord {
-    convenience init?(purchaseMethod: PurchaseMethod) {
-        self.init(recordType: PurchaseMethod.typeKey, recordID: CKRecord.ID(recordName: purchaseMethod.uuid!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)))
+    convenience init?(purchaseMethod: PurchaseMethod, zoneID: CKRecordZone.ID) {
+        self.init(recordType: PurchaseMethod.typeKey, recordID: CKRecord.ID(recordName: purchaseMethod.uuid!.uuidString, zoneID: zoneID))
         
-        setParent(CKRecord.ID(recordName: purchaseMethod.ledgerUUID!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)))
+        setParent(CKRecord.ID(recordName: purchaseMethod.ledgerUUID!.uuidString, zoneID: zoneID))
         
         setValue(purchaseMethod.color, forKey: PurchaseMethod.colorKey)
         setValue(purchaseMethod.name, forKey: PurchaseMethod.nameKey)

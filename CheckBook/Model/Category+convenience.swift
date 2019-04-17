@@ -40,10 +40,10 @@ extension Category {
     }
 }
 extension CKRecord {
-    convenience init?(category: Category) {
-        self.init(recordType: Category.typeKey, recordID: CKRecord.ID(recordName: category.uuid!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)))
+    convenience init?(category: Category, zoneID: CKRecordZone.ID) {
+        self.init(recordType: Category.typeKey, recordID: CKRecord.ID(recordName: category.uuid!.uuidString, zoneID: zoneID))
         
-        setParent(CKRecord.ID(recordName: category.ledgerUUID!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)))
+        setParent(CKRecord.ID(recordName: category.ledgerUUID!.uuidString, zoneID: zoneID))
         
         setValue(category.name, forKey: Category.nameKey)
         setValue(category.color, forKey: Category.colorKey)

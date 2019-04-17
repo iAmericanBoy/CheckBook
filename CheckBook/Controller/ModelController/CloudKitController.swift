@@ -23,8 +23,11 @@ class CloudKitController {
     /// The shared Database of the User.
     let shareDB = CKContainer.default().sharedCloudDatabase
     
+    /// The current Share or nil if not used
     var currentShare: CKShare?
+    var currentRecordZoneID: CKRecordZone.ID?
 
+    ///The RecordID of the logged in iCloud user
     var appleUserID: CKRecord.ID? {
         didSet {
             NotificationCenter.default.post(Notification.appleIdFound)
@@ -226,7 +229,7 @@ class CloudKitController {
         }
     }
     
-    ///Fetches the Metadata of a share for a given URL
+    ///Fetches the Metadata of a share for a given URL. Assigns the ZoneID of the RootRecord to the property in the CloudKitController
     /// - parameter url: The URL for the CKShare.
     /// - parameter completion: Handler for when the Share.Meta was found.
     /// - parameter isSuccess: Confirms the Share.Meta was found.
@@ -242,6 +245,7 @@ class CloudKitController {
             }
             
             guard let meta = fetchedMeta, url == shareUrl else {completion(false,nil); return}
+            self.currentRecordZoneID =  meta.rootRecordID.zoneID
             completion(true, meta.share)
         }
         
@@ -257,6 +261,7 @@ class CloudKitController {
     
     /// Updates the record if the record exists in the source of truth.
     /// - parameter record: The record that needs updating.
+    /// - parameter database: The database where the record should be saved in
     /// - parameter completion: Handler for when the record has been updated.
     /// - parameter isSuccess: Confirms the new record was updated.
     /// - parameter updatedRecord: The updated record or nil if the record could not be updated in CloudKit.
@@ -277,11 +282,12 @@ class CloudKitController {
     
     /// Deletes the record if the record exists in the source of truth.
     /// - parameter record: The record that needs deleting
+    /// - parameter database: The database where the record should be saved in
     /// - parameter completion: Handler for when the record has been deleted
     /// - parameter isSuccess: Confirms the record was deleted.
-    func delete(record: CKRecord, completion: @escaping (_ isSuccess: Bool) -> Void) {
-    
-        saveChangestoCK(recordsToUpdate: [], purchasesToDelete: [record.recordID]) { (isSuccess, _, deletedRecordIDs) in
+    func delete(record: CKRecord, inDataBase dataBase: CKDatabase, completion: @escaping (_ isSuccess: Bool) -> Void) {
+
+        saveChangestoCK(recordsToUpdate: [], purchasesToDelete: [record.recordID], toDataBase: dataBase) { (isSuccess, _, deletedRecordIDs) in
             if isSuccess {
                 guard let recordID = deletedRecordIDs?.first , recordID == record.recordID else {
                     completion(false)

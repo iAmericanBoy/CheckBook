@@ -41,8 +41,8 @@ extension Ledger {
 }
 
 extension CKRecord {
-    convenience init?(ledger: Ledger) {
-        self.init(recordType: Ledger.typeKey, recordID: CKRecord.ID(recordName: ledger.uuid!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)))
+    convenience init?(ledger: Ledger, zoneID: CKRecordZone.ID) {
+        self.init(recordType: Ledger.typeKey, recordID: CKRecord.ID(recordName: ledger.uuid!.uuidString, zoneID: zoneID))
         
         setValue(ledger.url, forKey: Ledger.shareURLKey)
         setValue(ledger.name, forKey: Ledger.nameKey)

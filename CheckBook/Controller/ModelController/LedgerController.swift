@@ -22,9 +22,23 @@ class LedgerController {
         let ledger = Ledger(name: name, appleUserRecordName: CloudKitController.shared.appleUserID?.recordName)
         CoreDataController.shared.saveToPersistentStore()
         
-        guard let newRecord = CKRecord(ledger: ledger) else {return ledger}
+        let zoneID: CKRecordZone.ID
+        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
+            zoneID = currentZoneID
+        } else {
+            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
+        }
         
-        CloudKitController.shared.create(record: newRecord) { (isSuccess, newRecord) in
+        guard let newRecord = CKRecord(ledger: ledger, zoneID: zoneID) else {return ledger}
+        
+        let dataBase: CKDatabase
+        if UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isParticipant") ?? false {
+            dataBase = CloudKitController.shared.shareDB
+        } else {
+            dataBase = CloudKitController.shared.privateDB
+        }
+        
+        CloudKitController.shared.create(record: newRecord, inDataBase: dataBase) { (isSuccess, newRecord) in
             if !isSuccess {
                 guard let uuid = ledger.uuid else {return}
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
@@ -43,11 +57,24 @@ class LedgerController {
         ledger.lastModified = Date()
         
         CoreDataController.shared.saveToPersistentStore()
-
-        guard let record = CKRecord(ledger: ledger) else {completion(false);return}
         
+        let zoneID: CKRecordZone.ID
+        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
+            zoneID = currentZoneID
+        } else {
+            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
+        }
         
-        CloudKitController.shared.saveChangestoCK(recordsToUpdate: [record], purchasesToDelete: []) { (isSuccess, updatedRecords, _) in
+        guard let record = CKRecord(ledger: ledger, zoneID: zoneID) else {completion(false);return}
+        
+        let dataBase: CKDatabase
+        if UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isParticipant") ?? false {
+            dataBase = CloudKitController.shared.shareDB
+        } else {
+            dataBase = CloudKitController.shared.privateDB
+        }
+        
+        CloudKitController.shared.saveChangestoCK(recordsToUpdate: [record], purchasesToDelete: [], toDataBase: dataBase) { (isSuccess, updatedRecords, _) in
             if !isSuccess {
                 guard let uuid = ledger.uuid else {return}
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
@@ -63,9 +90,23 @@ class LedgerController {
     /// - parameter ledger: The ledger to delete.
     func delete(ledger: Ledger) {
         
-        guard let recordToDelete = CKRecord(ledger: ledger) else {return}
+        let zoneID: CKRecordZone.ID
+        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
+            zoneID = currentZoneID
+        } else {
+            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
+        }
         
-        CloudKitController.shared.delete(record: recordToDelete) { (isSuccess) in
+        guard let recordToDelete = CKRecord(ledger: ledger, zoneID:  zoneID) else {return}
+        
+        let dataBase: CKDatabase
+        if UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isParticipant") ?? false {
+            dataBase = CloudKitController.shared.shareDB
+        } else {
+            dataBase = CloudKitController.shared.privateDB
+        }
+        
+        CloudKitController.shared.delete(record: recordToDelete, inDataBase: dataBase) { (isSuccess) in
             if !isSuccess {
                 guard let uuid = ledger.uuid else {return}
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)

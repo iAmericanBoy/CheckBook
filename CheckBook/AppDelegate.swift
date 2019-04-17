@@ -102,6 +102,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 //subscribe to changes
                 CloudKitController.shared.subscribeToNewChanges(forRecodZone: cloudKitShareMetadata.rootRecordID.zoneID, inDataBase: CloudKitController.shared.shareDB)
                 
+                //saveInUserDefaults that User is Participant
+                UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(true, forKey: "isParticipant")
+                
             }
             
             acceptSharing.acceptSharesCompletionBlock = { error in

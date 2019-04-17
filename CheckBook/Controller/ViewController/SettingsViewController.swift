@@ -62,7 +62,15 @@ extension SettingsViewController: SettingsDelegate {
             self.present(sharingViewController, animated: true)
             
         } else {
-            guard let ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first, let record = CKRecord(ledger: ledger) else {return}
+            
+            let zoneID: CKRecordZone.ID
+            if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
+                zoneID = currentZoneID
+            } else {
+                zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
+            }
+            
+            guard let ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first, let record = CKRecord(ledger: ledger, zoneID: zoneID) else {return}
             
             let share = CKShare(rootRecord: record)
             share.publicPermission = .readWrite

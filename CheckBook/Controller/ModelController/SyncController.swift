@@ -218,11 +218,18 @@ class SyncController {
             print("Error fetching cachedObjects with error: \(String(describing: error)) \(error.localizedDescription))")
         }
         
+        let zoneID: CKRecordZone.ID
+        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
+            zoneID = currentZoneID
+        } else {
+            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
+        }
+        
         cachedPurchases.forEach { (cachedPurchase) in
             CoreDataController.shared.findPurchaseWith(uuid: cachedPurchase.uuid, completion: { (purchaseFromCD) in
                 if let purchase = purchaseFromCD {
                     //sent update to CK
-                    recordsToUpdate.append(CKRecord(purchase: purchase)!)
+                    recordsToUpdate.append(CKRecord(purchase: purchase, zoneID: zoneID)!)
                 } else {
                     //sentdeleteToCK
                     if let uuid = cachedPurchase.uuid?.uuidString {
@@ -234,7 +241,7 @@ class SyncController {
             CoreDataController.shared.findLedgerWith(uuid: cachedPurchase.uuid, completion: { (ledgerFromCD) in
                 if let ledger = ledgerFromCD {
                     //sent update to CK
-                    recordsToUpdate.append(CKRecord(ledger: ledger)!)
+                    recordsToUpdate.append(CKRecord(ledger: ledger, zoneID: zoneID)!)
                 } else {
                     //sentdeleteToCK
                     if let uuid = cachedPurchase.uuid?.uuidString {
@@ -246,7 +253,7 @@ class SyncController {
             CoreDataController.shared.findCategoryWith(uuid: cachedPurchase.uuid, completion: { (categoryFromCD) in
                 if let category = categoryFromCD {
                     //sent update to CK
-                    recordsToUpdate.append(CKRecord(category: category)!)
+                    recordsToUpdate.append(CKRecord(category: category, zoneID: zoneID)!)
                 } else {
                     //sentdeleteToCK
                     if let uuid = cachedPurchase.uuid?.uuidString {
@@ -258,7 +265,8 @@ class SyncController {
             CoreDataController.shared.findPurchaseMethodWith(uuid: cachedPurchase.uuid, completion: { (methodFromCD) in
                 if let method = methodFromCD {
                     //sent update to CK
-                    recordsToUpdate.append(CKRecord(purchaseMethod: method)!)
+                    
+                    recordsToUpdate.append(CKRecord(purchaseMethod: method, zoneID: zoneID)!)
                 } else {
                     //sentdeleteToCK
                     if let uuid = cachedPurchase.uuid?.uuidString {
