@@ -136,9 +136,6 @@ class PurchaseListViewController: UIViewController {
     
     //MARK: - Private Functions
     fileprivate func setupViews() {
-        purchaseList.separatorInset = UIEdgeInsets(top: 1, left: 0, bottom: 1, right: 0)
-        purchaseList.separatorColor = .orange
-        purchaseList.separatorStyle = .singleLine
         purchaseList.tableFooterView = UIView()
         purchaseList.delegate = self
         purchaseList.dataSource = self

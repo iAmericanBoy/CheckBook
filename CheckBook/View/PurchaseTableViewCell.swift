@@ -14,6 +14,7 @@ class PurchaseTableViewCell: UITableViewCell {
     @IBOutlet weak var amountLabel: UILabel!
     @IBOutlet weak var storeNameLabel: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
+    @IBOutlet weak var methodLabel: UILabel!
     
     //MARK: - Properties
     var purchase: Purchase? {
@@ -23,7 +24,6 @@ class PurchaseTableViewCell: UITableViewCell {
     }
     let numberFormatter = NumberFormatter()
 
-    
     //MARK: - Private Functions
     fileprivate func updateViews() {
         guard let purchase = purchase else {return}
@@ -32,5 +32,6 @@ class PurchaseTableViewCell: UITableViewCell {
         amountLabel.text = numberFormatter.string(from: purchase.amount!)
         storeNameLabel.text = purchase.storeName
         categoryLabel.text = purchase.category?.name
+        methodLabel.text = purchase.purchaseMethod?.name
     }
 }

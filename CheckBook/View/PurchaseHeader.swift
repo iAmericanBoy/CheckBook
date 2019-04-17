@@ -22,6 +22,13 @@ class PurchaseHeader: UITableViewHeaderFooterView {
         return label
     }()
     
+    let boarderView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .black
+        return view
+    }()
+    
     //MARK: - Properties
     static let reuseIdentifier = "PurchaseHeader"
     
@@ -43,13 +50,20 @@ class PurchaseHeader: UITableViewHeaderFooterView {
     
     //MARK: - Private Functions
     func setupViews(){
+        
+        contentView.addSubview(boarderView)
+        boarderView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor).isActive = true
+        boarderView.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor).isActive = true
+        boarderView.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor).isActive = true
+        boarderView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        
         contentView.addSubview(amountLabel)
-        amountLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor).isActive = true
+        amountLabel.topAnchor.constraint(equalTo: boarderView.bottomAnchor).isActive = true
         amountLabel.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor).isActive = true
         amountLabel.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -8).isActive = true
         
         contentView.addSubview(dateLabel)
-        dateLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor).isActive = true
+        dateLabel.topAnchor.constraint(equalTo: boarderView.bottomAnchor).isActive = true
         dateLabel.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor).isActive = true
         dateLabel.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 8).isActive = true
     }
