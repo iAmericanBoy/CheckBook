@@ -33,7 +33,9 @@ class PurchaseListViewController: UIViewController {
     @IBOutlet weak var cardView: UIView!
     @IBOutlet weak var overlayView: UIView!
     @IBOutlet weak var purchaseList: UITableView!
-    
+    @IBOutlet weak var settingsButton: UIButton!
+    @IBOutlet weak var monthLabel: UILabel!
+    @IBOutlet weak var weekLabel: UILabel!
     //MARK: - Properties
     /// The current state of the animation. This variable is changed only when an animation completes.
     private var currentState: State = .closed
@@ -136,12 +138,49 @@ class PurchaseListViewController: UIViewController {
     
     //MARK: - Private Functions
     fileprivate func setupViews() {
+        purchaseList.tableFooterView = UIView()
         purchaseList.delegate = self
         purchaseList.dataSource = self
+        purchaseList.register(PurchaseHeader.self, forHeaderFooterViewReuseIdentifier: PurchaseHeader.reuseIdentifier)
         CoreDataController.shared.purchaseFetchResultsController.delegate = self
         cardView.layer.shadowColor = UIColor.black.cgColor
         cardView.layer.shadowOpacity = 0.1
         cardView.layer.shadowRadius = 10
+        calculateTotals()
+    }
+    
+    fileprivate func calculateTotals() {
+        let beginningOfWeek = Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))
+        let beginningOfMonth = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: Date()))
+
+
+        let purchasesOfWeek = CoreDataController.shared.purchaseFetchResultsController.fetchedObjects?.filter({ (purchase) -> Bool in
+            return Calendar.current.compare(purchase.day! as Date, to: beginningOfWeek!, toGranularity: Calendar.Component.second).rawValue > 0
+        })
+        let purchasesOfMonth = CoreDataController.shared.purchaseFetchResultsController.fetchedObjects?.filter({ (purchase) -> Bool in
+            return Calendar.current.compare(purchase.day! as Date, to: beginningOfMonth!, toGranularity: Calendar.Component.second).rawValue > 0
+        })
+        
+        let numberFormatter = NumberFormatter()
+        numberFormatter.locale = Locale.autoupdatingCurrent
+        numberFormatter.numberStyle = .currency
+        
+        var weekTotal:NSDecimalNumber = 0.0
+        
+        if let purchasesOfWeek = purchasesOfWeek {
+            for purchase in purchasesOfWeek {
+                weekTotal = weekTotal.adding(purchase.amount ?? 0)
+            }
+            weekLabel.text = numberFormatter.string(from: weekTotal)
+        }
+        var monthTotal:NSDecimalNumber = 0.0
+        
+        if let purchasesOfMonth = purchasesOfMonth {
+            for purchase in purchasesOfMonth {
+                monthTotal = monthTotal.adding(purchase.amount ?? 0)
+            }
+            monthLabel.text = numberFormatter.string(from: monthTotal)
+        }
     }
     
     fileprivate func fetchChangesFromCK() {
@@ -242,7 +281,15 @@ extension PurchaseListViewController: UITableViewDelegate, UITableViewDataSource
         return CoreDataController.shared.purchaseFetchResultsController.sections?.count ?? 0
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 5.0
+        return 35.0
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: PurchaseHeader.reuseIdentifier) as? PurchaseHeader
+        
+        view?.purchases = CoreDataController.shared.purchaseFetchResultsController.sections?[section].objects as? [Purchase]
+        
+        return view
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -279,32 +326,48 @@ extension PurchaseListViewController: NSFetchedResultsControllerDelegate {
     }
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         purchaseList.endUpdates()
+        calculateTotals()
     }
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
             guard let newIndexPath = newIndexPath else {return}
             purchaseList.insertRows(at: [newIndexPath], with: .automatic)
+            
+            if controller.sections?[newIndexPath.section].numberOfObjects ?? 1 > 1 {
+                purchaseList.reloadSections(IndexSet(arrayLiteral: newIndexPath.section), with: .automatic)
+            }
         case .delete:
             guard let indexPath = indexPath else {return}
             purchaseList.deleteRows(at: [indexPath], with: .automatic)
+            if purchaseList.numberOfRows(inSection: indexPath.section) > 1 {
+                purchaseList.reloadSections(IndexSet(arrayLiteral: indexPath.section), with: .automatic)
+            }
+
         case .move:
             guard let newIndexPath = newIndexPath, let indexPath = indexPath else {return}
             purchaseList.moveRow(at: indexPath, to: newIndexPath)
+            purchaseList.reloadSections(IndexSet(arrayLiteral: newIndexPath.section, indexPath.section), with: .automatic)
+
         case .update:
             guard let indexPath = indexPath else {return}
             purchaseList.reloadRows(at: [indexPath], with: .automatic)
+            purchaseList.reloadSections(IndexSet(arrayLiteral: indexPath.section), with: .automatic)
+
         }
     }
+    
+    
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         let indexSet = IndexSet(integer: sectionIndex)
-        switch type{
+        
+        switch type {
         case .insert:
             purchaseList.insertSections(indexSet, with: .automatic)
         case .delete:
             purchaseList.deleteSections(indexSet, with: .automatic)
         default:
-            break
+            ()
         }
     }
 }
