@@ -34,7 +34,8 @@ class PurchaseListViewController: UIViewController {
     @IBOutlet weak var overlayView: UIView!
     @IBOutlet weak var purchaseList: UITableView!
     @IBOutlet weak var settingsButton: UIButton!
-    
+    @IBOutlet weak var monthLabel: UILabel!
+    @IBOutlet weak var weekLabel: UILabel!
     //MARK: - Properties
     /// The current state of the animation. This variable is changed only when an animation completes.
     private var currentState: State = .closed
@@ -145,9 +146,42 @@ class PurchaseListViewController: UIViewController {
         cardView.layer.shadowColor = UIColor.black.cgColor
         cardView.layer.shadowOpacity = 0.1
         cardView.layer.shadowRadius = 10
-        settingsButton.setTitle("Settings", for: .normal)
+        calculateTotals()
     }
+    
+    fileprivate func calculateTotals() {
+        let beginningOfWeek = Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))
+        let beginningOfMonth = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: Date()))
 
+
+        let purchasesOfWeek = CoreDataController.shared.purchaseFetchResultsController.fetchedObjects?.filter({ (purchase) -> Bool in
+            return Calendar.current.compare(purchase.day! as Date, to: beginningOfWeek!, toGranularity: Calendar.Component.second).rawValue > 0
+        })
+        let purchasesOfMonth = CoreDataController.shared.purchaseFetchResultsController.fetchedObjects?.filter({ (purchase) -> Bool in
+            return Calendar.current.compare(purchase.day! as Date, to: beginningOfMonth!, toGranularity: Calendar.Component.second).rawValue > 0
+        })
+        
+        let numberFormatter = NumberFormatter()
+        numberFormatter.locale = Locale.autoupdatingCurrent
+        numberFormatter.numberStyle = .currency
+        
+        var weekTotal:NSDecimalNumber = 0.0
+        
+        if let purchasesOfWeek = purchasesOfWeek {
+            for purchase in purchasesOfWeek {
+                weekTotal = weekTotal.adding(purchase.amount ?? 0)
+            }
+            weekLabel.text = numberFormatter.string(from: weekTotal)
+        }
+        var monthTotal:NSDecimalNumber = 0.0
+        
+        if let purchasesOfMonth = purchasesOfMonth {
+            for purchase in purchasesOfMonth {
+                monthTotal = monthTotal.adding(purchase.amount ?? 0)
+            }
+            monthLabel.text = numberFormatter.string(from: monthTotal)
+        }
+    }
     
     fileprivate func fetchChangesFromCK() {
         //Check for updates from Ck
@@ -292,6 +326,7 @@ extension PurchaseListViewController: NSFetchedResultsControllerDelegate {
     }
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         purchaseList.endUpdates()
+        calculateTotals()
     }
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {

@@ -25,23 +25,31 @@
                                         <rect key="frame" x="8" y="8" width="359" height="60"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UHS-S9-dMn" userLabel="Settings">
-                                                <rect key="frame" x="0.0" y="0.0" width="359" height="22"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="359" height="31.666666666666668"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="35"/>
+                                                <state key="normal" title="⚙︎">
+                                                    <color key="titleColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
+                                                </state>
                                                 <connections>
                                                     <segue destination="wSr-fG-rlM" kind="show" identifier="toSettingsVC" id="eiz-ai-zUQ"/>
                                                 </connections>
                                             </button>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="BkK-v7-X23">
-                                                <rect key="frame" x="0.0" y="30" width="359" height="30"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="BkK-v7-X23">
+                                                <rect key="frame" x="0.0" y="39.666666666666671" width="359" height="20.333333333333329"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZFV-Xa-Pdr">
-                                                        <rect key="frame" x="0.0" y="0.0" width="159" height="30"/>
-                                                        <state key="normal" title="Week"/>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1kf-FV-efs">
-                                                        <rect key="frame" x="164" y="0.0" width="195" height="30"/>
-                                                        <state key="normal" title="Month"/>
-                                                    </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dI3-k2-pPJ">
+                                                        <rect key="frame" x="0.0" y="0.0" width="177" height="20.333333333333332"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jQb-m4-Z53">
+                                                        <rect key="frame" x="182" y="0.0" width="177" height="20.333333333333332"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
                                                 </subviews>
                                             </stackView>
                                         </subviews>
@@ -171,9 +179,11 @@
                     <navigationItem key="navigationItem" id="331-hA-HHw"/>
                     <connections>
                         <outlet property="cardView" destination="0oe-sS-ZTM" id="BTB-Jx-nx3"/>
+                        <outlet property="monthLabel" destination="jQb-m4-Z53" id="Vyu-a3-3Wb"/>
                         <outlet property="overlayView" destination="RWZ-CH-ypH" id="osj-aW-TzR"/>
                         <outlet property="purchaseList" destination="moa-AL-0ZY" id="lEO-Vm-uPa"/>
                         <outlet property="settingsButton" destination="UHS-S9-dMn" id="ggI-lZ-Had"/>
+                        <outlet property="weekLabel" destination="dI3-k2-pPJ" id="eAt-P8-BWD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7sO-va-BDq" userLabel="First Responder" sceneMemberID="firstResponder"/>
