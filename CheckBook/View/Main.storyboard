@@ -19,40 +19,47 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3zW-7J-Wdy">
-                                <rect key="frame" x="0.0" y="44" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="76"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="BkK-v7-X23">
-                                        <rect key="frame" x="0.0" y="10" width="375" height="30"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="XkL-Ew-dd3">
+                                        <rect key="frame" x="8" y="8" width="359" height="60"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UHS-S9-dMn" userLabel="Settings">
-                                                <rect key="frame" x="0.0" y="0.0" width="142.66666666666666" height="30"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UHS-S9-dMn" userLabel="Settings">
+                                                <rect key="frame" x="0.0" y="0.0" width="359" height="22"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <state key="normal" title="Settings"/>
                                                 <connections>
                                                     <segue destination="wSr-fG-rlM" kind="show" identifier="toSettingsVC" id="eiz-ai-zUQ"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZFV-Xa-Pdr">
-                                                <rect key="frame" x="147.66666666666666" y="0.0" width="97.333333333333343" height="30"/>
-                                                <state key="normal" title="Week"/>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1kf-FV-efs">
-                                                <rect key="frame" x="250" y="0.0" width="125" height="30"/>
-                                                <state key="normal" title="Month"/>
-                                            </button>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="BkK-v7-X23">
+                                                <rect key="frame" x="0.0" y="30" width="359" height="30"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZFV-Xa-Pdr">
+                                                        <rect key="frame" x="0.0" y="0.0" width="159" height="30"/>
+                                                        <state key="normal" title="Week"/>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1kf-FV-efs">
+                                                        <rect key="frame" x="164" y="0.0" width="195" height="30"/>
+                                                        <state key="normal" title="Month"/>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
                                         </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="paf-5Z-mlm"/>
+                                        </constraints>
                                     </stackView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="BkK-v7-X23" firstAttribute="width" secondItem="3zW-7J-Wdy" secondAttribute="width" id="0R2-tj-MSK"/>
-                                    <constraint firstAttribute="height" constant="50" id="XdY-Nv-EAS"/>
-                                    <constraint firstAttribute="bottom" secondItem="BkK-v7-X23" secondAttribute="bottom" constant="10" id="cLd-oR-sdP"/>
-                                    <constraint firstItem="BkK-v7-X23" firstAttribute="centerX" secondItem="3zW-7J-Wdy" secondAttribute="centerX" id="xKK-LT-Y2z"/>
+                                    <constraint firstItem="XkL-Ew-dd3" firstAttribute="top" secondItem="3zW-7J-Wdy" secondAttribute="topMargin" id="W8j-Am-GQJ"/>
+                                    <constraint firstAttribute="trailingMargin" secondItem="XkL-Ew-dd3" secondAttribute="trailing" id="eqm-88-fKG"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="XkL-Ew-dd3" secondAttribute="bottom" id="l44-GV-kVC"/>
+                                    <constraint firstItem="XkL-Ew-dd3" firstAttribute="leading" secondItem="3zW-7J-Wdy" secondAttribute="leadingMargin" id="zQP-BJ-5nW"/>
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="moa-AL-0ZY">
-                                <rect key="frame" x="0.0" y="94" width="375" height="644"/>
+                                <rect key="frame" x="0.0" y="120" width="375" height="618"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="purchaseCell" rowHeight="104" id="vjU-S1-OU1" customClass="PurchaseTableViewCell" customModule="CheckBook" customModuleProvider="target">
@@ -166,6 +173,7 @@
                         <outlet property="cardView" destination="0oe-sS-ZTM" id="BTB-Jx-nx3"/>
                         <outlet property="overlayView" destination="RWZ-CH-ypH" id="osj-aW-TzR"/>
                         <outlet property="purchaseList" destination="moa-AL-0ZY" id="lEO-Vm-uPa"/>
+                        <outlet property="settingsButton" destination="UHS-S9-dMn" id="ggI-lZ-Had"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7sO-va-BDq" userLabel="First Responder" sceneMemberID="firstResponder"/>

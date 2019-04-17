@@ -33,6 +33,7 @@ class PurchaseListViewController: UIViewController {
     @IBOutlet weak var cardView: UIView!
     @IBOutlet weak var overlayView: UIView!
     @IBOutlet weak var purchaseList: UITableView!
+    @IBOutlet weak var settingsButton: UIButton!
     
     //MARK: - Properties
     /// The current state of the animation. This variable is changed only when an animation completes.
@@ -144,7 +145,9 @@ class PurchaseListViewController: UIViewController {
         cardView.layer.shadowColor = UIColor.black.cgColor
         cardView.layer.shadowOpacity = 0.1
         cardView.layer.shadowRadius = 10
+        settingsButton.setTitle("Settings", for: .normal)
     }
+
     
     fileprivate func fetchChangesFromCK() {
         //Check for updates from Ck
@@ -244,7 +247,7 @@ extension PurchaseListViewController: UITableViewDelegate, UITableViewDataSource
         return CoreDataController.shared.purchaseFetchResultsController.sections?.count ?? 0
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40.0
+        return 35.0
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
