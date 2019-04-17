@@ -17,24 +17,37 @@ class CloudKitController {
     
     //MARK: - Properties
     /// The private Database of the User.
-    fileprivate let privateDB = CKContainer.default().privateCloudDatabase
+    let privateDB = CKContainer.default().privateCloudDatabase
+    /// The public Database of the User.
     let publicDB = CKContainer.default().publicCloudDatabase
+    /// The shared Database of the User.
+    let shareDB = CKContainer.default().sharedCloudDatabase
+    
+    /// The current Share or nil if not used
+    var currentShare: CKShare?
+    var currentRecordZoneID: CKRecordZone.ID?
 
-    var appleUserID: CKRecord.ID?
+    ///The RecordID of the logged in iCloud user
+    var appleUserID: CKRecord.ID? {
+        didSet {
+            NotificationCenter.default.post(Notification.appleIdFound)
+        }
+    }
     
     //MARK: - INIT
     init() {
         createZone(withName: Purchase.privateRecordZoneName) { (isSuccess, newZone) in
             if !isSuccess {
                 print("Could not create new zone.")
-            }
-        }
-        
-        fetchUserRecordID { (isSuccess) in
-            if isSuccess {
-                print("AppleUserID found")
             } else {
-                print("AppleUserID not found")
+                print("zone created")
+            }
+            self.fetchUserRecordID { (isSuccess) in
+                if isSuccess {
+                    print("AppleUserID found")
+                } else {
+                    print("AppleUserID not found")
+                }
             }
         }
     }
@@ -106,8 +119,11 @@ class CloudKitController {
     /// - parameter completion: Handler for the feched Zone.
     /// - parameter isSuccess: Confirms there was a zone with Updates.
     /// - parameter updatedZone: The updated Zone (can be nil).
-    private func fetchUpdatedZone(completion: @escaping (_ isSuccess: Bool, _ updatedZone: CKRecordZone.ID?) -> Void) {
-        let serverChangeTokenData = UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.data(forKey: CloudKitController.zoneChangeServerToken) ?? Data()
+    private func fetchUpdatedZone(inDataBase dataBase: CKDatabase = shared.privateDB , completion: @escaping (_ isSuccess: Bool, _ updatedZone: CKRecordZone.ID?) -> Void) {
+        
+        let key = dataBase == privateDB ? CloudKitController.privateServerChangeToken : CloudKitController.shareSubscribtionID
+        
+        let serverChangeTokenData = UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.data(forKey: key) ?? Data()
         
         let token: CKServerChangeToken?
         do {
@@ -121,7 +137,7 @@ class CloudKitController {
         fetch.changeTokenUpdatedBlock = { (newToken) in
             do {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: newToken, requiringSecureCoding: false)
-                UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(data, forKey: CloudKitController.zoneChangeServerToken)
+                UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(data, forKey: key)
             } catch {
                 print("Error encoding the token for UserDefualts: \(String(describing: error)) \(error.localizedDescription))")
             }
@@ -135,7 +151,7 @@ class CloudKitController {
             guard let newToken = newToken else {completion(false,nil); return}
             do {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: newToken, requiringSecureCoding: false)
-                UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(data, forKey: CloudKitController.zoneChangeServerToken)
+                UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(data, forKey: key)
             } catch {
                 print("Error encoding the token for UserDefualts: \(String(describing: error)) \(error.localizedDescription))")
             }
@@ -144,7 +160,7 @@ class CloudKitController {
         fetch.recordZoneWithIDChangedBlock = { (recordZoneID) in
             completion(true,recordZoneID)
         }
-        privateDB.add(fetch)
+        dataBase.add(fetch)
     }
     
     ///Gets all the updated records form CloudKit
@@ -152,16 +168,18 @@ class CloudKitController {
     /// - parameter isSuccess: Confirms that records where able to be fetched.
     /// - parameter updatedPurchases: The updated records (can be empty).
     /// - parameter updatedPurchases: The deleted recordIDS (can be empty).
-    func fetchUpdatedRecordsFromCK(completion: @escaping(_ isSuccess: Bool,_ updatedPurchases:[CKRecord], _ deletedPurchases: [CKRecord.ID])-> Void ) {
+    func fetchUpdatedRecordsFromCK(inDataBase database: CKDatabase = shared.privateDB ,completion: @escaping(_ isSuccess: Bool,_ updatedPurchases:[CKRecord], _ deletedPurchases: [CKRecord.ID])-> Void ) {
         var deletedRecordIDs: [CKRecord.ID] = []
         var updatedRecords: [CKRecord] = []
         
-        fetchUpdatedZone { [weak self] (isSuccess, updatedZoneID) in
+        let key = database == privateDB ? CloudKitController.updatesInPrivateZoneServerToken : CloudKitController.updatesInSharedZoneServerToken
+        
+        fetchUpdatedZone(inDataBase: database) { (isSuccess, updatedZoneID) in
             if isSuccess {
                 guard let updatedZoneID = updatedZoneID else {return}
                 
                 
-                let serverChangeTokenData = UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.data(forKey: CloudKitController.updatesInZoneServerToken) ?? Data()
+                let serverChangeTokenData = UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.data(forKey: key) ?? Data()
                 
                 let token: CKServerChangeToken?
                 do {
@@ -187,7 +205,7 @@ class CloudKitController {
                     guard let newToken = newServerChangeToken else {completion(false,updatedRecords,deletedRecordIDs); return}
                     do {
                         let data = try NSKeyedArchiver.archivedData(withRootObject: newToken, requiringSecureCoding: false)
-                        UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(data, forKey: CloudKitController.updatesInZoneServerToken)
+                        UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(data, forKey: key)
                     } catch {
                         print("Error encoding the token for UserDefualts: \(String(describing: error)) \(error.localizedDescription))")
                     }
@@ -203,7 +221,7 @@ class CloudKitController {
                     }
                 }
                 
-                self?.privateDB.add(fetch)
+                database.add(fetch)
                 
             } else {
                 completion(false,updatedRecords,deletedRecordIDs)
@@ -211,14 +229,45 @@ class CloudKitController {
         }
     }
     
+    ///Fetches the Metadata of a share for a given URL. Assigns the ZoneID of the RootRecord to the property in the CloudKitController
+    /// - parameter url: The URL for the CKShare.
+    /// - parameter completion: Handler for when the Share.Meta was found.
+    /// - parameter isSuccess: Confirms the Share.Meta was found.
+    /// - parameter share: The CkShare associate with the Share.Meta that was found
+    func fetchShareMetadata(forURL url: URL, _ completion: @escaping (_ isSuccess:Bool, _ share: CKShare?) -> Void) {
+        
+        let operation = CKFetchShareMetadataOperation(shareURLs: [url])
+        operation.perShareMetadataBlock = { (shareUrl,fetchedMeta,error) in
+            if let error = error {
+                print("There was an error fetching the ShareMetaData for the URL: \(error)")
+                completion(false, nil)
+                return
+            }
+            
+            guard let meta = fetchedMeta, url == shareUrl else {completion(false,nil); return}
+            self.currentRecordZoneID =  meta.rootRecordID.zoneID
+            completion(true, meta.share)
+        }
+        
+        operation.fetchShareMetadataCompletionBlock = { error in
+            if let error = error {
+                print("There was an error fetching the ShareMetaData for the URL: \(error)")
+                completion(false, nil)
+                return
+            }
+        }
+        CKContainer.default().add(operation)
+    }
+    
     /// Updates the record if the record exists in the source of truth.
     /// - parameter record: The record that needs updating.
+    /// - parameter database: The database where the record should be saved in
     /// - parameter completion: Handler for when the record has been updated.
     /// - parameter isSuccess: Confirms the new record was updated.
     /// - parameter updatedRecord: The updated record or nil if the record could not be updated in CloudKit.
-    func update(record: CKRecord, completion: @escaping (_ isSuccess: Bool, _ updatedRecord: CKRecord?) -> Void) {
-        
-        saveChangestoCK(recordsToUpdate: [record], purchasesToDelete: []) { (isSuccess, savedRecords, _) in
+    func update(record: CKRecord, inDataBase dataBase: CKDatabase = shared.privateDB, completion: @escaping (_ isSuccess: Bool, _ updatedRecord: CKRecord?) -> Void) {
+
+        saveChangestoCK(recordsToUpdate: [record], purchasesToDelete: [], toDataBase: dataBase) { (isSuccess, savedRecords, _) in
             if isSuccess {
                 guard let updatedRecord = savedRecords?.first , updatedRecord.recordID == updatedRecord.recordID else {
                         completion(false, nil)
@@ -233,11 +282,12 @@ class CloudKitController {
     
     /// Deletes the record if the record exists in the source of truth.
     /// - parameter record: The record that needs deleting
+    /// - parameter database: The database where the record should be saved in
     /// - parameter completion: Handler for when the record has been deleted
     /// - parameter isSuccess: Confirms the record was deleted.
-    func delete(record: CKRecord, completion: @escaping (_ isSuccess: Bool) -> Void) {
-    
-        saveChangestoCK(recordsToUpdate: [], purchasesToDelete: [record.recordID]) { (isSuccess, _, deletedRecordIDs) in
+    func delete(record: CKRecord, inDataBase dataBase: CKDatabase, completion: @escaping (_ isSuccess: Bool) -> Void) {
+
+        saveChangestoCK(recordsToUpdate: [], purchasesToDelete: [record.recordID], toDataBase: dataBase) { (isSuccess, _, deletedRecordIDs) in
             if isSuccess {
                 guard let recordID = deletedRecordIDs?.first , recordID == record.recordID else {
                     completion(false)
@@ -250,41 +300,53 @@ class CloudKitController {
         }
     }
     
+    /// Deletes all the recordZones and all of its contents in the private DataBase
+    func deleteRecordZones() {
+        privateDB.fetchAllRecordZones { (allZones, error) in
+            if let error = error {
+                print("An Error fetching all recordZones from CK has occured. \(error), \(error.localizedDescription)")
+                return
+            }
+            let allZoneIDs = allZones?.compactMap({ $0.zoneID })
+            let operation = CKModifyRecordZonesOperation(recordZonesToSave: [], recordZoneIDsToDelete: allZoneIDs)
+            operation.modifyRecordZonesCompletionBlock = { (_,_,error) in
+                if let error = error {
+                    print("An Error deleteing all recordZones from CK has occured. \(error), \(error.localizedDescription)")
+                    return
+                }
+            }
+            
+            self.privateDB.add(operation)
+        }
+    }
+    
     //MARK: - Subscribtion
     ///Subscribes to all new changes in the given CKRecordZone.
-    /// - parameter zone: The zone to subrscribe to changes to.
-    func subscribeToNewChanges(forRecodZone zone: CKRecordZone) {
-        let privateZoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
+    /// - parameter zone: The zone to subscribe to changes to.
+    func subscribeToNewChanges(forRecodZone zone: CKRecordZone.ID? , inDataBase dataBase: CKDatabase = CloudKitController.shared.privateDB) {
+        var subscription: CKSubscription
         
-        let subscription = CKRecordZoneSubscription(zoneID: zone.zoneID, subscriptionID: CloudKitController.privateSubID)
-        
+        if zone != nil {
+            subscription = CKDatabaseSubscription(subscriptionID: CloudKitController.shareSubscribtionID)
+        } else {
+            let privateZoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
+            subscription = CKRecordZoneSubscription(zoneID: privateZoneID, subscriptionID: CloudKitController.privateSubID)
+        }
         
         let notificationInfo = CKSubscription.NotificationInfo()
         notificationInfo.title = "New Record"
         notificationInfo.alertBody = "New Record available"
+        notificationInfo.shouldSendContentAvailable = true
+
         
         subscription.notificationInfo = notificationInfo
         
-        privateDB.save(subscription) { (_, error) in
+        dataBase.save(subscription) { (_, error) in
             if let error = error {
                 print("An Error signing up for a subscribtion has occured: \(error), \(error.localizedDescription)")
                 return
             }
         }
-    }
-    
-    ///Removes Subscribtion with given ID.
-    /// - parameter subscribtionID: The zone to subrscribe to changes to.
-    func removeSubscribtion(withSubscribtionID subscribtionID: String) {
-        
-        let modifyOperation = CKModifySubscriptionsOperation(subscriptionsToSave: [], subscriptionIDsToDelete: [subscribtionID])
-
-        modifyOperation.modifySubscriptionsCompletionBlock = { (_,_,_) in
-
-        }
-
-        privateDB.add(modifyOperation)
-        
     }
     
     //MARK: - Save
@@ -301,7 +363,7 @@ class CloudKitController {
         operation.savePolicy = .changedKeys
         operation.modifyRecordsCompletionBlock = { (savedRecords,deletedRecords,error) in
             if let error = error {
-                print("An Error updating CK has occured. \(error), \(error.localizedDescription)")
+                print("An Error updating CK with \(String(describing: records.first?.recordType)) has occured. \(error), \(error.localizedDescription)")
                 completion(false, savedRecords,deletedRecords)
                 return
             }

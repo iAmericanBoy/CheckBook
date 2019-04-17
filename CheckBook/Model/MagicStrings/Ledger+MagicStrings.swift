@@ -17,4 +17,6 @@ extension Ledger {
     static let nameKey = "name"
     /// "lastModified"
     static let lastModifiedKey = "lastModified"
+    /// "shareURL"
+    static let shareURLKey = "shareURL"
 }

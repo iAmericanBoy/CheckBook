@@ -21,7 +21,7 @@ class CoreDataController {
         let fetchRequest: NSFetchRequest<Purchase> = Purchase.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
-        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: "date", cacheName: nil)
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: "day", cacheName: nil)
     }()
     
     ///FetchController to fetch all the PurchaseMethods.
@@ -49,21 +49,20 @@ class CoreDataController {
     }()
     
     ///FetchController to fetch all the Ledgers.
-    let ledgerFetchResultsController: NSFetchedResultsController<Ledger> = {
+    let ledgersFetchResultsController: NSFetchedResultsController<Ledger> = {
         let fetchRequest: NSFetchRequest<Ledger> = Ledger.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
     }()
-    
-    
+        
     //MARK: - init
     ///Simple initializer to set up the fetchResultsController.
     init() {
         do{
             try purchaseFetchResultsController.performFetch()
             try purchaseMethodFetchResultsController.performFetch()
-            try ledgerFetchResultsController.performFetch()
+            try ledgersFetchResultsController.performFetch()
             try categoryFetchResultsController.performFetch()
 
         } catch {
@@ -189,6 +188,35 @@ class CoreDataController {
         if let moc = object.managedObjectContext {
             moc.delete(object)
             saveToPersistentStore()
+        }
+    }
+    
+    /// Removes all the objects in CoreDataStore
+    func clearCoreDataStore() {
+        let entities = CoreDataStack.container.managedObjectModel.entities
+        for entity in entities {
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity.name!)
+            let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+            deleteRequest.resultType = NSBatchDeleteRequestResultType.resultTypeObjectIDs
+            do {
+                let result = try CoreDataStack.context.execute(deleteRequest) as? NSBatchDeleteResult
+                
+                let objectIDArray = result?.result as? [NSManagedObjectID]
+                let changes = [NSDeletedObjectsKey : objectIDArray]
+                NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes as [AnyHashable : Any], into: [CoreDataStack.context])
+            } catch {
+                print(error)
+            }
+        }
+        
+        do{
+            try purchaseFetchResultsController.performFetch()
+            try purchaseMethodFetchResultsController.performFetch()
+            try ledgersFetchResultsController.performFetch()
+            try categoryFetchResultsController.performFetch()
+            
+        } catch {
+            print("Error loading fetchResultsControllers. \(String(describing: error)), \(error.localizedDescription)")
         }
     }
     

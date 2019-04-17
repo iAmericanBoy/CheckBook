@@ -51,6 +51,11 @@ class PurchaseListViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: Notification.syncFinished.name, object: nil, queue: .main) { (_) in
             self.purchaseList.reloadData()
         }
+        NotificationCenter.default.addObserver(forName: Notification.ledgerAlreadyExists.name, object: nil, queue: .main) { (_) in
+            self.tooManyLedgers {
+                self.performSegue(withIdentifier: "toSettingsVC", sender: nil)
+            }
+        }
     }
     
     func hideCard() {
@@ -147,10 +152,29 @@ class PurchaseListViewController: UIViewController {
             if isSuccess {
                 SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
             }
+            SyncController.shared.saveCachedPurchasesToCK()
+
+            //Fetch Share
+            if let stringURL = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.url, let url = URL(string: stringURL) {
+                CloudKitController.shared.fetchShareMetadata(forURL: url) { (isSuccess, share) in
+                    if isSuccess {
+                        CloudKitController.shared.currentShare = share
+                    }
+                }
+            }
         }
-        SyncController.shared.saveCachedPurchasesToCK()
-        
-        CloudKitController.shared.subscribeToNewChanges(forRecodZone: CKRecordZone(zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)))
+        CloudKitController.shared.fetchUpdatedRecordsFromCK(inDataBase: CloudKitController.shared.shareDB) { (isSuccess, recordsToUpdate, recordIDsToDelete) in
+            if isSuccess {
+                SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
+            }
+            if let stringURL = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.url, let url = URL(string: stringURL) {
+                CloudKitController.shared.fetchShareMetadata(forURL: url) { (isSuccess, share) in
+                    if isSuccess {
+                        CloudKitController.shared.currentShare = share
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -242,6 +266,7 @@ extension PurchaseListViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let purchase = CoreDataController.shared.purchaseFetchResultsController.object(at: indexPath)
+        self.addPurchaseViewController?.currentState = .open
         self.addPurchaseViewController?.purchase = purchase
         self.showCard()
     }

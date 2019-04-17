@@ -9,10 +9,16 @@
 import Foundation
 
 extension CloudKitController {
-    /// "serverChangeToken"
-    static let zoneChangeServerToken = "serverChangeToken"
-    /// "updatesInZoneServerToken"
-    static let updatesInZoneServerToken = "updatesInZoneServerToken"
+    /// "shareServerChangeToken"
+    static let shareServerChangeToken = "shareServerChangeToken"
+    /// "privateServerChangeToken"
+    static let privateServerChangeToken = "privateServerChangeToken"
+    /// "updatesInPrivateZoneServerToken"
+    static let updatesInPrivateZoneServerToken = "updatesInPrivateZoneServerToken"
+    /// "updatesInSharedZoneServerToken"
+    static let updatesInSharedZoneServerToken = "updatesInSharedZoneServerToken"
     /// "privateSubscribtionID"
     static let privateSubID = "privateSubscribtionID"
+    /// "shareSubscribtionID"
+    static let shareSubscribtionID = "shareSubscribtionID"
 }

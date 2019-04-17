@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CloudKit
 
 class SettingsViewController: UIViewController {
     
@@ -43,9 +44,83 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
 
 //MARK: - SettingsDelegate
 extension SettingsViewController: SettingsDelegate {
-    func shareLedger() {
-        print("SHARE!")
+    func deleteUserData() {
+        self.deleteUserData {
+            CoreDataController.shared.clearCoreDataStore()
+            CoreDataController.shared.clearCoreDataStore()
+            UserDefaults.standard.removePersistentDomain(forName: "group.com.oskman.DaysInARowGroup")
+            CloudKitController.shared.deleteRecordZones()
+        }
     }
     
-    
+    func shareLedger() {
+        
+        if let share = CloudKitController.shared.currentShare {
+            let sharingViewController = UICloudSharingController(share: share, container: CKContainer.default())
+            sharingViewController.delegate = self
+            
+            self.present(sharingViewController, animated: true)
+            
+        } else {
+            
+            let zoneID: CKRecordZone.ID
+            if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
+                zoneID = currentZoneID
+            } else {
+                zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
+            }
+            
+            guard let ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first, let record = CKRecord(ledger: ledger, zoneID: zoneID) else {return}
+            
+            let share = CKShare(rootRecord: record)
+            share.publicPermission = .readWrite
+            
+            let sharingViewController = UICloudSharingController(preparationHandler: {(UICloudSharingController, handler: @escaping (CKShare?, CKContainer?, Error?) -> Void) in
+                let operation = CKModifyRecordsOperation(recordsToSave: [record,share], recordIDsToDelete: nil)
+                operation.savePolicy = .changedKeys
+                
+                operation.modifyRecordsCompletionBlock = { (savedRecord, _,error) in
+                    handler(share, CKContainer.default(), error)
+                }
+                
+                operation.perRecordCompletionBlock = { (savedRecord,error) in
+                    if let error = error {
+                        print(error)
+                    }
+                }
+                CloudKitController.shared.privateDB.add(operation)
+            })
+            
+            sharingViewController.delegate = self
+            
+            self.present(sharingViewController, animated: true)
+        }
+    }
 }
+
+//MARK: - UICloudSharingControllerDelegate
+extension SettingsViewController: UICloudSharingControllerDelegate {
+    func cloudSharingControllerDidSaveShare(_ csc: UICloudSharingController) {
+        guard let ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first, let url = csc.share?.url else {return}
+        
+        LedgerController.shared.add(stringURL: url.absoluteString, toLedger: ledger) { (isSuccess) in
+            if isSuccess {
+                print("Succesfully added Url to Ledger")
+                print(url)
+            }
+        }
+    }
+    
+    func cloudSharingController(_ csc: UICloudSharingController, failedToSaveShareWithError error: Error) {
+        print("failed to save ckshare: \(error),\(error.localizedDescription)")
+    }
+    
+    func itemThumbnailData(for csc: UICloudSharingController) -> Data? {
+        return nil //You can set a hero image in your share sheet. Nil uses the default.
+    }
+    
+    func itemTitle(for csc: UICloudSharingController) -> String? {
+        return CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.name
+    }
+}
+

@@ -25,7 +25,8 @@ class AddPurchaseViewController: UIViewController {
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var categoryTextField: UITextField!
-    @IBOutlet var toolBar: UIToolbar!
+    @IBOutlet weak var ledgerTextField: UITextField!
+    @IBOutlet var dateToolBar: UIToolbar!
     @IBOutlet var datePicker: UIDatePicker!
     @IBOutlet var methodPickerView: UIPickerView!
     @IBOutlet var paymentMethodToolBar: UIToolbar!
@@ -35,11 +36,10 @@ class AddPurchaseViewController: UIViewController {
     //MARK: - Properties
     var delegate: AddPurchaseCardDelegate?
     /// The current state of the card.
-    var currentState: State = .open
+    var currentState = State.open
     let numberFormatter = NumberFormatter()
     var purchase: Purchase? {
         didSet {
-            currentState = .open
             updateViews()
         }
     }
@@ -54,7 +54,31 @@ class AddPurchaseViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification,object: nil)
-
+        NotificationCenter.default.addObserver(forName: Notification.syncFinished.name, object: nil, queue: .main) { (_) in
+            
+            try! CoreDataController.shared.categoryFetchResultsController.performFetch()
+            try! CoreDataController.shared.purchaseMethodFetchResultsController.performFetch()
+            self.methodPickerView.reloadAllComponents()
+            self.categoryPickerView.reloadAllComponents()
+            if CoreDataController.shared.categoryFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
+                self.categoryTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
+            }
+            if CoreDataController.shared.purchaseMethodFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
+                self.methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
+            }
+        }
+        NotificationCenter.default.addObserver(forName: Notification.appleIdFound.name, object: nil, queue: .main) { (_) in
+            
+            
+            if CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.count != 0 {
+                //add button = shareButton
+                
+            } else {
+                _ = LedgerController.shared.createNewLedgerWith(name: "New Ledger")
+                try! CoreDataController.shared.ledgersFetchResultsController.performFetch()
+                print("Ledger Created")
+            }
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -87,6 +111,7 @@ class AddPurchaseViewController: UIViewController {
 
         let methodRow = methodPickerView.selectedRow(inComponent: 0)
         let categoryRow = categoryPickerView.selectedRow(inComponent: 0)
+        
         let date = datePicker.date
         guard let storeName = storeNameTextField.text, !storeName.isEmpty,
             let amount = amountTextField.text, let amountNumber = numberFormatter.number(from: amount),
@@ -100,16 +125,17 @@ class AddPurchaseViewController: UIViewController {
         let method = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(row: methodRow, section: 0))
         let category = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(row: categoryRow, section: 0))
         
+        let ledger: Ledger
+        if CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.count != 0 {
+            ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects!.first!
+        } else {
+            ledger = LedgerController.shared.createNewLedgerWith(name: "")
+        }
         
         if let purchase = purchase {
             PurchaseController.shared.update(purchase: purchase, amount: NSDecimalNumber(decimal: amountNumber.decimalValue) as Decimal, date: date, item: "", storeName: storeName, purchaseMethod: method, category: category)
         } else {
-            if let ledger = CoreDataController.shared.ledgerFetchResultsController.fetchedObjects?.first {
-                PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger, category: category)
-            } else {
-                let newLedger = LedgerController.shared.createNewLedgerWith(name: "Hello")
-                PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: newLedger, category: category)
-            }
+            PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger, category: category)
         }
         purchase = nil
 
@@ -133,6 +159,7 @@ class AddPurchaseViewController: UIViewController {
             }
         }
     }
+    
     
     @IBAction func doneButtonTapped(_ sender: UIBarButtonItem) {
         dismissKeyBoards()
@@ -162,7 +189,6 @@ class AddPurchaseViewController: UIViewController {
             storeNameTextField.isHidden = true
             dateTextField.isHidden = true
             amountTextField.isHidden = true
-
         }
         
         if let purchase = purchase {
@@ -186,23 +212,28 @@ class AddPurchaseViewController: UIViewController {
             let dateFormatter = DateFormatter()
             dateFormatter.locale = Locale.autoupdatingCurrent
             dateFormatter.dateStyle = .medium
-            datePicker.date = purchase.date ?? Date()
-            dateTextField.text = dateFormatter.string(from: purchase.date ?? Date())
+            datePicker.date = purchase.date as Date? ?? Date()
+            dateTextField.text = dateFormatter.string(from: purchase.date as Date? ?? Date())
         }
     }
     
     fileprivate func setupViews() {
+        methodPickerView.delegate = self
+        methodPickerView.dataSource = self
+        categoryPickerView.dataSource = self
+        categoryPickerView.delegate = self
+        
         numberFormatter.numberStyle = .currency
-
+        
         storeNameTextField.delegate = self
+        
         amountTextField.delegate = self
         amountTextField.text = NumberFormatter.localizedString(from: 0, number: .currency)
         
         categoryTextField.delegate = self
         categoryTextField.inputAccessoryView = categoryToolBar
         categoryTextField.inputView = categoryPickerView
-        categoryPickerView.dataSource = self
-        categoryPickerView.delegate = self
+
         if CoreDataController.shared.categoryFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
             categoryTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
         }
@@ -213,12 +244,9 @@ class AddPurchaseViewController: UIViewController {
         if CoreDataController.shared.purchaseMethodFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
             methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
         }
-
-        methodPickerView.delegate = self
-        methodPickerView.dataSource = self
         
         dateTextField.delegate = self
-        dateTextField.inputAccessoryView = toolBar
+        dateTextField.inputAccessoryView = dateToolBar
         dateTextField.inputView = datePicker
         
         let dateFormatter = DateFormatter()
@@ -226,7 +254,7 @@ class AddPurchaseViewController: UIViewController {
         dateFormatter.dateStyle = .medium
         dateTextField.text = dateFormatter.string(from: Date())
         
-        amountTextField.inputAccessoryView = toolBar
+        amountTextField.inputAccessoryView = dateToolBar
         
         view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         view.layer.cornerRadius = 20
@@ -247,6 +275,7 @@ class AddPurchaseViewController: UIViewController {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
             self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight - 22, right: 0)
+            self.addPurchaseButton.setTitle("", for: .normal)
         }
     }
 }
@@ -284,10 +313,19 @@ extension AddPurchaseViewController: UITextFieldDelegate {
         }
     }
     
-    
-    
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        switch currentState {
+        case .open:
+            if  purchase != nil {
+                addPurchaseButton.setTitle("Update Purchase", for: .normal)
+            } else {
+                addPurchaseButton.setTitle("Save Purchase", for: .normal)
+            }
+
+        case .closed:
+            addPurchaseButton.setTitle("Add Purchase", for: .normal)
+        }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

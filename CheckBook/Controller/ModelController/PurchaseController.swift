@@ -29,8 +29,22 @@ class PurchaseController {
         let purchase = Purchase(amount: amount, date: date, item: item, storeName: storeName, purchaseMethod: purchaseMethod, category: category, appleUserRecordName: appleUserID.recordName, ledger: ledger)
         CoreDataController.shared.saveToPersistentStore()
         
-        guard let recordToCreate = CKRecord(purchase: purchase) else {return}
-        CloudKitController.shared.create(record: recordToCreate) { (isSuccess, newRecord) in
+        let dataBase: CKDatabase
+        if UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isParticipant") ?? false {
+            dataBase = CloudKitController.shared.shareDB
+        } else {
+            dataBase = CloudKitController.shared.privateDB
+        }
+        
+        let zoneID: CKRecordZone.ID
+        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
+            zoneID = currentZoneID
+        } else {
+            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
+        }
+
+        guard let recordToCreate = CKRecord(purchase: purchase, zoneID: zoneID) else {return}
+        CloudKitController.shared.create(record: recordToCreate, inDataBase: dataBase) { (isSuccess, newRecord) in
             if !isSuccess {
                 guard let uuid = purchase.uuid else {return}
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
@@ -48,16 +62,31 @@ class PurchaseController {
     /// - parameter category: The updated category of the purchase.
     func update(purchase: Purchase, amount:Decimal?, date: Date?, item: String?, storeName: String?, purchaseMethod: PurchaseMethod?, category: Category?) {
         if let amount = amount {purchase.amount = amount as NSDecimalNumber}
-        if let date = date {purchase.date = date}
+        if let date = date {purchase.date = date as NSDate}
         if let item = item {purchase.item = item}
         if let storeName = storeName {purchase.storeName = storeName}
         if let purchaseMethod = purchaseMethod {purchase.purchaseMethod = purchaseMethod}
         if let category = category {purchase.category = category}
 
-        purchase.lastModified = Date()
+        purchase.lastModified = Date() as NSDate
         CoreDataController.shared.saveToPersistentStore()
-        guard let recordToUpdate = CKRecord(purchase: purchase) else {return}
-        CloudKitController.shared.update(record: recordToUpdate) { (isSuccess, updatedPurchase) in
+        
+        let dataBase: CKDatabase
+        if UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isParticipant") ?? false {
+            dataBase = CloudKitController.shared.shareDB
+        } else {
+            dataBase = CloudKitController.shared.privateDB
+        }
+        
+        let zoneID: CKRecordZone.ID
+        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
+            zoneID = currentZoneID
+        } else {
+            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
+        }
+        
+        guard let recordToUpdate = CKRecord(purchase: purchase, zoneID: zoneID) else {return}
+        CloudKitController.shared.update(record: recordToUpdate, inDataBase: dataBase) { (isSuccess, updatedPurchase) in
             if !isSuccess {
                 guard let uuid = purchase.uuid else {return}
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
@@ -68,8 +97,24 @@ class PurchaseController {
     /// Deletes the Purchase, deletes it from Cotext and CloudKit. If the CK delete Fails the puchease gets added to the cache for uploading at a later date.
     /// - parameter purchase: The purchase to delete.
     func delete(purchase: Purchase) {
-        guard let recordToDelete = CKRecord(purchase: purchase) else {return}
-        CloudKitController.shared.delete(record: recordToDelete) { (isSuccess) in
+        
+        let dataBase: CKDatabase
+        if UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isParticipant") ?? false {
+            dataBase = CloudKitController.shared.shareDB
+        } else {
+            dataBase = CloudKitController.shared.privateDB
+        }
+        
+        let zoneID: CKRecordZone.ID
+        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
+            zoneID = currentZoneID
+        } else {
+            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
+        }
+        
+        guard let recordToDelete = CKRecord(purchase: purchase, zoneID: zoneID) else {return}
+        
+        CloudKitController.shared.delete(record: recordToDelete, inDataBase: dataBase) { (isSuccess) in
             if !isSuccess {
                 guard let uuid = purchase.uuid else {return}
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)

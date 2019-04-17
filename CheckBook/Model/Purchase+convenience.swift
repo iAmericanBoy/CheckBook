@@ -27,7 +27,7 @@ extension Purchase {
         self.init(context: context)
         
         self.amount = amount
-        self.date = date
+        self.date = date as NSDate
         self.item = item
         self.storeName = storeName
         self.purchaseMethod = purchaseMethod
@@ -40,22 +40,24 @@ extension Purchase {
         self.ledgerUUID = ledger?.uuid
         self.categoryUUID = category?.uuid
         
-        self.lastModified = lastModified
+        self.lastModified = lastModified as NSDate
         self.uuid = uuid
     }
 }
 
 extension CKRecord {
-    convenience init?(purchase: Purchase) {
-        self.init(recordType: Purchase.typeKey, recordID: CKRecord.ID(recordName: purchase.uuid!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)))
+    convenience init?(purchase: Purchase, zoneID: CKRecordZone.ID) {
+        self.init(recordType: Purchase.typeKey, recordID: CKRecord.ID(recordName: purchase.uuid!.uuidString, zoneID: zoneID))
         
-        let purchaseMethodReference = CKRecord.Reference(recordID: CKRecord.ID(recordName: purchase.methodUUID!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)), action: CKRecord_Reference_Action.none)
+        let purchaseMethodReference = CKRecord.Reference(recordID: CKRecord.ID(recordName: purchase.methodUUID!.uuidString, zoneID: zoneID), action: CKRecord_Reference_Action.none)
         
-        let ledgerReference = CKRecord.Reference(recordID: CKRecord.ID(recordName: purchase.ledgerUUID!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)), action: .none)
+        let ledgerReference = CKRecord.Reference(recordID: CKRecord.ID(recordName: purchase.ledgerUUID!.uuidString, zoneID: zoneID), action: .deleteSelf)
         
-        let categoryReference = CKRecord.Reference(recordID: CKRecord.ID(recordName: purchase.categoryUUID!.uuidString, zoneID: CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)), action: .none)
+        let categoryReference = CKRecord.Reference(recordID: CKRecord.ID(recordName: purchase.categoryUUID!.uuidString, zoneID: zoneID), action: .none)
 
         guard let methodUUID = purchase.purchaseMethod?.uuid, let methodName = purchase.purchaseMethod?.name, let ledgerUUID = purchase.ledger?.uuid, let categoryUUID = purchase.category?.uuid else {return nil}
+        
+        setParent(CKRecord.ID(recordName: purchase.ledgerUUID!.uuidString, zoneID: zoneID))
         
         setValue(purchase.amount, forKey: Purchase.amountKey)
         setValue(purchaseMethodReference, forKey: Purchase.methodReferenceKey)
@@ -71,10 +73,3 @@ extension CKRecord {
         setValue(purchase.storeName, forKey: Purchase.storeNameKey)
     }
 }
-
-//extension Purchase {
-//    var day: Date? {
-//        let dateComponents = Calendar.current.dateComponents([.day,.month,.year], from: self.date!)
-//        return dateComponents.date
-//    }
-//}

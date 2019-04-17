@@ -18,13 +18,28 @@ class PurchaseMethodController {
     //MARK: - CRUD
     /// Creates new PurchaseMethod using the convenience initilizer inside the CoredataStack.context and tries to uploads it to CloudKit. If the upload fails the new PurchaseMethod gets added to the CacheContext for a later try.
     /// - parameter name: The name of the purchaseMethod.
-    func createNewPurchaseMethodWith(name: String) -> PurchaseMethod {
-        let newPurchaseMethod = PurchaseMethod(name: name)
+    /// - parameter ledgerUUID: The UUID of the parent.
+    func createNewPurchaseMethodWith(name: String, withLedgerUUID ledgerUUID:UUID) -> PurchaseMethod {
+        let newPurchaseMethod = PurchaseMethod(name: name, ledgerUUID: ledgerUUID)
         CoreDataController.shared.saveToPersistentStore()
         
-        guard let newRecord = CKRecord(purchaseMethod: newPurchaseMethod) else {return newPurchaseMethod}
-
-        CloudKitController.shared.create(record: newRecord) { (isSuccess, newPurchase) in
+        let zoneID: CKRecordZone.ID
+        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
+            zoneID = currentZoneID
+        } else {
+            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
+        }
+        
+        guard let newRecord = CKRecord(purchaseMethod: newPurchaseMethod, zoneID: zoneID) else {return newPurchaseMethod}
+        
+        let dataBase: CKDatabase
+        if UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isParticipant") ?? false {
+            dataBase = CloudKitController.shared.shareDB
+        } else {
+            dataBase = CloudKitController.shared.privateDB
+        }
+        
+        CloudKitController.shared.create(record: newRecord, inDataBase: dataBase) { (isSuccess, newPurchase) in
             if !isSuccess {
                 guard let uuid = newPurchaseMethod.uuid else {return}
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
@@ -41,9 +56,23 @@ class PurchaseMethodController {
         purchaseMethod.lastModified = Date()
         CoreDataController.shared.saveToPersistentStore()
         
-        guard let recordToUpdate = CKRecord(purchaseMethod: purchaseMethod) else {return}
-
-        CloudKitController.shared.update(record: recordToUpdate) { (isSuccess, updatedPurchase) in
+        let zoneID: CKRecordZone.ID
+        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
+            zoneID = currentZoneID
+        } else {
+            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
+        }
+        
+        guard let recordToUpdate = CKRecord(purchaseMethod: purchaseMethod, zoneID: zoneID) else {return}
+        
+        let dataBase: CKDatabase
+        if UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isParticipant") ?? false {
+            dataBase = CloudKitController.shared.shareDB
+        } else {
+            dataBase = CloudKitController.shared.privateDB
+        }
+        
+        CloudKitController.shared.update(record: recordToUpdate, inDataBase: dataBase) { (isSuccess, updatedPurchase) in
             if !isSuccess {
                 guard let uuid = purchaseMethod.uuid else {return}
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
@@ -60,15 +89,29 @@ class PurchaseMethodController {
         oldPurchaseMethod.removeFromPurchases(purchase)
         purchase.purchaseMethod = newPurchaseMethod
         newPurchaseMethod.addToPurchases(purchase)
-        purchase.lastModified = Date()
+        purchase.lastModified = Date() as NSDate
         newPurchaseMethod.lastModified = Date()
         oldPurchaseMethod.lastModified = Date()
 
-        guard let oldPurchaseMethodRecord = CKRecord(purchaseMethod: oldPurchaseMethod),
-            let newPurchaseMethodRecord = CKRecord(purchaseMethod: newPurchaseMethod),
-            let purchaseRecord = CKRecord(purchase: purchase) else {return}
-
-        CloudKitController.shared.saveChangestoCK(recordsToUpdate: [oldPurchaseMethodRecord,newPurchaseMethodRecord,purchaseRecord], purchasesToDelete: []) { (isSuccess, updatedRecords, _) in
+        let zoneID: CKRecordZone.ID
+        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
+            zoneID = currentZoneID
+        } else {
+            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
+        }
+        
+        guard let oldPurchaseMethodRecord = CKRecord(purchaseMethod: oldPurchaseMethod, zoneID: zoneID),
+            let newPurchaseMethodRecord = CKRecord(purchaseMethod: newPurchaseMethod, zoneID: zoneID),
+            let purchaseRecord = CKRecord(purchase: purchase, zoneID: zoneID) else {return}
+        
+        let dataBase: CKDatabase
+        if UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isParticipant") ?? false {
+            dataBase = CloudKitController.shared.shareDB
+        } else {
+            dataBase = CloudKitController.shared.privateDB
+        }
+        
+        CloudKitController.shared.saveChangestoCK(recordsToUpdate: [oldPurchaseMethodRecord,newPurchaseMethodRecord,purchaseRecord], purchasesToDelete: [], toDataBase: dataBase) { (isSuccess, updatedRecords, _) in
             if !isSuccess {
                 guard let uuid = purchase.uuid else {return}
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
@@ -85,9 +128,23 @@ class PurchaseMethodController {
     /// - parameter purchase: The purchaseMethod to delete.
     func delete(purchaseMethod: PurchaseMethod) {
         
-        guard let recordToDelete = CKRecord(purchaseMethod: purchaseMethod) else {return}
-
-        CloudKitController.shared.delete(record: recordToDelete) { (isSuccess) in
+        let zoneID: CKRecordZone.ID
+        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
+            zoneID = currentZoneID
+        } else {
+            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
+        }
+        
+        guard let recordToDelete = CKRecord(purchaseMethod: purchaseMethod, zoneID: zoneID) else {return}
+        
+        let dataBase: CKDatabase
+        if UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isParticipant") ?? false {
+            dataBase = CloudKitController.shared.shareDB
+        } else {
+            dataBase = CloudKitController.shared.privateDB
+        }
+        
+        CloudKitController.shared.delete(record: recordToDelete, inDataBase: dataBase) { (isSuccess) in
             if !isSuccess {
                 guard let uuid = purchaseMethod.uuid else {return}
                 SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
