@@ -253,23 +253,8 @@ extension PurchaseListViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: PurchaseHeader.reuseIdentifier) as? PurchaseHeader
         
-        let numberFormatter = NumberFormatter()
-        numberFormatter.locale = Locale.autoupdatingCurrent
-        numberFormatter.numberStyle = .currency
+        view?.purchases = CoreDataController.shared.purchaseFetchResultsController.sections?[section].objects as? [Purchase]
         
-        
-        var total:NSDecimalNumber = 0.0
-        for purchase in CoreDataController.shared.purchaseFetchResultsController.sections?[section].objects as? [Purchase] ?? [] {
-            total = total.adding(purchase.amount ?? 0)
-        }
-        view?.amountLabel.text = numberFormatter.string(from: total)
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale.autoupdatingCurrent
-        dateFormatter.dateStyle = .short
-        let sectionDate = CoreDataController.shared.purchaseFetchResultsController.object(at: IndexPath(row: 0, section: section)).day ?? Date() as NSDate
-        
-        view?.dateLabel.text = dateFormatter.string(from: sectionDate as Date)
         return view
     }
     

@@ -25,6 +25,12 @@ class PurchaseHeader: UITableViewHeaderFooterView {
     //MARK: - Properties
     static let reuseIdentifier = "PurchaseHeader"
     
+    var purchases: [Purchase]? {
+        didSet{
+            updateViews()
+        }
+    }
+    
     //MARK: - LifeCycle
     override public init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
@@ -49,6 +55,22 @@ class PurchaseHeader: UITableViewHeaderFooterView {
     }
     
     func updateViews() {
+        guard let purchases = purchases else {return}
+        let numberFormatter = NumberFormatter()
+        numberFormatter.locale = Locale.autoupdatingCurrent
+        numberFormatter.numberStyle = .currency
         
+        var total:NSDecimalNumber = 0.0
+        for purchase in purchases  {
+            total = total.adding(purchase.amount ?? 0)
+        }
+        amountLabel.text = numberFormatter.string(from: total)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale.autoupdatingCurrent
+        dateFormatter.dateStyle = .short
+        let sectionDate = purchases.first?.day ?? Date() as NSDate
+        
+        dateLabel.text = dateFormatter.string(from: sectionDate as Date)
     }
 }
