@@ -12,6 +12,7 @@ protocol AddPurchaseCardDelegate: class {
     func panDidEnd() -> State
     func userDidInteractWithCard() -> State
     func panViews(withPanPoint panPoint:CGPoint)
+    func cardPanned(recognizer: UIPanGestureRecognizer)
 }
 
 class AddPurchaseViewController: UIViewController {
@@ -89,20 +90,21 @@ class AddPurchaseViewController: UIViewController {
     //MARK: - Actions
     @IBAction func handlePan(_ sender: UIPanGestureRecognizer) {
         dismissKeyBoards()
-        switch sender.state {
-        case .began:
-            delegate?.panViews(withPanPoint: CGPoint(x: view.center.x, y: view.center.y + sender.translation(in: view).y))
-            sender.setTranslation(CGPoint.zero, in: view)
-        case .changed:
-            delegate?.panViews(withPanPoint: CGPoint(x: view.center.x, y: view.center.y + sender.translation(in: view).y))
-            sender.setTranslation(CGPoint.zero, in: view)
-        case .ended:
-            sender.setTranslation(CGPoint.zero, in: view)
-            currentState = delegate?.panDidEnd() ?? State.closed
-            updateViews()
-        default:
-            return
-        }
+//        switch sender.state {
+//        case .began:
+//            delegate?.panViews(withPanPoint: CGPoint(x: view.center.x, y: view.center.y + sender.translation(in: view).y))
+//            sender.setTranslation(CGPoint.zero, in: view)
+//        case .changed:
+//            delegate?.panViews(withPanPoint: CGPoint(x: view.center.x, y: view.center.y + sender.translation(in: view).y))
+//            sender.setTranslation(CGPoint.zero, in: view)
+//        case .ended:
+//            sender.setTranslation(CGPoint.zero, in: view)
+//            currentState = delegate?.panDidEnd() ?? State.closed
+//            updateViews()
+//        default:
+//            return
+//        }
+        delegate?.cardPanned(recognizer: sender)
     }
 
     @IBAction func addPurchaseButtonTapped(_ sender: UIButton) {
@@ -260,6 +262,7 @@ class AddPurchaseViewController: UIViewController {
         view.layer.cornerRadius = 20
 
         pullView.layer.cornerRadius = pullView.frame.height / 2
+        pullView.translatesAutoresizingMaskIntoConstraints = false
     }
     
     fileprivate func dismissKeyBoards() {
