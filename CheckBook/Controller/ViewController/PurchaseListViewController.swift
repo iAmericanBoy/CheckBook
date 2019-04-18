@@ -347,13 +347,16 @@ extension PurchaseListViewController: NSFetchedResultsControllerDelegate {
         case .move:
             guard let newIndexPath = newIndexPath, let indexPath = indexPath else {return}
             purchaseList.moveRow(at: indexPath, to: newIndexPath)
-            purchaseList.reloadSections(IndexSet(arrayLiteral: newIndexPath.section, indexPath.section), with: .automatic)
+            if purchaseList.numberOfRows(inSection: indexPath.section) > 1 {
+                purchaseList.reloadSections(IndexSet(arrayLiteral: newIndexPath.section, indexPath.section), with: .automatic)
+            }
 
         case .update:
             guard let indexPath = indexPath else {return}
             purchaseList.reloadRows(at: [indexPath], with: .automatic)
-            purchaseList.reloadSections(IndexSet(arrayLiteral: indexPath.section), with: .automatic)
-
+            if purchaseList.numberOfRows(inSection: indexPath.section) > 0 {
+                purchaseList.reloadSections(IndexSet(arrayLiteral: indexPath.section), with: .automatic)
+            }
         }
     }
     
@@ -366,8 +369,11 @@ extension PurchaseListViewController: NSFetchedResultsControllerDelegate {
             purchaseList.insertSections(indexSet, with: .automatic)
         case .delete:
             purchaseList.deleteSections(indexSet, with: .automatic)
-        default:
-            ()
+        case .update:
+            print(indexSet)
+            purchaseList.reloadSections(indexSet, with: .automatic)
+        case .move:
+            purchaseList.reloadSections(indexSet, with: .automatic)
         }
     }
 }
