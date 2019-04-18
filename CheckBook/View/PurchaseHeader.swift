@@ -19,13 +19,13 @@ class PurchaseHeader: UITableViewHeaderFooterView {
     let dateLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .purple
         return label
     }()
     
     let boarderView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .black
         return view
     }()
     
@@ -50,21 +50,22 @@ class PurchaseHeader: UITableViewHeaderFooterView {
     
     //MARK: - Private Functions
     func setupViews(){
+        contentView.backgroundColor = UIColor.purple.withAlphaComponent(0.06)
         
         contentView.addSubview(boarderView)
         boarderView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor).isActive = true
         boarderView.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor).isActive = true
         boarderView.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor).isActive = true
-        boarderView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        boarderView.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
         
         contentView.addSubview(amountLabel)
         amountLabel.topAnchor.constraint(equalTo: boarderView.bottomAnchor).isActive = true
-        amountLabel.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        amountLabel.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant: 12).isActive = true
         amountLabel.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -8).isActive = true
         
         contentView.addSubview(dateLabel)
         dateLabel.topAnchor.constraint(equalTo: boarderView.bottomAnchor).isActive = true
-        dateLabel.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        dateLabel.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant: 12).isActive = true
         dateLabel.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 8).isActive = true
     }
     
@@ -82,7 +83,7 @@ class PurchaseHeader: UITableViewHeaderFooterView {
         
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale.autoupdatingCurrent
-        dateFormatter.dateStyle = .short
+        dateFormatter.dateStyle = .medium
         let sectionDate = purchases.first?.day ?? Date() as NSDate
         
         dateLabel.text = dateFormatter.string(from: sectionDate as Date)

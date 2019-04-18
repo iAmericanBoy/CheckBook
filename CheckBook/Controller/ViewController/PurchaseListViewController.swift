@@ -36,11 +36,19 @@ class PurchaseListViewController: UIViewController {
     @IBOutlet weak var settingsButton: UIButton!
     @IBOutlet weak var monthLabel: UILabel!
     @IBOutlet weak var weekLabel: UILabel!
+    @IBOutlet weak var topView: UIView!
+    
     //MARK: - Properties
     /// The current state of the animation. This variable is changed only when an animation completes.
     private var currentState: State = .closed
+    /// All of the currently running animators.
+    private var runningAnimators = [UIViewPropertyAnimator]()
+    
+    /// The progress of each animator. This array is parallel to the `runningAnimators` array.
+    private var animationProgress = [CGFloat]()
     var impact = UIImpactFeedbackGenerator(style: .light)
-
+    private var popupOffset: CGFloat = 520
+    
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -60,9 +68,10 @@ class PurchaseListViewController: UIViewController {
         }
     }
     
+    //MARK: - Animations
     func hideCard() {
         guard let addPurchaseCard = addPurchaseViewController else {return}
-
+        
         // Sets target locations of views & then animates.
         let cardTarget = self.view.frame.maxY  - 75
         self.userInteractionAnimate(forState: .closed, animatedView: cardView, edge: cardView.frame.minY, to: cardTarget, velocity: addPurchaseCard.panGesture.velocity(in: cardView).y, insightAlphaTarget: 1)
@@ -70,7 +79,7 @@ class PurchaseListViewController: UIViewController {
     
     func showCard() {
         guard let addPurchaseCard = addPurchaseViewController else {return}
-
+        
         // Sets target locations of views & then animates.
         let target = self.view.frame.maxY
         self.userInteractionAnimate(forState: .open, animatedView: cardView, edge: cardView.frame.maxY, to: target, velocity: addPurchaseCard.panGesture.velocity(in: cardView).y, insightAlphaTarget: 0)
@@ -88,21 +97,22 @@ class PurchaseListViewController: UIViewController {
             case .open:
                 animatedView.frame = animatedView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
                 self.overlayView.alpha = 0.5
-                
+                addPurchaseCard.pullViewWidthContraint.constant = self.view.frame.width * 0.15
+
                 addPurchaseCard.view.layer.cornerRadius = 20
-                addPurchaseCard.pullView.alpha = 0.5
+                
                 animatedView.layoutIfNeeded()
             case .closed:
                 animatedView.frame = animatedView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
                 self.overlayView.alpha = 0
                 
                 addPurchaseCard.view.layer.cornerRadius = 0
-                addPurchaseCard.pullView.alpha = 0
+                addPurchaseCard.pullViewWidthContraint.constant = 0
 
                 animatedView.layoutIfNeeded()
             }
-
-
+            
+            
             self.view.layoutIfNeeded()
         }
         transitionAnimator.addAnimations({
@@ -111,7 +121,7 @@ class PurchaseListViewController: UIViewController {
         }, delayFactor: 1.0)
         
         transitionAnimator.addCompletion { (position) in
-
+            
             // update the state
             switch position {
             case .start:
@@ -126,7 +136,85 @@ class PurchaseListViewController: UIViewController {
         transitionAnimator.startAnimation()
     }
     
+    /// Animates the transition, if the animation is not already running.
+    private func animateTransitionIfNeeded(to state: State, duration: TimeInterval, velocity: CGFloat) {
+        guard let addPurchaseCard = addPurchaseViewController else {return}
+        
+        let target: CGFloat
+        let edge: CGFloat
+        
+        switch state {
+        case .open:
+            target = self.view.frame.maxY
+            edge = cardView.frame.maxY
+        case .closed:
+            target = self.view.frame.maxY  - 75
+            edge = cardView.frame.minY
+        }
+        
+        let distanceToTranslate = target - edge
+        
+        // ensure that the animators array is empty (which implies new animations need to be created)
+        guard runningAnimators.isEmpty else { return }
+        
+        // an animator for the transition
+        
+        let timing = UISpringTimingParameters(damping: 0.8, response: 0.3, initialVelocity: CGVector(dx: 0, dy: abs(velocity) * 0.01))
+        let transitionAnimator = UIViewPropertyAnimator(duration: 0.5, timingParameters: timing)
+        transitionAnimator.addAnimations {
+            switch state {
+            case .open:
+                self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
+                addPurchaseCard.addPurchaseButton.titleLabel?.text = "Save Purchase"
 
+                self.overlayView.alpha = 0.5
+                
+                addPurchaseCard.view.layer.cornerRadius = 20
+                addPurchaseCard.pullViewWidthContraint.constant = self.view.frame.width * 0.15
+
+            case .closed:
+                self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
+                addPurchaseCard.addPurchaseButton.titleLabel?.text = "Add Purchase"
+
+                self.overlayView.alpha = 0
+                
+                addPurchaseCard.view.layer.cornerRadius = 0
+                addPurchaseCard.pullViewWidthContraint.constant = 0
+
+            }
+            
+            self.view.layoutIfNeeded()
+        }
+        
+        // the transition completion block
+        transitionAnimator.addCompletion { position in
+            self.impact.prepare()
+            self.impact.impactOccurred()
+            
+            // update the state
+            switch position {
+            case .start:
+                self.currentState = state.opposite
+            case .end:
+                self.currentState = state
+            case .current:
+                ()
+            }
+            
+            
+            // remove all running animators
+            self.runningAnimators.removeAll()
+            
+        }
+        
+        // start all animators
+        transitionAnimator.startAnimation()
+        
+        // keep track of all running animators
+        runningAnimators.append(transitionAnimator)
+    }
+    
+    
     
     //MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -146,14 +234,15 @@ class PurchaseListViewController: UIViewController {
         cardView.layer.shadowColor = UIColor.black.cgColor
         cardView.layer.shadowOpacity = 0.1
         cardView.layer.shadowRadius = 10
+        topView.backgroundColor = UIColor.purple.withAlphaComponent(0.1)
         calculateTotals()
     }
     
     fileprivate func calculateTotals() {
         let beginningOfWeek = Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))
         let beginningOfMonth = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: Date()))
-
-
+        
+        
         let purchasesOfWeek = CoreDataController.shared.purchaseFetchResultsController.fetchedObjects?.filter({ (purchase) -> Bool in
             return Calendar.current.compare(purchase.day! as Date, to: beginningOfWeek!, toGranularity: Calendar.Component.second).rawValue > 0
         })
@@ -192,7 +281,7 @@ class PurchaseListViewController: UIViewController {
                 SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
             }
             SyncController.shared.saveCachedPurchasesToCK()
-
+            
             //Fetch Share
             if let stringURL = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.url, let url = URL(string: stringURL) {
                 CloudKitController.shared.fetchShareMetadata(forURL: url) { (isSuccess, share) in
@@ -219,9 +308,76 @@ class PurchaseListViewController: UIViewController {
 
 //MARK: - AddPurchaseCardDelegate
 extension PurchaseListViewController: AddPurchaseCardDelegate {
+    
+    func cardPanned(recognizer: UIPanGestureRecognizer) {
+        switch recognizer.state {
+        case .began:
+            
+            // start the animations
+            animateTransitionIfNeeded(to: currentState.opposite, duration: 0.5, velocity: recognizer.velocity(in: recognizer.view).y)
+            
+            // pause all animations, since the next event may be a pan changed
+            runningAnimators.forEach { $0.pauseAnimation() }
+            
+            // keep track of each animator's progress
+            animationProgress = runningAnimators.map { $0.fractionComplete }
+            
+        case .changed:
+            
+            // variable setup
+            let translation = recognizer.translation(in: addPurchaseViewController?.view)
+            var fraction = -translation.y / (self.view.frame.maxY  - 75)
+            
+            // adjust the fraction for the current state and reversed state
+            if currentState == .open { fraction *= -1 }
+            if let animator = runningAnimators.first {
+                if animator.isReversed { fraction *= -1 }
+
+            }
+
+            
+            // apply the new fraction
+            for (_, animator) in runningAnimators.enumerated() {
+                animator.fractionComplete = fraction
+            }
+            
+            
+        case .ended:
+            
+            // variable setup
+            let yVelocity = recognizer.velocity(in: addPurchaseViewController?.view).y
+            let shouldClose = yVelocity > 500
+            
+            runningAnimators.forEach { (animator)  in
+
+            if yVelocity == 0 {
+                
+                let timing = UISpringTimingParameters(damping: 0.8, response: 0.3, initialVelocity: CGVector(dx: 0, dy: abs(recognizer.velocity(in: recognizer.view).y) * 0.01))
+                runningAnimators.forEach { $0.continueAnimation(withTimingParameters: timing, durationFactor: 0.5) }
+            } else {
+                    switch currentState {
+                    case .open:
+                        if !shouldClose && !animator.isReversed { animator.isReversed = !animator.isReversed }
+                        if shouldClose && animator.isReversed { animator.isReversed = !animator.isReversed }
+                    case .closed:
+                        if shouldClose && !animator.isReversed { animator.isReversed = !animator.isReversed }
+                        if !shouldClose && animator.isReversed { animator.isReversed = !animator.isReversed }
+                    }
+                }
+            }
+            
+            // continue all animations
+            let timing = UISpringTimingParameters(damping: 0.8, response: 0.3, initialVelocity: CGVector(dx: 0, dy: abs(recognizer.velocity(in: recognizer.view).y) * 0.01))
+            runningAnimators.forEach { $0.continueAnimation(withTimingParameters: timing, durationFactor: 0.5) }
+            
+        default:
+            ()
+        }
+    }
+    
     func panDidEnd() -> State {
         guard let addPurchaseCard = addPurchaseViewController else {return State.closed}
-
+        
         // Check the state when the pan gesture ends and react accordingly with linear or velocity reactive animations.
         let aboveHalfWay = cardView.frame.minY < (self.view.frame.height * 0.5)
         let velocity = addPurchaseCard.panGesture.velocity(in: cardView).y
@@ -254,10 +410,9 @@ extension PurchaseListViewController: AddPurchaseCardDelegate {
     
     func panViews(withPanPoint panPoint: CGPoint) {
         guard let addPurchaseCard = addPurchaseViewController else {return}
-
+        
         // If user goes against necessary pan adjust reaction
         if cardView.frame.maxY < self.view.bounds.maxY {
-            // Don’t animate top bar with pan gesture
             cardView.center.y += addPurchaseCard.panGesture.translation(in: cardView).y / 4
         } else {
             // Normal reaction
@@ -281,7 +436,7 @@ extension PurchaseListViewController: UITableViewDelegate, UITableViewDataSource
         return CoreDataController.shared.purchaseFetchResultsController.sections?.count ?? 0
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 35.0
+        return 40.0
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -326,7 +481,6 @@ extension PurchaseListViewController: NSFetchedResultsControllerDelegate {
     }
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         purchaseList.endUpdates()
-        calculateTotals()
     }
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
@@ -343,17 +497,20 @@ extension PurchaseListViewController: NSFetchedResultsControllerDelegate {
             if purchaseList.numberOfRows(inSection: indexPath.section) > 1 {
                 purchaseList.reloadSections(IndexSet(arrayLiteral: indexPath.section), with: .automatic)
             }
-
+            
         case .move:
             guard let newIndexPath = newIndexPath, let indexPath = indexPath else {return}
             purchaseList.moveRow(at: indexPath, to: newIndexPath)
-            purchaseList.reloadSections(IndexSet(arrayLiteral: newIndexPath.section, indexPath.section), with: .automatic)
-
+            if purchaseList.numberOfRows(inSection: indexPath.section) > 1 {
+                purchaseList.reloadSections(IndexSet(arrayLiteral: newIndexPath.section, indexPath.section), with: .automatic)
+            }
+            
         case .update:
             guard let indexPath = indexPath else {return}
             purchaseList.reloadRows(at: [indexPath], with: .automatic)
-            purchaseList.reloadSections(IndexSet(arrayLiteral: indexPath.section), with: .automatic)
-
+            if purchaseList.numberOfRows(inSection: indexPath.section) > 0 {
+                purchaseList.reloadSections(IndexSet(arrayLiteral: indexPath.section), with: .automatic)
+            }
         }
     }
     
@@ -366,8 +523,11 @@ extension PurchaseListViewController: NSFetchedResultsControllerDelegate {
             purchaseList.insertSections(indexSet, with: .automatic)
         case .delete:
             purchaseList.deleteSections(indexSet, with: .automatic)
-        default:
-            ()
+        case .update:
+            print(indexSet)
+            purchaseList.reloadSections(indexSet, with: .automatic)
+        case .move:
+            purchaseList.reloadSections(indexSet, with: .automatic)
         }
     }
 }

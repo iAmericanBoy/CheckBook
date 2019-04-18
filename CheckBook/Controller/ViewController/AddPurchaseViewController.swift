@@ -12,6 +12,7 @@ protocol AddPurchaseCardDelegate: class {
     func panDidEnd() -> State
     func userDidInteractWithCard() -> State
     func panViews(withPanPoint panPoint:CGPoint)
+    func cardPanned(recognizer: UIPanGestureRecognizer)
 }
 
 class AddPurchaseViewController: UIViewController {
@@ -19,13 +20,13 @@ class AddPurchaseViewController: UIViewController {
     //MARK: - Outlets
     @IBOutlet var panGesture: UIPanGestureRecognizer!
     @IBOutlet weak var pullView: UIView!
+    @IBOutlet weak var pullViewWidthContraint: NSLayoutConstraint!
     @IBOutlet weak var addPurchaseButton: UIButton!
     @IBOutlet weak var storeNameTextField: UITextField!
     @IBOutlet weak var methodTextField: UITextField!
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var categoryTextField: UITextField!
-    @IBOutlet weak var ledgerTextField: UITextField!
     @IBOutlet var dateToolBar: UIToolbar!
     @IBOutlet var datePicker: UIDatePicker!
     @IBOutlet var methodPickerView: UIPickerView!
@@ -53,7 +54,6 @@ class AddPurchaseViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification,object: nil)
         NotificationCenter.default.addObserver(forName: Notification.syncFinished.name, object: nil, queue: .main) { (_) in
             
             try! CoreDataController.shared.categoryFetchResultsController.performFetch()
@@ -68,8 +68,6 @@ class AddPurchaseViewController: UIViewController {
             }
         }
         NotificationCenter.default.addObserver(forName: Notification.appleIdFound.name, object: nil, queue: .main) { (_) in
-            
-            
             if CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.count != 0 {
                 //add button = shareButton
                 
@@ -79,30 +77,35 @@ class AddPurchaseViewController: UIViewController {
                 print("Ledger Created")
             }
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification,object: nil)
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+
     }
     
     //MARK: - Actions
     @IBAction func handlePan(_ sender: UIPanGestureRecognizer) {
         dismissKeyBoards()
-        switch sender.state {
-        case .began:
-            delegate?.panViews(withPanPoint: CGPoint(x: view.center.x, y: view.center.y + sender.translation(in: view).y))
-            sender.setTranslation(CGPoint.zero, in: view)
-        case .changed:
-            delegate?.panViews(withPanPoint: CGPoint(x: view.center.x, y: view.center.y + sender.translation(in: view).y))
-            sender.setTranslation(CGPoint.zero, in: view)
-        case .ended:
-            sender.setTranslation(CGPoint.zero, in: view)
-            currentState = delegate?.panDidEnd() ?? State.closed
-            updateViews()
-        default:
-            return
-        }
+//        switch sender.state {
+//        case .began:
+//            delegate?.panViews(withPanPoint: CGPoint(x: view.center.x, y: view.center.y + sender.translation(in: view).y))
+//            sender.setTranslation(CGPoint.zero, in: view)
+//        case .changed:
+//            delegate?.panViews(withPanPoint: CGPoint(x: view.center.x, y: view.center.y + sender.translation(in: view).y))
+//            sender.setTranslation(CGPoint.zero, in: view)
+//        case .ended:
+//            sender.setTranslation(CGPoint.zero, in: view)
+//            currentState = delegate?.panDidEnd() ?? State.closed
+//            updateViews()
+//        default:
+//            return
+//        }
+        delegate?.cardPanned(recognizer: sender)
     }
 
     @IBAction func addPurchaseButtonTapped(_ sender: UIButton) {
@@ -260,6 +263,8 @@ class AddPurchaseViewController: UIViewController {
         view.layer.cornerRadius = 20
 
         pullView.layer.cornerRadius = pullView.frame.height / 2
+        pullViewWidthContraint.constant = view.frame.width * 0.15
+        
     }
     
     fileprivate func dismissKeyBoards() {
@@ -271,11 +276,13 @@ class AddPurchaseViewController: UIViewController {
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = keyboardRectangle.height
-            self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight - 22, right: 0)
-            self.addPurchaseButton.setTitle("", for: .normal)
+        if storeNameTextField.isFirstResponder || methodTextField.isFirstResponder || amountTextField.isFirstResponder || dateTextField.isFirstResponder || categoryTextField.isFirstResponder {
+            if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                let keyboardRectangle = keyboardFrame.cgRectValue
+                let keyboardHeight = keyboardRectangle.height
+                self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight - 22, right: 0)
+                self.addPurchaseButton.setTitle("", for: .normal)
+            }
         }
     }
 }
