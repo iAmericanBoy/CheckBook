@@ -50,7 +50,7 @@ class PurchaseHeader: UITableViewHeaderFooterView {
     
     //MARK: - Private Functions
     func setupViews(){
-        contentView.backgroundColor = UIColor.purple.withAlphaComponent(0.05)
+        contentView.backgroundColor = UIColor.purple.withAlphaComponent(0.06)
         
         contentView.addSubview(boarderView)
         boarderView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor).isActive = true

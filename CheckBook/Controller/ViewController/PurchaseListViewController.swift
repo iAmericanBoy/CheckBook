@@ -36,6 +36,8 @@ class PurchaseListViewController: UIViewController {
     @IBOutlet weak var settingsButton: UIButton!
     @IBOutlet weak var monthLabel: UILabel!
     @IBOutlet weak var weekLabel: UILabel!
+    @IBOutlet weak var topView: UIView!
+    
     //MARK: - Properties
     /// The current state of the animation. This variable is changed only when an animation completes.
     private var currentState: State = .closed
@@ -91,6 +93,7 @@ class PurchaseListViewController: UIViewController {
                 
                 addPurchaseCard.view.layer.cornerRadius = 20
                 addPurchaseCard.pullView.alpha = 0.5
+
                 animatedView.layoutIfNeeded()
             case .closed:
                 animatedView.frame = animatedView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
@@ -146,6 +149,7 @@ class PurchaseListViewController: UIViewController {
         cardView.layer.shadowColor = UIColor.black.cgColor
         cardView.layer.shadowOpacity = 0.1
         cardView.layer.shadowRadius = 10
+        topView.backgroundColor = UIColor.purple.withAlphaComponent(0.1)
         calculateTotals()
     }
     

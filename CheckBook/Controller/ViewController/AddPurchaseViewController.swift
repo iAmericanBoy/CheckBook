@@ -25,7 +25,6 @@ class AddPurchaseViewController: UIViewController {
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var categoryTextField: UITextField!
-    @IBOutlet weak var ledgerTextField: UITextField!
     @IBOutlet var dateToolBar: UIToolbar!
     @IBOutlet var datePicker: UIDatePicker!
     @IBOutlet var methodPickerView: UIPickerView!

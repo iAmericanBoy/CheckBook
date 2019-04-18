@@ -19,15 +19,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3zW-7J-Wdy">
-                                <rect key="frame" x="0.0" y="44" width="375" height="76"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="120"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="XkL-Ew-dd3">
-                                        <rect key="frame" x="8" y="8" width="359" height="60"/>
+                                        <rect key="frame" x="8" y="52" width="359" height="60"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UHS-S9-dMn" userLabel="Settings">
                                                 <rect key="frame" x="0.0" y="0.0" width="359" height="31.666666666666668"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="35"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                                 <state key="normal" title="⚙︎">
                                                     <color key="titleColor" red="0.57919406890000003" green="0.1280144453" blue="0.57268613580000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
@@ -58,7 +58,6 @@
                                         </constraints>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="XkL-Ew-dd3" firstAttribute="top" secondItem="3zW-7J-Wdy" secondAttribute="topMargin" id="W8j-Am-GQJ"/>
                                     <constraint firstAttribute="trailingMargin" secondItem="XkL-Ew-dd3" secondAttribute="trailing" id="eqm-88-fKG"/>
@@ -170,7 +169,7 @@
                             <constraint firstItem="0oe-sS-ZTM" firstAttribute="centerX" secondItem="PtZ-E8-WJ0" secondAttribute="centerX" id="hHQ-hx-r4H"/>
                             <constraint firstAttribute="bottom" secondItem="RWZ-CH-ypH" secondAttribute="bottom" id="i4k-Zy-4H4"/>
                             <constraint firstItem="0oe-sS-ZTM" firstAttribute="trailing" secondItem="bVv-mj-cpu" secondAttribute="trailing" id="iVd-QP-6Hk"/>
-                            <constraint firstItem="3zW-7J-Wdy" firstAttribute="top" secondItem="bVv-mj-cpu" secondAttribute="top" id="lME-np-dcw"/>
+                            <constraint firstItem="3zW-7J-Wdy" firstAttribute="top" secondItem="PtZ-E8-WJ0" secondAttribute="top" id="lME-np-dcw"/>
                             <constraint firstItem="RWZ-CH-ypH" firstAttribute="width" secondItem="PtZ-E8-WJ0" secondAttribute="width" id="pw3-Rs-jDt"/>
                             <constraint firstItem="0oe-sS-ZTM" firstAttribute="height" secondItem="PtZ-E8-WJ0" secondAttribute="height" multiplier="0.75" id="qvq-7I-vnc"/>
                         </constraints>
@@ -183,6 +182,7 @@
                         <outlet property="overlayView" destination="RWZ-CH-ypH" id="osj-aW-TzR"/>
                         <outlet property="purchaseList" destination="moa-AL-0ZY" id="lEO-Vm-uPa"/>
                         <outlet property="settingsButton" destination="UHS-S9-dMn" id="ggI-lZ-Had"/>
+                        <outlet property="topView" destination="3zW-7J-Wdy" id="tGt-1r-ZQy"/>
                         <outlet property="weekLabel" destination="dI3-k2-pPJ" id="eAt-P8-BWD"/>
                     </connections>
                 </viewController>
