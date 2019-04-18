@@ -20,6 +20,7 @@ class AddPurchaseViewController: UIViewController {
     //MARK: - Outlets
     @IBOutlet var panGesture: UIPanGestureRecognizer!
     @IBOutlet weak var pullView: UIView!
+    @IBOutlet weak var pullViewWidthContraint: NSLayoutConstraint!
     @IBOutlet weak var addPurchaseButton: UIButton!
     @IBOutlet weak var storeNameTextField: UITextField!
     @IBOutlet weak var methodTextField: UITextField!
@@ -262,7 +263,8 @@ class AddPurchaseViewController: UIViewController {
         view.layer.cornerRadius = 20
 
         pullView.layer.cornerRadius = pullView.frame.height / 2
-        pullView.translatesAutoresizingMaskIntoConstraints = false
+        pullViewWidthContraint.constant = view.frame.width * 0.15
+        
     }
     
     fileprivate func dismissKeyBoards() {

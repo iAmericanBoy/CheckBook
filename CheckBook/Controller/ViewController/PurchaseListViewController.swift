@@ -97,10 +97,9 @@ class PurchaseListViewController: UIViewController {
             case .open:
                 animatedView.frame = animatedView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
                 self.overlayView.alpha = 0.5
-                
+                addPurchaseCard.pullViewWidthContraint.constant = self.view.frame.width * 0.15
+
                 addPurchaseCard.view.layer.cornerRadius = 20
-                addPurchaseCard.pullView.alpha = 0.5
-                addPurchaseCard.pullView.widthAnchor.constraint(equalTo: addPurchaseCard.view.widthAnchor, multiplier: 0.15).isActive = true
                 
                 animatedView.layoutIfNeeded()
             case .closed:
@@ -108,9 +107,8 @@ class PurchaseListViewController: UIViewController {
                 self.overlayView.alpha = 0
                 
                 addPurchaseCard.view.layer.cornerRadius = 0
-                addPurchaseCard.pullView.alpha = 0
-                addPurchaseCard.pullView.widthAnchor.constraint(equalToConstant: 0).isActive = true
-                
+                addPurchaseCard.pullViewWidthContraint.constant = 0
+
                 animatedView.layoutIfNeeded()
             }
             
@@ -139,7 +137,7 @@ class PurchaseListViewController: UIViewController {
     }
     
     /// Animates the transition, if the animation is not already running.
-    private func animateTransitionIfNeeded(to state: State, duration: TimeInterval) {
+    private func animateTransitionIfNeeded(to state: State, duration: TimeInterval, velocity: CGFloat) {
         guard let addPurchaseCard = addPurchaseViewController else {return}
         
         let target: CGFloat
@@ -161,34 +159,37 @@ class PurchaseListViewController: UIViewController {
         
         // an animator for the transition
         
-        let timing = UISpringTimingParameters(damping: 0.8, response: 0.3)
-        let transitionAnimator = UIViewPropertyAnimator(duration: duration, timingParameters: timing)
+        let timing = UISpringTimingParameters(damping: 0.8, response: 0.3, initialVelocity: CGVector(dx: 0, dy: abs(velocity) * 0.01))
+        let transitionAnimator = UIViewPropertyAnimator(duration: 0.5, timingParameters: timing)
         transitionAnimator.addAnimations {
             switch state {
             case .open:
                 self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-                
+                addPurchaseCard.addPurchaseButton.titleLabel?.text = "Save Purchase"
+
                 self.overlayView.alpha = 0.5
                 
                 addPurchaseCard.view.layer.cornerRadius = 20
-                addPurchaseCard.pullView.alpha = 0.5
-                addPurchaseCard.pullView.widthAnchor.constraint(equalTo: addPurchaseCard.view.widthAnchor, multiplier: 0.15).isActive = true
-                
+                addPurchaseCard.pullViewWidthContraint.constant = self.view.frame.width * 0.15
+
             case .closed:
                 self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-                
+                addPurchaseCard.addPurchaseButton.titleLabel?.text = "Add Purchase"
+
                 self.overlayView.alpha = 0
                 
                 addPurchaseCard.view.layer.cornerRadius = 0
-                addPurchaseCard.pullView.alpha = 0
-                addPurchaseCard.pullView.widthAnchor.constraint(equalToConstant: 0).isActive = true
-                
+                addPurchaseCard.pullViewWidthContraint.constant = 0
+
             }
+            
             self.view.layoutIfNeeded()
         }
         
         // the transition completion block
         transitionAnimator.addCompletion { position in
+            self.impact.prepare()
+            self.impact.impactOccurred()
             
             // update the state
             switch position {
@@ -313,7 +314,7 @@ extension PurchaseListViewController: AddPurchaseCardDelegate {
         case .began:
             
             // start the animations
-            animateTransitionIfNeeded(to: currentState.opposite, duration: 1)
+            animateTransitionIfNeeded(to: currentState.opposite, duration: 0.5, velocity: recognizer.velocity(in: recognizer.view).y)
             
             // pause all animations, since the next event may be a pan changed
             runningAnimators.forEach { $0.pauseAnimation() }
@@ -336,7 +337,7 @@ extension PurchaseListViewController: AddPurchaseCardDelegate {
 
             
             // apply the new fraction
-            for (index, animator) in runningAnimators.enumerated() {
+            for (_, animator) in runningAnimators.enumerated() {
                 animator.fractionComplete = fraction
             }
             
@@ -347,12 +348,12 @@ extension PurchaseListViewController: AddPurchaseCardDelegate {
             let yVelocity = recognizer.velocity(in: addPurchaseViewController?.view).y
             let shouldClose = yVelocity > 500
             
-            if let animator = runningAnimators.first {
+            runningAnimators.forEach { (animator)  in
 
             if yVelocity == 0 {
                 
-                animator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
-                break
+                let timing = UISpringTimingParameters(damping: 0.8, response: 0.3, initialVelocity: CGVector(dx: 0, dy: abs(recognizer.velocity(in: recognizer.view).y) * 0.01))
+                runningAnimators.forEach { $0.continueAnimation(withTimingParameters: timing, durationFactor: 0.5) }
             } else {
                     switch currentState {
                     case .open:
@@ -366,7 +367,8 @@ extension PurchaseListViewController: AddPurchaseCardDelegate {
             }
             
             // continue all animations
-            runningAnimators.forEach { $0.continueAnimation(withTimingParameters: nil, durationFactor: 0) }
+            let timing = UISpringTimingParameters(damping: 0.8, response: 0.3, initialVelocity: CGVector(dx: 0, dy: abs(recognizer.velocity(in: recognizer.view).y) * 0.01))
+            runningAnimators.forEach { $0.continueAnimation(withTimingParameters: timing, durationFactor: 0.5) }
             
         default:
             ()
@@ -479,7 +481,6 @@ extension PurchaseListViewController: NSFetchedResultsControllerDelegate {
     }
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         purchaseList.endUpdates()
-        calculateTotals()
     }
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
