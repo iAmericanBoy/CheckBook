@@ -281,7 +281,7 @@ extension PurchaseListViewController: UITableViewDelegate, UITableViewDataSource
         return CoreDataController.shared.purchaseFetchResultsController.sections?.count ?? 0
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 35.0
+        return 40.0
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
