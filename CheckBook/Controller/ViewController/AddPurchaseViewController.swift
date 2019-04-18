@@ -52,7 +52,6 @@ class AddPurchaseViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification,object: nil)
         NotificationCenter.default.addObserver(forName: Notification.syncFinished.name, object: nil, queue: .main) { (_) in
             
             try! CoreDataController.shared.categoryFetchResultsController.performFetch()
@@ -67,8 +66,6 @@ class AddPurchaseViewController: UIViewController {
             }
         }
         NotificationCenter.default.addObserver(forName: Notification.appleIdFound.name, object: nil, queue: .main) { (_) in
-            
-            
             if CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.count != 0 {
                 //add button = shareButton
                 
@@ -78,11 +75,15 @@ class AddPurchaseViewController: UIViewController {
                 print("Ledger Created")
             }
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification,object: nil)
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+
     }
     
     //MARK: - Actions
@@ -270,11 +271,13 @@ class AddPurchaseViewController: UIViewController {
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = keyboardRectangle.height
-            self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight - 22, right: 0)
-            self.addPurchaseButton.setTitle("", for: .normal)
+        if storeNameTextField.isFirstResponder || methodTextField.isFirstResponder || amountTextField.isFirstResponder || dateTextField.isFirstResponder || categoryTextField.isFirstResponder {
+            if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                let keyboardRectangle = keyboardFrame.cgRectValue
+                let keyboardHeight = keyboardRectangle.height
+                self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight - 22, right: 0)
+                self.addPurchaseButton.setTitle("", for: .normal)
+            }
         }
     }
 }
