@@ -68,6 +68,11 @@ class PurchaseListViewController: UIViewController {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.showCard()
+    }
+    
     //MARK: - Animations
     func hideCard() {
         guard let addPurchaseCard = addPurchaseViewController else {return}

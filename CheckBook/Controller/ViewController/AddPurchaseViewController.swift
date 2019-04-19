@@ -254,10 +254,8 @@ class AddPurchaseViewController: UIViewController {
         amountTextField.inputAccessoryView = dateToolBar
         
         view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-        view.layer.cornerRadius = 20
 
         pullView.layer.cornerRadius = pullView.frame.height / 2
-        pullViewWidthContraint.constant = view.frame.width * 0.15
         
     }
     
