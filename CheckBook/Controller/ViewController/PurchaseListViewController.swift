@@ -95,23 +95,26 @@ class PurchaseListViewController: UIViewController {
         transitionAnimator.addAnimations {
             switch state {
             case .open:
-                animatedView.frame = animatedView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-                self.overlayView.alpha = 0.5
-                addPurchaseCard.pullViewWidthContraint.constant = self.view.frame.width * 0.15
-
-                addPurchaseCard.view.layer.cornerRadius = 20
+                self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
+                addPurchaseCard.addPurchaseButton.alpha = 0
+                addPurchaseCard.savePurchaseButton.alpha = 1
                 
-                animatedView.layoutIfNeeded()
+                self.overlayView.alpha = 0.5
+                
+                addPurchaseCard.view.layer.cornerRadius = 20
+                addPurchaseCard.pullViewWidthContraint.constant = self.view.frame.width * 0.15
+                
             case .closed:
-                animatedView.frame = animatedView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
+                self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
+                addPurchaseCard.addPurchaseButton.alpha = 1
+                addPurchaseCard.savePurchaseButton.alpha = 0
+                
                 self.overlayView.alpha = 0
                 
                 addPurchaseCard.view.layer.cornerRadius = 0
                 addPurchaseCard.pullViewWidthContraint.constant = 0
-
-                animatedView.layoutIfNeeded()
+                
             }
-            
             
             self.view.layoutIfNeeded()
         }
@@ -165,7 +168,8 @@ class PurchaseListViewController: UIViewController {
             switch state {
             case .open:
                 self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-                addPurchaseCard.addPurchaseButton.titleLabel?.text = "Save Purchase"
+                addPurchaseCard.addPurchaseButton.alpha = 0
+                addPurchaseCard.savePurchaseButton.alpha = 1
 
                 self.overlayView.alpha = 0.5
                 
@@ -174,7 +178,8 @@ class PurchaseListViewController: UIViewController {
 
             case .closed:
                 self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-                addPurchaseCard.addPurchaseButton.titleLabel?.text = "Add Purchase"
+                addPurchaseCard.addPurchaseButton.alpha = 1
+                addPurchaseCard.savePurchaseButton.alpha = 0
 
                 self.overlayView.alpha = 0
                 

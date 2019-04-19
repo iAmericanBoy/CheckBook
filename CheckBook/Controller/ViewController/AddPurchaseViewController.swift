@@ -22,6 +22,7 @@ class AddPurchaseViewController: UIViewController {
     @IBOutlet weak var pullView: UIView!
     @IBOutlet weak var pullViewWidthContraint: NSLayoutConstraint!
     @IBOutlet weak var addPurchaseButton: UIButton!
+    @IBOutlet weak var savePurchaseButton: UIButton!
     @IBOutlet weak var storeNameTextField: UITextField!
     @IBOutlet weak var methodTextField: UITextField!
     @IBOutlet weak var dateTextField: UITextField!
@@ -179,14 +180,12 @@ class AddPurchaseViewController: UIViewController {
     fileprivate func updateViews() {
         switch currentState {
         case .open:
-            addPurchaseButton.setTitle("Save Purchase", for: .normal)
             categoryTextField.isHidden = false
             methodTextField.isHidden = false
             storeNameTextField.isHidden = false
             dateTextField.isHidden = false
             amountTextField.isHidden = false
         case .closed:
-            addPurchaseButton.setTitle("Add Purchase", for: .normal)
             categoryTextField.isHidden = true
             methodTextField.isHidden = true
             storeNameTextField.isHidden = true
@@ -196,12 +195,7 @@ class AddPurchaseViewController: UIViewController {
         
         if let purchase = purchase {
             //updatePurchaseMode
-            switch currentState {
-            case .open:
-                addPurchaseButton.setTitle("Update Purchase", for: .normal)
-            case .closed:
-                addPurchaseButton.setTitle("Add Purchase", for: .normal)
-            }
+
             storeNameTextField.text = purchase.storeName
             amountTextField.text = NumberFormatter.localizedString(from: purchase.amount ?? 0, number: .currency)
             categoryTextField.text = purchase.category?.name
@@ -281,7 +275,6 @@ class AddPurchaseViewController: UIViewController {
                 let keyboardRectangle = keyboardFrame.cgRectValue
                 let keyboardHeight = keyboardRectangle.height
                 self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight - 22, right: 0)
-                self.addPurchaseButton.setTitle("", for: .normal)
             }
         }
     }
@@ -322,17 +315,7 @@ extension AddPurchaseViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        switch currentState {
-        case .open:
-            if  purchase != nil {
-                addPurchaseButton.setTitle("Update Purchase", for: .normal)
-            } else {
-                addPurchaseButton.setTitle("Save Purchase", for: .normal)
-            }
 
-        case .closed:
-            addPurchaseButton.setTitle("Add Purchase", for: .normal)
-        }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
