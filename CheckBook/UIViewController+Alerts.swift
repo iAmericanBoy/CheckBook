@@ -33,6 +33,7 @@ extension UIViewController {
         
         alertController.addTextField { textField in
             textField.placeholder = "Add Name"
+            textField.autocapitalizationType = .sentences
             UIViewController.alertTextField = alertController.textFields?.first ?? UITextField()
             NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: .main) { notif in
                 
@@ -73,6 +74,7 @@ extension UIViewController {
         
         alertController.addTextField { textField in
             textField.placeholder = "Add Name"
+            textField.autocapitalizationType = .sentences
             UIViewController.alertTextField = alertController.textFields?.first ?? UITextField()
             NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: .main) { notif in
                 
