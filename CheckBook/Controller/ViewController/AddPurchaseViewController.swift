@@ -147,19 +147,29 @@ class AddPurchaseViewController: UIViewController {
     }
     
     @IBAction func addNewCardButtonTapped(_ sender: UIBarButtonItem) {
-        self.addNewPurchaseMethodAlert {
+        self.addNewPurchaseMethodAlert { newCard in
             DispatchQueue.main.async {
                 try! CoreDataController.shared.purchaseMethodFetchResultsController.performFetch()
                 self.methodPickerView.reloadAllComponents()
+                if let newCard = newCard {
+                    self.methodTextField.text = newCard.name
+                    guard let indexPath = CoreDataController.shared.purchaseMethodFetchResultsController.indexPath(forObject: newCard) else {return}
+                    self.methodPickerView.selectRow(indexPath.row, inComponent: 0, animated: true)
+                }
             }
         }
     }
     
     @IBAction func newCategoryButtonTapped(_ sender: UIBarButtonItem) {
-        self.addNewCategoryAlert {
+        self.addNewCategoryAlert { newCatergory in
             DispatchQueue.main.async {
                 try! CoreDataController.shared.categoryFetchResultsController.performFetch()
                 self.categoryPickerView.reloadAllComponents()
+                if let newCatergory = newCatergory {
+                    self.categoryTextField.text = newCatergory.name
+                    guard let indexPath = CoreDataController.shared.categoryFetchResultsController.indexPath(forObject: newCatergory) else {return}
+                    self.categoryPickerView.selectRow(indexPath.row, inComponent: 0, animated: true)
+                }
             }
         }
     }

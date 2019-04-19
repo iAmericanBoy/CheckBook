@@ -13,7 +13,7 @@ extension UIViewController {
     
     static var alertTextField = UITextField()
     
-    func addNewPurchaseMethodAlert(_ completion: @escaping () -> Void) {
+    func addNewPurchaseMethodAlert(_ completion: @escaping (PurchaseMethod?) -> Void) {
         var nameTextField: UITextField?
         
         let alertController = UIAlertController(title: "New", message: "Add a new Purchase Method", preferredStyle: .alert)
@@ -21,13 +21,15 @@ extension UIViewController {
         let addAction = UIAlertAction(title: "Add", style: .default) { (action) in
             if let name = nameTextField?.text {
                 guard let ledgerUUID = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.uuid else {return}
-                _ = PurchaseMethodController.shared.createNewPurchaseMethodWith(name: name, withLedgerUUID: ledgerUUID)
-                completion()
+                let newMethod = PurchaseMethodController.shared.createNewPurchaseMethodWith(name: name, withLedgerUUID: ledgerUUID)
+                completion(newMethod)
             }
         }
         addAction.isEnabled = false
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
+            completion(nil)
+        }
         
         alertController.addTextField { textField in
             textField.placeholder = "Add Name"
@@ -48,7 +50,7 @@ extension UIViewController {
         }
     }
     
-    func addNewCategoryAlert(_ completion: @escaping () -> Void) {
+    func addNewCategoryAlert(_ completion: @escaping (Category?) -> Void) {
         var nameTextField: UITextField?
         
         let alertController = UIAlertController(title: "New", message: "Add a new Category", preferredStyle: .alert)
@@ -59,13 +61,15 @@ extension UIViewController {
 
                 guard let ledgerUUID = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.uuid else {return}
 
-                _ = CategoryController.shared.createNewCategoryWith(name: name, ledgerUUID: ledgerUUID)
-                completion()
+                let newCategory = CategoryController.shared.createNewCategoryWith(name: name, ledgerUUID: ledgerUUID)
+                completion(newCategory)
             }
         }
         addAction.isEnabled = false
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
+            completion(nil)
+        }
         
         alertController.addTextField { textField in
             textField.placeholder = "Add Name"
@@ -86,7 +90,7 @@ extension UIViewController {
         }
     }
     
-    func addNewLedgerAlert(_ completion: @escaping () -> Void) {
+    func addNewLedgerAlert(_ completion: @escaping (String?) -> Void)  {
         var nameTextField: UITextField?
         
         let alertController = UIAlertController(title: "New", message: "Add a new Ledger", preferredStyle: .alert)
@@ -94,12 +98,14 @@ extension UIViewController {
         let addAction = UIAlertAction(title: "Add", style: .default) { (action) in
             if let name = nameTextField?.text {
                 _ = LedgerController.shared.createNewLedgerWith(name: name)
-                completion()
+                completion(name)
             }
         }
         addAction.isEnabled = false
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
+            completion(nil)
+        }
         alertController.addTextField { textField in
             textField.placeholder = "Add Name"
             UIViewController.alertTextField = alertController.textFields?.first ?? UITextField()
