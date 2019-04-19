@@ -66,6 +66,13 @@ class PurchaseListViewController: UIViewController {
                 self.performSegue(withIdentifier: "toSettingsVC", sender: nil)
             }
         }
+        
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.showCard()
     }
     
     //MARK: - Animations
@@ -95,23 +102,26 @@ class PurchaseListViewController: UIViewController {
         transitionAnimator.addAnimations {
             switch state {
             case .open:
-                animatedView.frame = animatedView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-                self.overlayView.alpha = 0.5
-                addPurchaseCard.pullViewWidthContraint.constant = self.view.frame.width * 0.15
-
-                addPurchaseCard.view.layer.cornerRadius = 20
+                self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
+                addPurchaseCard.addPurchaseButton.alpha = 0
+                addPurchaseCard.savePurchaseButton.alpha = 1
                 
-                animatedView.layoutIfNeeded()
+                self.overlayView.alpha = 0.5
+                
+                addPurchaseCard.view.layer.cornerRadius = 20
+                addPurchaseCard.pullViewWidthContraint.constant = self.view.frame.width * 0.15
+                
             case .closed:
-                animatedView.frame = animatedView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
+                self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
+                addPurchaseCard.addPurchaseButton.alpha = 1
+                addPurchaseCard.savePurchaseButton.alpha = 0
+                
                 self.overlayView.alpha = 0
                 
                 addPurchaseCard.view.layer.cornerRadius = 0
                 addPurchaseCard.pullViewWidthContraint.constant = 0
-
-                animatedView.layoutIfNeeded()
+                
             }
-            
             
             self.view.layoutIfNeeded()
         }
@@ -165,7 +175,8 @@ class PurchaseListViewController: UIViewController {
             switch state {
             case .open:
                 self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-                addPurchaseCard.addPurchaseButton.titleLabel?.text = "Save Purchase"
+                addPurchaseCard.addPurchaseButton.alpha = 0
+                addPurchaseCard.savePurchaseButton.alpha = 1
 
                 self.overlayView.alpha = 0.5
                 
@@ -174,7 +185,8 @@ class PurchaseListViewController: UIViewController {
 
             case .closed:
                 self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-                addPurchaseCard.addPurchaseButton.titleLabel?.text = "Add Purchase"
+                addPurchaseCard.addPurchaseButton.alpha = 1
+                addPurchaseCard.savePurchaseButton.alpha = 0
 
                 self.overlayView.alpha = 0
                 
@@ -487,13 +499,14 @@ extension PurchaseListViewController: NSFetchedResultsControllerDelegate {
         case .insert:
             guard let newIndexPath = newIndexPath else {return}
             purchaseList.insertRows(at: [newIndexPath], with: .automatic)
-            
+            calculateTotals()
             if controller.sections?[newIndexPath.section].numberOfObjects ?? 1 > 1 {
                 purchaseList.reloadSections(IndexSet(arrayLiteral: newIndexPath.section), with: .automatic)
             }
         case .delete:
             guard let indexPath = indexPath else {return}
             purchaseList.deleteRows(at: [indexPath], with: .automatic)
+            calculateTotals()
             if purchaseList.numberOfRows(inSection: indexPath.section) > 1 {
                 purchaseList.reloadSections(IndexSet(arrayLiteral: indexPath.section), with: .automatic)
             }
@@ -501,6 +514,7 @@ extension PurchaseListViewController: NSFetchedResultsControllerDelegate {
         case .move:
             guard let newIndexPath = newIndexPath, let indexPath = indexPath else {return}
             purchaseList.moveRow(at: indexPath, to: newIndexPath)
+            calculateTotals()
             if purchaseList.numberOfRows(inSection: indexPath.section) > 1 {
                 purchaseList.reloadSections(IndexSet(arrayLiteral: newIndexPath.section, indexPath.section), with: .automatic)
             }
@@ -508,6 +522,7 @@ extension PurchaseListViewController: NSFetchedResultsControllerDelegate {
         case .update:
             guard let indexPath = indexPath else {return}
             purchaseList.reloadRows(at: [indexPath], with: .automatic)
+            calculateTotals()
             if purchaseList.numberOfRows(inSection: indexPath.section) > 0 {
                 purchaseList.reloadSections(IndexSet(arrayLiteral: indexPath.section), with: .automatic)
             }

@@ -22,6 +22,7 @@ class AddPurchaseViewController: UIViewController {
     @IBOutlet weak var pullView: UIView!
     @IBOutlet weak var pullViewWidthContraint: NSLayoutConstraint!
     @IBOutlet weak var addPurchaseButton: UIButton!
+    @IBOutlet weak var savePurchaseButton: UIButton!
     @IBOutlet weak var storeNameTextField: UITextField!
     @IBOutlet weak var methodTextField: UITextField!
     @IBOutlet weak var dateTextField: UITextField!
@@ -146,19 +147,29 @@ class AddPurchaseViewController: UIViewController {
     }
     
     @IBAction func addNewCardButtonTapped(_ sender: UIBarButtonItem) {
-        self.addNewPurchaseMethodAlert {
+        self.addNewPurchaseMethodAlert { newCard in
             DispatchQueue.main.async {
                 try! CoreDataController.shared.purchaseMethodFetchResultsController.performFetch()
                 self.methodPickerView.reloadAllComponents()
+                if let newCard = newCard {
+                    self.methodTextField.text = newCard.name
+                    guard let indexPath = CoreDataController.shared.purchaseMethodFetchResultsController.indexPath(forObject: newCard) else {return}
+                    self.methodPickerView.selectRow(indexPath.row, inComponent: 0, animated: true)
+                }
             }
         }
     }
     
     @IBAction func newCategoryButtonTapped(_ sender: UIBarButtonItem) {
-        self.addNewCategoryAlert {
+        self.addNewCategoryAlert { newCatergory in
             DispatchQueue.main.async {
                 try! CoreDataController.shared.categoryFetchResultsController.performFetch()
                 self.categoryPickerView.reloadAllComponents()
+                if let newCatergory = newCatergory {
+                    self.categoryTextField.text = newCatergory.name
+                    guard let indexPath = CoreDataController.shared.categoryFetchResultsController.indexPath(forObject: newCatergory) else {return}
+                    self.categoryPickerView.selectRow(indexPath.row, inComponent: 0, animated: true)
+                }
             }
         }
     }
@@ -179,14 +190,12 @@ class AddPurchaseViewController: UIViewController {
     fileprivate func updateViews() {
         switch currentState {
         case .open:
-            addPurchaseButton.setTitle("Save Purchase", for: .normal)
             categoryTextField.isHidden = false
             methodTextField.isHidden = false
             storeNameTextField.isHidden = false
             dateTextField.isHidden = false
             amountTextField.isHidden = false
         case .closed:
-            addPurchaseButton.setTitle("Add Purchase", for: .normal)
             categoryTextField.isHidden = true
             methodTextField.isHidden = true
             storeNameTextField.isHidden = true
@@ -196,12 +205,7 @@ class AddPurchaseViewController: UIViewController {
         
         if let purchase = purchase {
             //updatePurchaseMode
-            switch currentState {
-            case .open:
-                addPurchaseButton.setTitle("Update Purchase", for: .normal)
-            case .closed:
-                addPurchaseButton.setTitle("Add Purchase", for: .normal)
-            }
+
             storeNameTextField.text = purchase.storeName
             amountTextField.text = NumberFormatter.localizedString(from: purchase.amount ?? 0, number: .currency)
             categoryTextField.text = purchase.category?.name
@@ -260,10 +264,8 @@ class AddPurchaseViewController: UIViewController {
         amountTextField.inputAccessoryView = dateToolBar
         
         view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-        view.layer.cornerRadius = 20
 
         pullView.layer.cornerRadius = pullView.frame.height / 2
-        pullViewWidthContraint.constant = view.frame.width * 0.15
         
     }
     
@@ -276,12 +278,11 @@ class AddPurchaseViewController: UIViewController {
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
-        if storeNameTextField.isFirstResponder || methodTextField.isFirstResponder || amountTextField.isFirstResponder || dateTextField.isFirstResponder || categoryTextField.isFirstResponder {
+        if storeNameTextField.isFirstResponder || methodTextField.isFirstResponder || amountTextField.isFirstResponder || dateTextField.isFirstResponder || categoryTextField.isFirstResponder || UIViewController.alertTextField.isFirstResponder {
             if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
                 let keyboardRectangle = keyboardFrame.cgRectValue
                 let keyboardHeight = keyboardRectangle.height
                 self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight - 22, right: 0)
-                self.addPurchaseButton.setTitle("", for: .normal)
             }
         }
     }
@@ -322,17 +323,7 @@ extension AddPurchaseViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        switch currentState {
-        case .open:
-            if  purchase != nil {
-                addPurchaseButton.setTitle("Update Purchase", for: .normal)
-            } else {
-                addPurchaseButton.setTitle("Save Purchase", for: .normal)
-            }
 
-        case .closed:
-            addPurchaseButton.setTitle("Add Purchase", for: .normal)
-        }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

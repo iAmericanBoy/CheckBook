@@ -141,12 +141,12 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RWZ-CH-ypH">
+                            <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RWZ-CH-ypH">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0oe-sS-ZTM">
-                                <rect key="frame" x="0.0" y="224.66666666666669" width="375" height="587.33333333333326"/>
+                                <rect key="frame" x="0.0" y="737" width="375" height="587.33333333333348"/>
                                 <connections>
                                     <segue destination="MYC-vt-QZt" kind="embed" id="P1P-Ca-3hb"/>
                                 </connections>
@@ -157,7 +157,7 @@
                             <constraint firstItem="moa-AL-0ZY" firstAttribute="top" secondItem="3zW-7J-Wdy" secondAttribute="bottom" id="41P-ME-USD"/>
                             <constraint firstItem="RWZ-CH-ypH" firstAttribute="height" secondItem="PtZ-E8-WJ0" secondAttribute="height" id="5Ry-Pg-beD"/>
                             <constraint firstItem="RWZ-CH-ypH" firstAttribute="leading" secondItem="3zW-7J-Wdy" secondAttribute="leading" id="8Ic-YR-9Zw"/>
-                            <constraint firstItem="bVv-mj-cpu" firstAttribute="bottom" secondItem="0oe-sS-ZTM" secondAttribute="bottom" constant="-34" id="EBw-TP-e9d"/>
+                            <constraint firstAttribute="bottom" secondItem="0oe-sS-ZTM" secondAttribute="top" constant="75" id="EBw-TP-e9d"/>
                             <constraint firstItem="0oe-sS-ZTM" firstAttribute="leading" secondItem="bVv-mj-cpu" secondAttribute="leading" id="FOS-Tf-zJg"/>
                             <constraint firstItem="3zW-7J-Wdy" firstAttribute="leading" secondItem="bVv-mj-cpu" secondAttribute="leading" id="HKa-GX-DK4"/>
                             <constraint firstItem="moa-AL-0ZY" firstAttribute="centerX" secondItem="PtZ-E8-WJ0" secondAttribute="centerX" id="Iaa-PX-3oe"/>
@@ -281,7 +281,7 @@
             <objects>
                 <viewController id="MYC-vt-QZt" customClass="AddPurchaseViewController" customModule="CheckBook" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="QUX-nd-ifU">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="587.33333333333326"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="587.33333333333348"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view clipsSubviews="YES" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tjs-mr-6hM">
@@ -379,11 +379,24 @@
                                     <constraint firstAttribute="height" constant="70" id="fvx-sM-6VB"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
-                                <state key="normal" title="Save Purchase">
+                                <state key="normal" title="Add Purchase">
                                     <color key="titleColor" red="0.57919406890000003" green="0.1280144453" blue="0.57268613580000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="addPurchaseButtonTapped:" destination="MYC-vt-QZt" eventType="touchUpInside" id="ciR-5b-1dZ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="fill" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fcx-w8-TWn">
+                                <rect key="frame" x="16" y="44" width="343" height="70"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="z1Y-5p-Zt8"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
+                                <state key="normal" title="Save Purchase">
+                                    <color key="titleColor" red="0.57919406890000003" green="0.1280144453" blue="0.57268613580000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="addPurchaseButtonTapped:" destination="MYC-vt-QZt" eventType="touchUpInside" id="kD1-XW-TXT"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -397,7 +410,11 @@
                             <constraint firstItem="hgU-b3-rG5" firstAttribute="bottom" secondItem="bcZ-Wj-o5e" secondAttribute="bottom" id="gEh-ag-Lno"/>
                             <constraint firstItem="4F5-bc-uGJ" firstAttribute="top" secondItem="hgU-b3-rG5" secondAttribute="top" id="hje-pE-O24"/>
                             <constraint firstItem="bcZ-Wj-o5e" firstAttribute="height" secondItem="hgU-b3-rG5" secondAttribute="height" multiplier="0.62" constant="1" id="iS4-MR-T2a"/>
+                            <constraint firstItem="fcx-w8-TWn" firstAttribute="trailing" secondItem="4F5-bc-uGJ" secondAttribute="trailing" id="jnR-mo-i4W"/>
+                            <constraint firstItem="fcx-w8-TWn" firstAttribute="bottom" secondItem="4F5-bc-uGJ" secondAttribute="bottom" id="nJt-G4-Dem"/>
                             <constraint firstItem="Tjs-mr-6hM" firstAttribute="top" secondItem="hgU-b3-rG5" secondAttribute="top" constant="8" id="nn5-ZD-UxJ"/>
+                            <constraint firstItem="fcx-w8-TWn" firstAttribute="top" secondItem="4F5-bc-uGJ" secondAttribute="top" id="pgT-Uq-TA4"/>
+                            <constraint firstItem="fcx-w8-TWn" firstAttribute="leading" secondItem="4F5-bc-uGJ" secondAttribute="leading" id="qIY-XV-0eN"/>
                             <constraint firstItem="Tjs-mr-6hM" firstAttribute="height" secondItem="QUX-nd-ifU" secondAttribute="height" multiplier="0.01" id="thc-MR-4fR"/>
                             <constraint firstItem="hgU-b3-rG5" firstAttribute="trailing" secondItem="bcZ-Wj-o5e" secondAttribute="trailing" constant="12" id="xNv-yG-XAh"/>
                         </constraints>
@@ -421,6 +438,7 @@
                         <outlet property="paymentMethodToolBar" destination="P8t-g7-mfu" id="fji-5m-FlL"/>
                         <outlet property="pullView" destination="Tjs-mr-6hM" id="bUV-md-l0z"/>
                         <outlet property="pullViewWidthContraint" destination="MJX-yk-wZh" id="Gm7-v5-FX4"/>
+                        <outlet property="savePurchaseButton" destination="fcx-w8-TWn" id="KfP-qy-EJF"/>
                         <outlet property="storeNameTextField" destination="WRO-aM-shB" id="1go-b4-iXz"/>
                     </connections>
                 </viewController>
