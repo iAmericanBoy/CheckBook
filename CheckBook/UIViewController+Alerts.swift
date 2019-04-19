@@ -11,6 +11,8 @@ import UIKit
 
 extension UIViewController {
     
+    static var alertTextField = UITextField()
+    
     func addNewPurchaseMethodAlert(_ completion: @escaping () -> Void) {
         var nameTextField: UITextField?
         
@@ -29,6 +31,7 @@ extension UIViewController {
         
         alertController.addTextField { textField in
             textField.placeholder = "Add Name"
+            UIViewController.alertTextField = alertController.textFields?.first ?? UITextField()
             NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: .main) { notif in
                 
                 if let name = textField.text, !name.isEmpty {
@@ -52,6 +55,8 @@ extension UIViewController {
         
         let addAction = UIAlertAction(title: "Add", style: .default) { (action) in
             if let name = nameTextField?.text {
+                UIViewController.alertTextField = alertController.textFields?.first ?? UITextField()
+
                 guard let ledgerUUID = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.uuid else {return}
 
                 _ = CategoryController.shared.createNewCategoryWith(name: name, ledgerUUID: ledgerUUID)
@@ -64,6 +69,7 @@ extension UIViewController {
         
         alertController.addTextField { textField in
             textField.placeholder = "Add Name"
+            UIViewController.alertTextField = alertController.textFields?.first ?? UITextField()
             NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: .main) { notif in
                 
                 if let name = textField.text, !name.isEmpty {
@@ -94,9 +100,10 @@ extension UIViewController {
         addAction.isEnabled = false
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-        
         alertController.addTextField { textField in
             textField.placeholder = "Add Name"
+            UIViewController.alertTextField = alertController.textFields?.first ?? UITextField()
+
             NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: .main) { notif in
                 
                 if let name = textField.text, !name.isEmpty {
@@ -140,6 +147,4 @@ extension UIViewController {
         alertController.addAction(settingsAction)
         self.present(alertController, animated: true)
     }
-    
-    
 }

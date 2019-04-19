@@ -268,7 +268,7 @@ class AddPurchaseViewController: UIViewController {
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
-        if storeNameTextField.isFirstResponder || methodTextField.isFirstResponder || amountTextField.isFirstResponder || dateTextField.isFirstResponder || categoryTextField.isFirstResponder {
+        if storeNameTextField.isFirstResponder || methodTextField.isFirstResponder || amountTextField.isFirstResponder || dateTextField.isFirstResponder || categoryTextField.isFirstResponder || UIViewController.alertTextField.isFirstResponder {
             if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
                 let keyboardRectangle = keyboardFrame.cgRectValue
                 let keyboardHeight = keyboardRectangle.height
