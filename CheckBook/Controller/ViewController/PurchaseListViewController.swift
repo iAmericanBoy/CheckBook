@@ -241,7 +241,7 @@ class PurchaseListViewController: UIViewController {
         purchaseList.tableFooterView = UIView()
         purchaseList.delegate = self
         purchaseList.dataSource = self
-        purchaseList.register(PurchaseHeader.self, forHeaderFooterViewReuseIdentifier: PurchaseHeader.reuseIdentifier)
+        purchaseList.register(PurchaseListSectionView.self, forHeaderFooterViewReuseIdentifier: PurchaseListSectionView.reuseIdentifier)
         CoreDataController.shared.purchaseFetchResultsController.delegate = self
         cardView.layer.shadowColor = UIColor.black.cgColor
         cardView.layer.shadowOpacity = 0.1
@@ -452,7 +452,7 @@ extension PurchaseListViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: PurchaseHeader.reuseIdentifier) as? PurchaseHeader
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: PurchaseListSectionView.reuseIdentifier) as? PurchaseListSectionView
         
         view?.purchases = CoreDataController.shared.purchaseFetchResultsController.sections?[section].objects as? [Purchase]
         
