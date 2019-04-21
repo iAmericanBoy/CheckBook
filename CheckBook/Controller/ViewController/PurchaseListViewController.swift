@@ -103,8 +103,13 @@ class PurchaseListViewController: UIViewController {
             switch state {
             case .open:
                 self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-                addPurchaseCard.addPurchaseButton.alpha = 0
-                addPurchaseCard.savePurchaseButton.alpha = 1
+                addPurchaseCard.openCardButton.alpha = 0
+                addPurchaseCard.cancelButton.alpha = 1
+                if addPurchaseCard.purchase == nil {
+                    addPurchaseCard.saveButton.alpha = 1
+                } else {
+                    addPurchaseCard.updateButton.alpha = 1
+                }
                 
                 self.overlayView.alpha = 0.5
                 
@@ -113,8 +118,11 @@ class PurchaseListViewController: UIViewController {
                 
             case .closed:
                 self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-                addPurchaseCard.addPurchaseButton.alpha = 1
-                addPurchaseCard.savePurchaseButton.alpha = 0
+                addPurchaseCard.openCardButton.alpha = 1
+                addPurchaseCard.saveButton.alpha = 0
+                addPurchaseCard.cancelButton.alpha = 0
+                addPurchaseCard.updateButton.alpha = 0
+
                 
                 self.overlayView.alpha = 0
                 
@@ -175,9 +183,13 @@ class PurchaseListViewController: UIViewController {
             switch state {
             case .open:
                 self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-                addPurchaseCard.addPurchaseButton.alpha = 0
-                addPurchaseCard.savePurchaseButton.alpha = 1
-
+                addPurchaseCard.openCardButton.alpha = 0
+                addPurchaseCard.cancelButton.alpha = 1
+                if addPurchaseCard.purchase == nil {
+                    addPurchaseCard.saveButton.alpha = 1
+                } else {
+                    addPurchaseCard.updateButton.alpha = 1
+                }
                 self.overlayView.alpha = 0.5
                 
                 addPurchaseCard.view.layer.cornerRadius = 20
@@ -185,9 +197,11 @@ class PurchaseListViewController: UIViewController {
 
             case .closed:
                 self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-                addPurchaseCard.addPurchaseButton.alpha = 1
-                addPurchaseCard.savePurchaseButton.alpha = 0
-
+                addPurchaseCard.openCardButton.alpha = 1
+                addPurchaseCard.saveButton.alpha = 0
+                addPurchaseCard.cancelButton.alpha = 0
+                addPurchaseCard.updateButton.alpha = 0
+                
                 self.overlayView.alpha = 0
                 
                 addPurchaseCard.view.layer.cornerRadius = 0
