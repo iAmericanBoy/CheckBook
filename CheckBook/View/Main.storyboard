@@ -94,28 +94,28 @@
                                                     </constraints>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="StoreName" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vir-cL-VEN">
-                                                    <rect key="frame" x="8" y="0.6666666666666643" width="168.66666666666666" height="103.33333333333334"/>
+                                                    <rect key="frame" x="8" y="6.6666666666666643" width="168.66666666666666" height="97.333333333333343"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Catergory" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BTh-Pj-8b5">
-                                                    <rect key="frame" x="182.66666666666666" y="0.6666666666666643" width="99.666666666666657" height="103.33333333333334"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Catergory" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BTh-Pj-8b5">
+                                                    <rect key="frame" x="182.66666666666666" y="6.6666666666666643" width="99.666666666666657" height="97.333333333333343"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="nbc-gX-KTR">
-                                                    <rect key="frame" x="288.33333333333331" y="0.6666666666666643" width="78.666666666666686" height="103.33333333333334"/>
+                                                    <rect key="frame" x="288.33333333333331" y="6.6666666666666643" width="78.666666666666686" height="97.333333333333343"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Method" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7f9-bm-cu0">
-                                                            <rect key="frame" x="0.0" y="0.0" width="78.666666666666671" height="36.333333333333336"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="78.666666666666671" height="34.333333333333336"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$ 00,00" textAlignment="right" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0YE-dK-A3G">
-                                                            <rect key="frame" x="0.0" y="42.333333333333343" width="78.666666666666671" height="61"/>
+                                                            <rect key="frame" x="0.0" y="40.333333333333343" width="78.666666666666671" height="57"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
@@ -130,7 +130,7 @@
                                                 <constraint firstItem="BTh-Pj-8b5" firstAttribute="top" secondItem="vir-cL-VEN" secondAttribute="top" id="EDB-rd-5Sz"/>
                                                 <constraint firstItem="nbc-gX-KTR" firstAttribute="leading" secondItem="BTh-Pj-8b5" secondAttribute="trailing" constant="6" id="EFh-1h-2S8"/>
                                                 <constraint firstItem="vir-cL-VEN" firstAttribute="width" secondItem="g8f-NP-Sym" secondAttribute="width" multiplier="0.45" id="J5p-UB-mvg"/>
-                                                <constraint firstItem="vir-cL-VEN" firstAttribute="top" secondItem="KG3-Eq-7Fn" secondAttribute="bottom" id="fof-xu-q8Y"/>
+                                                <constraint firstItem="vir-cL-VEN" firstAttribute="top" secondItem="KG3-Eq-7Fn" secondAttribute="bottom" constant="6" id="fof-xu-q8Y"/>
                                                 <constraint firstItem="KG3-Eq-7Fn" firstAttribute="top" secondItem="g8f-NP-Sym" secondAttribute="top" id="hLf-JI-zdF"/>
                                                 <constraint firstAttribute="trailing" secondItem="KG3-Eq-7Fn" secondAttribute="trailing" id="hrM-rK-zSq"/>
                                                 <constraint firstAttribute="bottom" secondItem="vir-cL-VEN" secondAttribute="bottom" id="ja6-Xg-q6r"/>
