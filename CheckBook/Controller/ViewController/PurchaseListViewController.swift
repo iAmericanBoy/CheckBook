@@ -455,7 +455,12 @@ extension PurchaseListViewController: UITableViewDelegate, UITableViewDataSource
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: PurchaseListSectionView.reuseIdentifier) as? PurchaseListSectionView
         
         view?.purchases = CoreDataController.shared.purchaseFetchResultsController.sections?[section].objects as? [Purchase]
-        
+        view?.layer.shadowOpacity = 0.19
+        view?.layer.shadowRadius = 10
+        view?.layer.shadowColor = UIColor.black.cgColor
+        view?.backgroundView?.backgroundColor = .clear
+        view?.backgroundView?.tintColor = .clear
+
         return view
     }
     

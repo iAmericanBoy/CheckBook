@@ -53,10 +53,7 @@ class PurchaseListSectionView: UITableViewHeaderFooterView {
         contentView.backgroundColor = UIColor.purple.withAlphaComponent(0.06)
         backgroundView?.backgroundColor = .clear
         
-        contentView.layer.shadowColor = UIColor.black.cgColor
-        contentView.layer.shadowOpacity = 0.1
-        contentView.layer.shadowRadius = 10
-        contentView.clipsToBounds = false
+
         
         contentView.addSubview(boarderView)
         boarderView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor).isActive = true
