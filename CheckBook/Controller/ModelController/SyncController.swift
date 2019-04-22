@@ -64,6 +64,10 @@ class SyncController {
                             if let foundLedger = foundLedger {
                                 ledgerOfPurchase = foundLedger
                             } else {
+                                // There can only be one Ledger in this App
+                                CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.forEach({ (ledger) in
+                                    LedgerController.shared.delete(ledger: ledger)
+                                })
                                 ledgerOfPurchase = Ledger(name: "", uuid: UUID(uuidString: ledgerUUID)!, appleUserRecordName: nil, lastModified: Date(timeIntervalSince1970: 0), context: CoreDataStack.context)
                             }
 
@@ -146,6 +150,10 @@ class SyncController {
                             foundLedger.lastModified = lastModified
                         }
                     } else {
+                        // There can only be one Ledger in this App
+                        CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.forEach({ (ledger) in
+                            LedgerController.shared.delete(ledger: ledger)
+                        })
                         //create new Ledger in ChildContext
                         Ledger(record: recordFromCK, context: CoreDataStack.context)
                     }

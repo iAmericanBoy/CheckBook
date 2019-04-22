@@ -72,6 +72,7 @@ class AddPurchaseViewController: UIViewController {
             }
         }
         NotificationCenter.default.addObserver(forName: Notification.appleIdFound.name, object: nil, queue: .main) { (_) in
+            try! CoreDataController.shared.ledgersFetchResultsController.performFetch()
             if CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.count != 0 {
                 
             } else {
