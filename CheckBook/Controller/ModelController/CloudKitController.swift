@@ -382,9 +382,9 @@ class CloudKitController {
     }
     
     
-    //MARK: -
+    //MARK: - Sharing
     func confirmShareSettings() {
-        if currentShare?.owner.userIdentity.userRecordID == appleUserID {
+        if currentShare?.owner.userIdentity.userRecordID?.recordName == "__defaultOwner__" {
             //Current User is Owner of share
             UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(true, forKey: "isSharing")
             UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(false, forKey: "isParticipant")

@@ -303,31 +303,24 @@ class PurchaseListViewController: UIViewController {
         //-> If there are updates update Context
         //-> after that try to upload cached Purchases to CK
         SyncController.shared.saveCachedPurchasesToCK()
-
+        
+        //Fetch Share
+        if let stringURL = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.url, let url = URL(string: stringURL) {
+            CloudKitController.shared.fetchShareMetadata(forURL: url) { (isSuccess) in
+                if isSuccess {
+                    print("Share found")
+                }
+            }
+        }
+        
         CloudKitController.shared.fetchUpdatedRecordsFromCK { (isSuccess, recordsToUpdate, recordIDsToDelete) in
             if isSuccess {
                 SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
-            }
-            
-            //Fetch Share
-            if let stringURL = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.url, let url = URL(string: stringURL) {
-                CloudKitController.shared.fetchShareMetadata(forURL: url) { (isSuccess) in
-                    if isSuccess {
-                        print("Share found")
-                    }
-                }
             }
         }
         CloudKitController.shared.fetchUpdatedRecordsFromCK(inDataBase: CloudKitController.shared.shareDB) { (isSuccess, recordsToUpdate, recordIDsToDelete) in
             if isSuccess {
                 SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
-            }
-            if let stringURL = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.url, let url = URL(string: stringURL) {
-                CloudKitController.shared.fetchShareMetadata(forURL: url) { (isSuccess) in
-                    if isSuccess {
-                        print("Share found")
-                    }
-                }
             }
         }
     }
