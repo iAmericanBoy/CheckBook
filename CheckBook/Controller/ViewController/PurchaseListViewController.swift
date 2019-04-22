@@ -311,9 +311,9 @@ class PurchaseListViewController: UIViewController {
             
             //Fetch Share
             if let stringURL = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.url, let url = URL(string: stringURL) {
-                CloudKitController.shared.fetchShareMetadata(forURL: url) { (isSuccess, share) in
+                CloudKitController.shared.fetchShareMetadata(forURL: url) { (isSuccess) in
                     if isSuccess {
-                        CloudKitController.shared.currentShare = share
+                        print("Share found")
                     }
                 }
             }
@@ -323,9 +323,9 @@ class PurchaseListViewController: UIViewController {
                 SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
             }
             if let stringURL = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.url, let url = URL(string: stringURL) {
-                CloudKitController.shared.fetchShareMetadata(forURL: url) { (isSuccess, share) in
+                CloudKitController.shared.fetchShareMetadata(forURL: url) { (isSuccess) in
                     if isSuccess {
-                        CloudKitController.shared.currentShare = share
+                        print("Share found")
                     }
                 }
             }
