@@ -302,11 +302,12 @@ class PurchaseListViewController: UIViewController {
         //Check for updates from Ck
         //-> If there are updates update Context
         //-> after that try to upload cached Purchases to CK
+        SyncController.shared.saveCachedPurchasesToCK()
+
         CloudKitController.shared.fetchUpdatedRecordsFromCK { (isSuccess, recordsToUpdate, recordIDsToDelete) in
             if isSuccess {
                 SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
             }
-            SyncController.shared.saveCachedPurchasesToCK()
             
             //Fetch Share
             if let stringURL = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.url, let url = URL(string: stringURL) {

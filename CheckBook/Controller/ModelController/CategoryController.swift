@@ -42,7 +42,7 @@ class CategoryController {
         CloudKitController.shared.create(record: newRecord, inDataBase: dataBase) { (isSuccess, newPurchase) in
             if !isSuccess {
                 guard let uuid = newCategory.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(ofType: .category, withFailedPurchaseUUID: uuid)
             }
         }
         return newCategory
@@ -74,10 +74,10 @@ class CategoryController {
             dataBase = CloudKitController.shared.privateDB
         }
         
-        CloudKitController.shared.update(record: recordToUpdate, inDataBase: dataBase) { (isSuccess, updatedPurchase) in
+        CloudKitController.shared.update(record: recordToUpdate, inDataBase: dataBase) { (isSuccess, _) in
             if !isSuccess {
                 guard let uuid = category.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(ofType: .category, withFailedPurchaseUUID: uuid)
             }
         }
     }
@@ -116,11 +116,11 @@ class CategoryController {
         CloudKitController.shared.saveChangestoCK(recordsToUpdate: [oldCategoryRecord,newCategoryRecord,purchaseRecord], purchasesToDelete: [], toDataBase: dataBase) { (isSuccess, updatedRecords, _) in
             if !isSuccess {
                 guard let uuid = purchase.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(ofType: .purchase, withFailedPurchaseUUID: uuid)
                 guard let uuidOfOld = oldCategory.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuidOfOld)
+                SyncController.shared.saveFailedUpload(ofType: .category, withFailedPurchaseUUID: uuidOfOld)
                 guard let uuidOfNew = newCategory.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuidOfNew)
+                SyncController.shared.saveFailedUpload(ofType: .category, withFailedPurchaseUUID: uuidOfNew)
             }
         }
         CoreDataController.shared.saveToPersistentStore()
@@ -148,7 +148,7 @@ class CategoryController {
         CloudKitController.shared.delete(record: recordToDelete, inDataBase: dataBase) { (isSuccess) in
             if !isSuccess {
                 guard let uuid = category.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(ofType: .category, withFailedPurchaseUUID: uuid)
             }
         }
         CoreDataController.shared.remove(object: category)

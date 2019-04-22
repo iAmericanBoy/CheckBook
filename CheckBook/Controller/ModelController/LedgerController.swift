@@ -41,7 +41,7 @@ class LedgerController {
         CloudKitController.shared.create(record: newRecord, inDataBase: dataBase) { (isSuccess, newRecord) in
             if !isSuccess {
                 guard let uuid = ledger.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(ofType: .ledger, withFailedPurchaseUUID: uuid)
             }
         }
         return ledger
@@ -77,7 +77,7 @@ class LedgerController {
         CloudKitController.shared.saveChangestoCK(recordsToUpdate: [record], purchasesToDelete: [], toDataBase: dataBase) { (isSuccess, updatedRecords, _) in
             if !isSuccess {
                 guard let uuid = ledger.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(ofType: .ledger, withFailedPurchaseUUID: uuid)
                 completion(false)
             } else {
                 completion(true)
@@ -109,7 +109,7 @@ class LedgerController {
         CloudKitController.shared.delete(record: recordToDelete, inDataBase: dataBase) { (isSuccess) in
             if !isSuccess {
                 guard let uuid = ledger.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(ofType: .ledger, withFailedPurchaseUUID: uuid)
             }
         }
         CoreDataController.shared.remove(object: ledger)

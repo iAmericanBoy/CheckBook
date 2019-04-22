@@ -133,6 +133,7 @@ class CloudKitController {
         }
         
         let fetch = CKFetchDatabaseChangesOperation(previousServerChangeToken: token)
+        fetch.qualityOfService = .userInitiated
         
         fetch.changeTokenUpdatedBlock = { (newToken) in
             do {
@@ -361,6 +362,8 @@ class CloudKitController {
     func saveChangestoCK(recordsToUpdate records: [CKRecord], purchasesToDelete recordIDs: [CKRecord.ID], toDataBase dataBase: CKDatabase = CloudKitController.shared.privateDB, completion: @escaping (_ isSuccess: Bool,_ savedRecords: [CKRecord]?, _ deletedRecordIDs: [CKRecord.ID]?) -> Void) {
         let operation = CKModifyRecordsOperation(recordsToSave: records, recordIDsToDelete: recordIDs)
         operation.savePolicy = .changedKeys
+        operation.isAtomic = true
+        operation.qualityOfService = .userInitiated
         operation.modifyRecordsCompletionBlock = { (savedRecords,deletedRecords,error) in
             if let error = error {
                 print("An Error updating CK with \(String(describing: records.first?.recordType)) has occured. \(error), \(error.localizedDescription)")
@@ -370,6 +373,7 @@ class CloudKitController {
             guard let saved = savedRecords, let deleted = deletedRecords else {completion(false,savedRecords,deletedRecords); return}
             completion(true,saved,deleted)
         }
+
         dataBase.add(operation)
     }
 }

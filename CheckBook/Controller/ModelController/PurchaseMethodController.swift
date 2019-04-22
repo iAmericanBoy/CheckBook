@@ -42,7 +42,7 @@ class PurchaseMethodController {
         CloudKitController.shared.create(record: newRecord, inDataBase: dataBase) { (isSuccess, newPurchase) in
             if !isSuccess {
                 guard let uuid = newPurchaseMethod.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(ofType: .method, withFailedPurchaseUUID: uuid)
             }
         }
         return newPurchaseMethod
@@ -75,7 +75,7 @@ class PurchaseMethodController {
         CloudKitController.shared.update(record: recordToUpdate, inDataBase: dataBase) { (isSuccess, updatedPurchase) in
             if !isSuccess {
                 guard let uuid = purchaseMethod.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(ofType: .method, withFailedPurchaseUUID: uuid)
             }
         }
     }
@@ -114,11 +114,11 @@ class PurchaseMethodController {
         CloudKitController.shared.saveChangestoCK(recordsToUpdate: [oldPurchaseMethodRecord,newPurchaseMethodRecord,purchaseRecord], purchasesToDelete: [], toDataBase: dataBase) { (isSuccess, updatedRecords, _) in
             if !isSuccess {
                 guard let uuid = purchase.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(ofType: .purchase, withFailedPurchaseUUID: uuid)
                 guard let uuidOfOld = oldPurchaseMethod.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuidOfOld)
+                SyncController.shared.saveFailedUpload(ofType: .method, withFailedPurchaseUUID: uuidOfOld)
                 guard let uuidOfNew = newPurchaseMethod.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuidOfNew)
+                SyncController.shared.saveFailedUpload(ofType: .method, withFailedPurchaseUUID: uuidOfNew)
             }
         }
         CoreDataController.shared.saveToPersistentStore()
@@ -147,7 +147,7 @@ class PurchaseMethodController {
         CloudKitController.shared.delete(record: recordToDelete, inDataBase: dataBase) { (isSuccess) in
             if !isSuccess {
                 guard let uuid = purchaseMethod.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(ofType: .method, withFailedPurchaseUUID: uuid)
             }
         }
         CoreDataController.shared.remove(object: purchaseMethod)

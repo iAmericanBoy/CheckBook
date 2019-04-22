@@ -17,9 +17,10 @@ class SyncController {
     static let shared = SyncController()
     
     ///Saves failed CK object to a local cache.
+    /// - parameter type: The type of the object being saved.
     /// - parameter uuid: The UUID of the purchase that was not able to be uploaded.
-    func saveFailedUpload(withFailedPurchaseUUID uuid: UUID) {
-        CachePurchase(uuid: uuid)
+    func saveFailedUpload(ofType type: CacheType, withFailedPurchaseUUID uuid: UUID) {
+        CachePurchase(uuid: uuid, cacheType: type)
         CoreDataController.shared.saveToPersistentStore()
     }
     
@@ -226,54 +227,60 @@ class SyncController {
         }
         
         cachedPurchases.forEach { (cachedPurchase) in
-            CoreDataController.shared.findPurchaseWith(uuid: cachedPurchase.uuid, completion: { (purchaseFromCD) in
-                if let purchase = purchaseFromCD {
-                    //sent update to CK
-                    recordsToUpdate.append(CKRecord(purchase: purchase, zoneID: zoneID)!)
-                } else {
-                    //sentdeleteToCK
-                    if let uuid = cachedPurchase.uuid?.uuidString {
-                        recordsToDelete.append(CKRecord.ID(recordName: uuid))
-                    }
-                }
-            })
             
-            CoreDataController.shared.findLedgerWith(uuid: cachedPurchase.uuid, completion: { (ledgerFromCD) in
-                if let ledger = ledgerFromCD {
-                    //sent update to CK
-                    recordsToUpdate.append(CKRecord(ledger: ledger, zoneID: zoneID)!)
-                } else {
-                    //sentdeleteToCK
-                    if let uuid = cachedPurchase.uuid?.uuidString {
-                        recordsToDelete.append(CKRecord.ID(recordName: uuid))
-                    }
-                }
-            })
+            guard let type = cachedPurchase.type , let cacheType = CacheType(rawValue: type) else {return}
             
-            CoreDataController.shared.findCategoryWith(uuid: cachedPurchase.uuid, completion: { (categoryFromCD) in
-                if let category = categoryFromCD {
-                    //sent update to CK
-                    recordsToUpdate.append(CKRecord(category: category, zoneID: zoneID)!)
-                } else {
-                    //sentdeleteToCK
-                    if let uuid = cachedPurchase.uuid?.uuidString {
-                        recordsToDelete.append(CKRecord.ID(recordName: uuid))
+            switch cacheType {
+            case .purchase:
+                CoreDataController.shared.findPurchaseWith(uuid: cachedPurchase.uuid, completion: { (purchaseFromCD) in
+                    if let purchase = purchaseFromCD {
+                        //sent update to CK
+                        recordsToUpdate.append(CKRecord(purchase: purchase, zoneID: zoneID)!)
+                    } else {
+                        //sentdeleteToCK
+                        if let uuid = cachedPurchase.uuid?.uuidString {
+                            recordsToDelete.append(CKRecord.ID(recordName: uuid))
+                        }
                     }
-                }
-            })
-            
-            CoreDataController.shared.findPurchaseMethodWith(uuid: cachedPurchase.uuid, completion: { (methodFromCD) in
-                if let method = methodFromCD {
-                    //sent update to CK
-                    
-                    recordsToUpdate.append(CKRecord(purchaseMethod: method, zoneID: zoneID)!)
-                } else {
-                    //sentdeleteToCK
-                    if let uuid = cachedPurchase.uuid?.uuidString {
-                        recordsToDelete.append(CKRecord.ID(recordName: uuid))
+                })
+            case .category:
+                CoreDataController.shared.findCategoryWith(uuid: cachedPurchase.uuid, completion: { (categoryFromCD) in
+                    if let category = categoryFromCD {
+                        //sent update to CK
+                        recordsToUpdate.append(CKRecord(category: category, zoneID: zoneID)!)
+                    } else {
+                        //sentdeleteToCK
+                        if let uuid = cachedPurchase.uuid?.uuidString {
+                            recordsToDelete.append(CKRecord.ID(recordName: uuid))
+                        }
                     }
-                }
-            })
+                })
+            case .ledger:
+                CoreDataController.shared.findLedgerWith(uuid: cachedPurchase.uuid, completion: { (ledgerFromCD) in
+                    if let ledger = ledgerFromCD {
+                        //sent update to CK
+                        recordsToUpdate.append(CKRecord(ledger: ledger, zoneID: zoneID)!)
+                    } else {
+                        //sentdeleteToCK
+                        if let uuid = cachedPurchase.uuid?.uuidString {
+                            recordsToDelete.append(CKRecord.ID(recordName: uuid))
+                        }
+                    }
+                })
+            case .method:
+                CoreDataController.shared.findPurchaseMethodWith(uuid: cachedPurchase.uuid, completion: { (methodFromCD) in
+                    if let method = methodFromCD {
+                        //sent update to CK
+                        
+                        recordsToUpdate.append(CKRecord(purchaseMethod: method, zoneID: zoneID)!)
+                    } else {
+                        //sentdeleteToCK
+                        if let uuid = cachedPurchase.uuid?.uuidString {
+                            recordsToDelete.append(CKRecord.ID(recordName: uuid))
+                        }
+                    }
+                })
+            }
         }
         
         CloudKitController.shared.saveChangestoCK(recordsToUpdate: recordsToUpdate, purchasesToDelete: recordsToDelete) { (isSuccess, savedRecords, deletedRecordIDs) in

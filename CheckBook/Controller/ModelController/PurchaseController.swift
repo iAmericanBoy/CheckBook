@@ -25,8 +25,7 @@ class PurchaseController {
     /// - parameter ledger: The leger of the purchase.
     /// - parameter category: The category of the purchase.
     func createNewPurchaseWith(amount: NSDecimalNumber, date: Date, item: String, storeName:String, purchaseMethod: PurchaseMethod, ledger: Ledger, category: Category) {
-        guard let appleUserID = CloudKitController.shared.appleUserID else {return}
-        let purchase = Purchase(amount: amount, date: date, item: item, storeName: storeName, purchaseMethod: purchaseMethod, category: category, appleUserRecordName: appleUserID.recordName, ledger: ledger)
+        let purchase = Purchase(amount: amount, date: date, item: item, storeName: storeName, purchaseMethod: purchaseMethod, category: category, appleUserRecordName: CloudKitController.shared.appleUserID?.recordName, ledger: ledger)
         CoreDataController.shared.saveToPersistentStore()
         
         let dataBase: CKDatabase
@@ -47,7 +46,7 @@ class PurchaseController {
         CloudKitController.shared.create(record: recordToCreate, inDataBase: dataBase) { (isSuccess, newRecord) in
             if !isSuccess {
                 guard let uuid = purchase.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(ofType: .purchase, withFailedPurchaseUUID: uuid)
             }
         }
     }
@@ -89,7 +88,7 @@ class PurchaseController {
         CloudKitController.shared.update(record: recordToUpdate, inDataBase: dataBase) { (isSuccess, updatedPurchase) in
             if !isSuccess {
                 guard let uuid = purchase.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(ofType: .method, withFailedPurchaseUUID: uuid)
             }
         }
     }
@@ -117,7 +116,7 @@ class PurchaseController {
         CloudKitController.shared.delete(record: recordToDelete, inDataBase: dataBase) { (isSuccess) in
             if !isSuccess {
                 guard let uuid = purchase.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(ofType: .purchase, withFailedPurchaseUUID: uuid)
             }
         }
         CoreDataController.shared.remove(object: purchase)

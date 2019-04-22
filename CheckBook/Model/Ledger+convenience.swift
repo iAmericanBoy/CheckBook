@@ -37,6 +37,7 @@ extension Ledger {
             let lastModified = record[Ledger.lastModifiedKey] as? Date else {return nil}
         
         self.init(name: name, uuid: UUID(uuidString: record.recordID.recordName)!, appleUserRecordName: record.creatorUserRecordID?.recordName, url: record[Ledger.shareURLKey] as? String , lastModified: lastModified, context: context)
+        
     }
 }
 
