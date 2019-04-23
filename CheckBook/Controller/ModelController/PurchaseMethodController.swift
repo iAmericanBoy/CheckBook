@@ -23,14 +23,8 @@ class PurchaseMethodController {
         let newPurchaseMethod = PurchaseMethod(name: name, ledgerUUID: ledgerUUID)
         CoreDataController.shared.saveToPersistentStore()
         
-        let zoneID: CKRecordZone.ID
-        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
-            zoneID = currentZoneID
-        } else {
-            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
-        }
         
-        guard let newRecord = CKRecord(purchaseMethod: newPurchaseMethod, zoneID: zoneID) else {return newPurchaseMethod}
+        guard let newRecord = CKRecord(purchaseMethod: newPurchaseMethod) else {return newPurchaseMethod}
         
         let dataBase: CKDatabase
         if UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isParticipant") ?? false {
@@ -56,14 +50,9 @@ class PurchaseMethodController {
         purchaseMethod.lastModified = Date()
         CoreDataController.shared.saveToPersistentStore()
         
-        let zoneID: CKRecordZone.ID
-        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
-            zoneID = currentZoneID
-        } else {
-            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
-        }
+
         
-        guard let recordToUpdate = CKRecord(purchaseMethod: purchaseMethod, zoneID: zoneID) else {return}
+        guard let recordToUpdate = CKRecord(purchaseMethod: purchaseMethod) else {return}
         
         let dataBase: CKDatabase
         if UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isParticipant") ?? false {
@@ -93,16 +82,10 @@ class PurchaseMethodController {
         newPurchaseMethod.lastModified = Date()
         oldPurchaseMethod.lastModified = Date()
 
-        let zoneID: CKRecordZone.ID
-        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
-            zoneID = currentZoneID
-        } else {
-            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
-        }
         
-        guard let oldPurchaseMethodRecord = CKRecord(purchaseMethod: oldPurchaseMethod, zoneID: zoneID),
-            let newPurchaseMethodRecord = CKRecord(purchaseMethod: newPurchaseMethod, zoneID: zoneID),
-            let purchaseRecord = CKRecord(purchase: purchase, zoneID: zoneID) else {return}
+        guard let oldPurchaseMethodRecord = CKRecord(purchaseMethod: oldPurchaseMethod),
+            let newPurchaseMethodRecord = CKRecord(purchaseMethod: newPurchaseMethod),
+            let purchaseRecord = CKRecord(purchase: purchase) else {return}
         
         let dataBase: CKDatabase
         if UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isParticipant") ?? false {
@@ -128,14 +111,8 @@ class PurchaseMethodController {
     /// - parameter purchase: The purchaseMethod to delete.
     func delete(purchaseMethod: PurchaseMethod) {
         
-        let zoneID: CKRecordZone.ID
-        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
-            zoneID = currentZoneID
-        } else {
-            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
-        }
         
-        guard let recordToDelete = CKRecord(purchaseMethod: purchaseMethod, zoneID: zoneID) else {return}
+        guard let recordToDelete = CKRecord(purchaseMethod: purchaseMethod) else {return}
         
         let dataBase: CKDatabase
         if UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isParticipant") ?? false {

@@ -46,7 +46,9 @@ extension Purchase {
 }
 
 extension CKRecord {
-    convenience init?(purchase: Purchase, zoneID: CKRecordZone.ID) {
+    convenience init?(purchase: Purchase) {
+        let zoneID = CKRecordZone.ID(zoneName: purchase.ledger!.zoneName!, ownerName: purchase.ledger!.zoneOwnerName!)
+        
         self.init(recordType: Purchase.typeKey, recordID: CKRecord.ID(recordName: purchase.uuid!.uuidString, zoneID: zoneID))
         
         let purchaseMethodReference = CKRecord.Reference(recordID: CKRecord.ID(recordName: purchase.methodUUID!.uuidString, zoneID: zoneID), action: CKRecord_Reference_Action.none)

@@ -38,12 +38,14 @@ extension Ledger {
         
         self.init(name: name, uuid: UUID(uuidString: record.recordID.recordName)!, appleUserRecordName: record.creatorUserRecordID?.recordName, url: record[Ledger.shareURLKey] as? String , lastModified: lastModified, context: context)
         
+        self.zoneOwnerName = record.recordID.zoneID.ownerName
+        self.zoneName = record.recordID.zoneID.zoneName
     }
 }
 
 extension CKRecord {
-    convenience init?(ledger: Ledger, zoneID: CKRecordZone.ID) {
-        self.init(recordType: Ledger.typeKey, recordID: CKRecord.ID(recordName: ledger.uuid!.uuidString, zoneID: zoneID))
+    convenience init?(ledger: Ledger) {
+        self.init(recordType: Ledger.typeKey, recordID: CKRecord.ID(recordName: ledger.uuid!.uuidString, zoneID: CKRecordZone.ID(zoneName: ledger.zoneName ?? Purchase.privateRecordZoneName, ownerName: ledger.zoneOwnerName ?? CKCurrentUserDefaultName)))
         
         setValue(ledger.url, forKey: Ledger.shareURLKey)
         setValue(ledger.name, forKey: Ledger.nameKey)

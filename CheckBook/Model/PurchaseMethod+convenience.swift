@@ -37,10 +37,15 @@ extension PurchaseMethod {
             let lastModified = record[PurchaseMethod.lastModifiedKey] as? Date else {return nil}
         
         self.init(name: name, uuid: UUID(uuidString: record.recordID.recordName)!, color: record[PurchaseMethod.colorKey] as? String, ledgerUUID: UUID(uuidString: (record.parent?.recordID.recordName)!)!, lastModified: lastModified, context: context)
+        
+        self.zoneOwnerName = record.recordID.zoneID.ownerName
+        self.zoneName = record.recordID.zoneID.zoneName
     }
 }
 extension CKRecord {
-    convenience init?(purchaseMethod: PurchaseMethod, zoneID: CKRecordZone.ID) {
+    convenience init?(purchaseMethod: PurchaseMethod) {
+        let zoneID = CKRecordZone.ID(zoneName: purchaseMethod.zoneName!, ownerName: purchaseMethod.zoneOwnerName!)
+
         self.init(recordType: PurchaseMethod.typeKey, recordID: CKRecord.ID(recordName: purchaseMethod.uuid!.uuidString, zoneID: zoneID))
         
         setParent(CKRecord.ID(recordName: purchaseMethod.ledgerUUID!.uuidString, zoneID: zoneID))

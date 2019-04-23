@@ -37,10 +37,15 @@ extension Category {
             let lastModified = record[Category.lastModifiedKey] as? Date else {return nil}
         
         self.init(name: name, color: record[Category.colorKey] as? String, uuid: UUID(uuidString: record.recordID.recordName)!, ledgerUUID: UUID(uuidString: (record.parent?.recordID.recordName)!)!, lastModified: lastModified, context: context)
+        
+        self.zoneOwnerName = record.recordID.zoneID.ownerName
+        self.zoneName = record.recordID.zoneID.zoneName
     }
 }
 extension CKRecord {
-    convenience init?(category: Category, zoneID: CKRecordZone.ID) {
+    convenience init?(category: Category) {
+        let zoneID = CKRecordZone.ID(zoneName: category.zoneName!, ownerName: category.zoneOwnerName!)
+
         self.init(recordType: Category.typeKey, recordID: CKRecord.ID(recordName: category.uuid!.uuidString, zoneID: zoneID))
         
         setParent(CKRecord.ID(recordName: category.ledgerUUID!.uuidString, zoneID: zoneID))

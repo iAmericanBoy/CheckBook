@@ -34,15 +34,8 @@ class PurchaseController {
         } else {
             dataBase = CloudKitController.shared.privateDB
         }
-        
-        let zoneID: CKRecordZone.ID
-        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
-            zoneID = currentZoneID
-        } else {
-            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
-        }
 
-        guard let recordToCreate = CKRecord(purchase: purchase, zoneID: zoneID) else {return}
+        guard let recordToCreate = CKRecord(purchase: purchase) else {return}
         CloudKitController.shared.create(record: recordToCreate, inDataBase: dataBase) { (isSuccess, newRecord) in
             if !isSuccess {
                 guard let uuid = purchase.uuid else {return}
@@ -77,14 +70,8 @@ class PurchaseController {
             dataBase = CloudKitController.shared.privateDB
         }
         
-        let zoneID: CKRecordZone.ID
-        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
-            zoneID = currentZoneID
-        } else {
-            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
-        }
         
-        guard let recordToUpdate = CKRecord(purchase: purchase, zoneID: zoneID) else {return}
+        guard let recordToUpdate = CKRecord(purchase: purchase) else {return}
         CloudKitController.shared.update(record: recordToUpdate, inDataBase: dataBase) { (isSuccess, updatedPurchase) in
             if !isSuccess {
                 guard let uuid = purchase.uuid else {return}
@@ -104,14 +91,7 @@ class PurchaseController {
             dataBase = CloudKitController.shared.privateDB
         }
         
-        let zoneID: CKRecordZone.ID
-        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
-            zoneID = currentZoneID
-        } else {
-            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
-        }
-        
-        guard let recordToDelete = CKRecord(purchase: purchase, zoneID: zoneID) else {return}
+        guard let recordToDelete = CKRecord(purchase: purchase) else {return}
         
         CloudKitController.shared.delete(record: recordToDelete, inDataBase: dataBase) { (isSuccess) in
             if !isSuccess {

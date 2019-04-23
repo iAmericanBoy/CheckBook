@@ -126,6 +126,8 @@ class SyncController {
                             
                             foundPurchaseMethod.name = name
                             foundPurchaseMethod.uuid = uuid
+                            foundPurchaseMethod.zoneOwnerName = recordFromCK.recordID.zoneID.ownerName
+                            foundPurchaseMethod.zoneName = recordFromCK.recordID.zoneID.zoneName
                             foundPurchaseMethod.color = recordFromCK[PurchaseMethod.colorKey] as? String
                             foundPurchaseMethod.lastModified = lastModified
                         }
@@ -146,6 +148,8 @@ class SyncController {
                             
                             foundLedger.name = name
                             foundLedger.uuid = uuid
+                            foundLedger.zoneOwnerName = recordFromCK.recordID.zoneID.ownerName
+                            foundLedger.zoneName = recordFromCK.recordID.zoneID.zoneName
                             foundLedger.url = recordFromCK[Ledger.shareURLKey] as? String
                             foundLedger.lastModified = lastModified
                         }
@@ -172,6 +176,8 @@ class SyncController {
                             foundCategory.name = name
                             foundCategory.uuid = uuid
                             foundCategory.color = color
+                            foundCategory.zoneOwnerName = recordFromCK.recordID.zoneID.ownerName
+                            foundCategory.zoneName = recordFromCK.recordID.zoneID.zoneName
                             foundCategory.lastModified = lastModified
                         }
                     } else {
@@ -227,13 +233,6 @@ class SyncController {
             print("Error fetching cachedObjects with error: \(String(describing: error)) \(error.localizedDescription))")
         }
         
-        let zoneID: CKRecordZone.ID
-        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
-            zoneID = currentZoneID
-        } else {
-            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
-        }
-        
         cachedPurchases.forEach { (cachedPurchase) in
             
             guard let type = cachedPurchase.type , let cacheType = CacheType(rawValue: type) else {return}
@@ -243,7 +242,7 @@ class SyncController {
                 CoreDataController.shared.findPurchaseWith(uuid: cachedPurchase.uuid, completion: { (purchaseFromCD) in
                     if let purchase = purchaseFromCD {
                         //sent update to CK
-                        recordsToUpdate.append(CKRecord(purchase: purchase, zoneID: zoneID)!)
+                        recordsToUpdate.append(CKRecord(purchase: purchase)!)
                     } else {
                         //sentdeleteToCK
                         if let uuid = cachedPurchase.uuid?.uuidString {
@@ -255,7 +254,7 @@ class SyncController {
                 CoreDataController.shared.findCategoryWith(uuid: cachedPurchase.uuid, completion: { (categoryFromCD) in
                     if let category = categoryFromCD {
                         //sent update to CK
-                        recordsToUpdate.append(CKRecord(category: category, zoneID: zoneID)!)
+                        recordsToUpdate.append(CKRecord(category: category)!)
                     } else {
                         //sentdeleteToCK
                         if let uuid = cachedPurchase.uuid?.uuidString {
@@ -267,7 +266,7 @@ class SyncController {
                 CoreDataController.shared.findLedgerWith(uuid: cachedPurchase.uuid, completion: { (ledgerFromCD) in
                     if let ledger = ledgerFromCD {
                         //sent update to CK
-                        recordsToUpdate.append(CKRecord(ledger: ledger, zoneID: zoneID)!)
+                        recordsToUpdate.append(CKRecord(ledger: ledger)!)
                     } else {
                         //sentdeleteToCK
                         if let uuid = cachedPurchase.uuid?.uuidString {
@@ -280,7 +279,7 @@ class SyncController {
                     if let method = methodFromCD {
                         //sent update to CK
                         
-                        recordsToUpdate.append(CKRecord(purchaseMethod: method, zoneID: zoneID)!)
+                        recordsToUpdate.append(CKRecord(purchaseMethod: method)!)
                     } else {
                         //sentdeleteToCK
                         if let uuid = cachedPurchase.uuid?.uuidString {
