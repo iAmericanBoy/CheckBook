@@ -15,7 +15,7 @@ extension Category {
     convenience init(name: String,
                      color: String? = nil,
                      uuid: UUID = UUID(),
-                     ledgerUUID: UUID,
+                     ledger: Ledger? = nil,
                      purchases: NSOrderedSet = NSOrderedSet(),
                      lastModified: Date = Date(),
                      context: NSManagedObjectContext = CoreDataStack.context) {
@@ -26,7 +26,9 @@ extension Category {
         self.uuid = uuid
         self.purchases = purchases
         self.color = color
-        self.ledgerUUID = ledgerUUID
+        self.ledgerUUID = ledger?.uuid
+        self.zoneOwnerName = ledger?.zoneOwnerName
+        self.zoneName = ledger?.zoneName
         
         self.lastModified = lastModified
     }
@@ -36,8 +38,9 @@ extension Category {
         guard let name = record[Category.nameKey] as? String,
             let lastModified = record[Category.lastModifiedKey] as? Date else {return nil}
         
-        self.init(name: name, color: record[Category.colorKey] as? String, uuid: UUID(uuidString: record.recordID.recordName)!, ledgerUUID: UUID(uuidString: (record.parent?.recordID.recordName)!)!, lastModified: lastModified, context: context)
+        self.init(name: name, color: record[Category.colorKey] as? String, uuid: UUID(uuidString: record.recordID.recordName)!, lastModified: lastModified, context: context)
         
+        self.ledgerUUID = UUID(uuidString: (record.parent?.recordID.recordName)!)
         self.zoneOwnerName = record.recordID.zoneID.ownerName
         self.zoneName = record.recordID.zoneID.zoneName
     }

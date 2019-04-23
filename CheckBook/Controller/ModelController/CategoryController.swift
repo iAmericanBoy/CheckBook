@@ -18,9 +18,9 @@ class CategoryController {
     //MARK: - CRUD
     /// Creates new Category using the convenience initilizer inside the CoredataStack.context and tries to uploads it to CloudKit. If the upload fails the new Category gets added to the CacheContext for a later try.
     /// - parameter name: The name of the Category.
-    /// - parameter ledgerUUID: The uuid of the parent.
-    func createNewCategoryWith(name: String, ledgerUUID: UUID) -> Category {
-        let newCategory = Category(name: name, ledgerUUID: ledgerUUID)
+    /// - parameter ledger: The parent ledger.
+    func createNewCategoryWith(name: String, withParentLedger ledger: Ledger) -> Category {
+        let newCategory = Category(name: name, ledger: ledger)
         CoreDataController.shared.saveToPersistentStore()
 
         
