@@ -24,7 +24,11 @@ class CloudKitController {
     let shareDB = CKContainer.default().sharedCloudDatabase
     
     /// The current Share or nil if not used
-    var currentShare: CKShare?
+    var currentShare: CKShare? {
+        didSet {
+            confirmShareSettings()
+        }
+    }
     var currentRecordZoneID: CKRecordZone.ID?
 
     ///The RecordID of the logged in iCloud user
@@ -38,15 +42,15 @@ class CloudKitController {
     init() {
         createZone(withName: Purchase.privateRecordZoneName) { (isSuccess, newZone) in
             if !isSuccess {
-                print("Could not create new zone.")
+                print("private zone NOT available")
             } else {
-                print("zone created")
+                print("private zone available")
             }
             self.fetchUserRecordID { (isSuccess) in
                 if isSuccess {
                     print("AppleUserID found")
                 } else {
-                    print("AppleUserID not found")
+                    print("AppleUserID NOT found")
                 }
             }
         }
@@ -133,6 +137,7 @@ class CloudKitController {
         }
         
         let fetch = CKFetchDatabaseChangesOperation(previousServerChangeToken: token)
+        fetch.qualityOfService = .userInitiated
         
         fetch.changeTokenUpdatedBlock = { (newToken) in
             do {
@@ -229,30 +234,30 @@ class CloudKitController {
         }
     }
     
-    ///Fetches the Metadata of a share for a given URL. Assigns the ZoneID of the RootRecord to the property in the CloudKitController
+    ///Fetches the Metadata of a share for a given URL. Assigns the ZoneID of the RootRecord to the property in the CloudKitController. Assigns the Share to the currentshare Property.
     /// - parameter url: The URL for the CKShare.
     /// - parameter completion: Handler for when the Share.Meta was found.
     /// - parameter isSuccess: Confirms the Share.Meta was found.
-    /// - parameter share: The CkShare associate with the Share.Meta that was found
-    func fetchShareMetadata(forURL url: URL, _ completion: @escaping (_ isSuccess:Bool, _ share: CKShare?) -> Void) {
+    func fetchShareMetadata(forURL url: URL, _ completion: @escaping (_ isSuccess:Bool) -> Void) {
         
         let operation = CKFetchShareMetadataOperation(shareURLs: [url])
         operation.perShareMetadataBlock = { (shareUrl,fetchedMeta,error) in
             if let error = error {
                 print("There was an error fetching the ShareMetaData for the URL: \(error)")
-                completion(false, nil)
+                completion(false)
                 return
             }
             
-            guard let meta = fetchedMeta, url == shareUrl else {completion(false,nil); return}
+            guard let meta = fetchedMeta, url == shareUrl else {completion(false); return}
             self.currentRecordZoneID =  meta.rootRecordID.zoneID
-            completion(true, meta.share)
+            self.currentShare = meta.share
+            completion(true)
         }
         
         operation.fetchShareMetadataCompletionBlock = { error in
             if let error = error {
                 print("There was an error fetching the ShareMetaData for the URL: \(error)")
-                completion(false, nil)
+                completion(false)
                 return
             }
         }
@@ -361,6 +366,8 @@ class CloudKitController {
     func saveChangestoCK(recordsToUpdate records: [CKRecord], purchasesToDelete recordIDs: [CKRecord.ID], toDataBase dataBase: CKDatabase = CloudKitController.shared.privateDB, completion: @escaping (_ isSuccess: Bool,_ savedRecords: [CKRecord]?, _ deletedRecordIDs: [CKRecord.ID]?) -> Void) {
         let operation = CKModifyRecordsOperation(recordsToSave: records, recordIDsToDelete: recordIDs)
         operation.savePolicy = .changedKeys
+        operation.isAtomic = true
+        operation.qualityOfService = .userInitiated
         operation.modifyRecordsCompletionBlock = { (savedRecords,deletedRecords,error) in
             if let error = error {
                 print("An Error updating CK with \(String(describing: records.first?.recordType)) has occured. \(error), \(error.localizedDescription)")
@@ -370,6 +377,21 @@ class CloudKitController {
             guard let saved = savedRecords, let deleted = deletedRecords else {completion(false,savedRecords,deletedRecords); return}
             completion(true,saved,deleted)
         }
+
         dataBase.add(operation)
+    }
+    
+    
+    //MARK: - Sharing
+    func confirmShareSettings() {
+        if currentShare?.owner.userIdentity.userRecordID?.recordName == "__defaultOwner__" {
+            //Current User is Owner of share
+            UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(true, forKey: "isSharing")
+            UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(false, forKey: "isParticipant")
+        } else {
+            //Current User is Participant
+            UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(true, forKey: "isParticipant")
+            UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.set(false, forKey: "isSharing")
+        }
     }
 }

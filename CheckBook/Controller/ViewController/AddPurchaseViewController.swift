@@ -21,8 +21,11 @@ class AddPurchaseViewController: UIViewController {
     @IBOutlet var panGesture: UIPanGestureRecognizer!
     @IBOutlet weak var pullView: UIView!
     @IBOutlet weak var pullViewWidthContraint: NSLayoutConstraint!
-    @IBOutlet weak var addPurchaseButton: UIButton!
-    @IBOutlet weak var savePurchaseButton: UIButton!
+    @IBOutlet weak var openCardButton: UIButton!
+    @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var updateButton: UIButton!
+    
     @IBOutlet weak var storeNameTextField: UITextField!
     @IBOutlet weak var methodTextField: UITextField!
     @IBOutlet weak var dateTextField: UITextField!
@@ -69,8 +72,8 @@ class AddPurchaseViewController: UIViewController {
             }
         }
         NotificationCenter.default.addObserver(forName: Notification.appleIdFound.name, object: nil, queue: .main) { (_) in
+            try! CoreDataController.shared.ledgersFetchResultsController.performFetch()
             if CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.count != 0 {
-                //add button = shareButton
                 
             } else {
                 _ = LedgerController.shared.createNewLedgerWith(name: "New Ledger")
@@ -108,42 +111,25 @@ class AddPurchaseViewController: UIViewController {
 //        }
         delegate?.cardPanned(recognizer: sender)
     }
-
-    @IBAction func addPurchaseButtonTapped(_ sender: UIButton) {
+    
+    @IBAction func openCardButtonTapped(_ sender: UIButton) {
         currentState = delegate?.userDidInteractWithCard() ?? State.closed
-        dismissKeyBoards()
-
-        let methodRow = methodPickerView.selectedRow(inComponent: 0)
-        let categoryRow = categoryPickerView.selectedRow(inComponent: 0)
-        
-        let date = datePicker.date
-        guard let storeName = storeNameTextField.text, !storeName.isEmpty,
-            let amount = amountTextField.text, let amountNumber = numberFormatter.number(from: amount),
-            let methodText = methodTextField.text, !methodText.isEmpty,
-            let categoryText = methodTextField.text, !categoryText.isEmpty else {updateViews(); return}
-        
-        //Set TextFields to Empty
-        amountTextField.text = NumberFormatter.localizedString(from: 0, number: .currency)
-        storeNameTextField.text = ""
-
-        let method = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(row: methodRow, section: 0))
-        let category = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(row: categoryRow, section: 0))
-        
-        let ledger: Ledger
-        if CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.count != 0 {
-            ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects!.first!
-        } else {
-            ledger = LedgerController.shared.createNewLedgerWith(name: "")
-        }
-        
-        if let purchase = purchase {
-            PurchaseController.shared.update(purchase: purchase, amount: NSDecimalNumber(decimal: amountNumber.decimalValue) as Decimal, date: date, item: "", storeName: storeName, purchaseMethod: method, category: category)
-        } else {
-            PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger, category: category)
-        }
-        purchase = nil
-
         updateViews()
+    }
+    
+    @IBAction func cancelButtonTapped(_ sender: UIButton) {
+        purchase = nil
+        dismissKeyBoards()
+        currentState = delegate?.userDidInteractWithCard() ?? State.closed
+        updateViews()
+    }
+    
+    @IBAction func updateButtonTapped(_ sender: UIButton) {
+        savePurchase()
+    }
+    
+    @IBAction func saveButtonTapped(_ sender: UIButton) {
+        savePurchase()
     }
     
     @IBAction func addNewCardButtonTapped(_ sender: UIBarButtonItem) {
@@ -187,6 +173,41 @@ class AddPurchaseViewController: UIViewController {
     }
     
     //MARK: - Private Functions
+    fileprivate func savePurchase() {
+        let methodRow = methodPickerView.selectedRow(inComponent: 0)
+        let categoryRow = categoryPickerView.selectedRow(inComponent: 0)
+        
+        let date = datePicker.date
+        guard let storeName = storeNameTextField.text, !storeName.isEmpty,
+            let amount = amountTextField.text, let amountNumber = numberFormatter.number(from: amount),
+            let methodText = methodTextField.text, !methodText.isEmpty,
+            let categoryText = methodTextField.text, !categoryText.isEmpty else {updateViews(); return}
+        
+        //Set TextFields to Empty
+        amountTextField.text = NumberFormatter.localizedString(from: 0, number: .currency)
+        storeNameTextField.text = ""
+        
+        let method = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(row: methodRow, section: 0))
+        let category = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(row: categoryRow, section: 0))
+        
+        let ledger: Ledger
+        if CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.count != 0 {
+            ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects!.first!
+        } else {
+            ledger = LedgerController.shared.createNewLedgerWith(name: "")
+        }
+        
+        if let purchase = purchase {
+            PurchaseController.shared.update(purchase: purchase, amount: NSDecimalNumber(decimal: amountNumber.decimalValue) as Decimal, date: date, item: "", storeName: storeName, purchaseMethod: method, category: category)
+        } else {
+            PurchaseController.shared.createNewPurchaseWith(amount: NSDecimalNumber(decimal: amountNumber.decimalValue), date: date, item: "", storeName: storeName, purchaseMethod: method, ledger: ledger, category: category)
+        }
+        currentState = delegate?.userDidInteractWithCard() ?? State.closed
+        dismissKeyBoards()
+        purchase = nil
+        
+        updateViews()
+    }
     fileprivate func updateViews() {
         switch currentState {
         case .open:
@@ -221,6 +242,22 @@ class AddPurchaseViewController: UIViewController {
             dateFormatter.dateStyle = .medium
             datePicker.date = purchase.date as Date? ?? Date()
             dateTextField.text = dateFormatter.string(from: purchase.date as Date? ?? Date())
+        } else {
+            amountTextField.text = NumberFormatter.localizedString(from: 0, number: .currency)
+            if CoreDataController.shared.categoryFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
+                categoryTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
+            }
+            if CoreDataController.shared.purchaseMethodFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
+                methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
+            }
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Locale.autoupdatingCurrent
+            dateFormatter.dateStyle = .medium
+            dateTextField.text = dateFormatter.string(from: Date())
+            
+            storeNameTextField.text = nil
+
         }
     }
     
@@ -235,31 +272,21 @@ class AddPurchaseViewController: UIViewController {
         storeNameTextField.delegate = self
         
         amountTextField.delegate = self
-        amountTextField.text = NumberFormatter.localizedString(from: 0, number: .currency)
         
         categoryTextField.delegate = self
         categoryTextField.inputAccessoryView = categoryToolBar
         categoryTextField.inputView = categoryPickerView
 
-        if CoreDataController.shared.categoryFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
-            categoryTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
-        }
         
         methodTextField.delegate = self
         methodTextField.inputAccessoryView = paymentMethodToolBar
         methodTextField.inputView = methodPickerView
-        if CoreDataController.shared.purchaseMethodFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
-            methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
-        }
+
         
         dateTextField.delegate = self
         dateTextField.inputAccessoryView = dateToolBar
         dateTextField.inputView = datePicker
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale.autoupdatingCurrent
-        dateFormatter.dateStyle = .medium
-        dateTextField.text = dateFormatter.string(from: Date())
         
         amountTextField.inputAccessoryView = dateToolBar
         

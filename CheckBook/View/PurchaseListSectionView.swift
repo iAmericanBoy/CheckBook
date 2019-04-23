@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PurchaseHeader: UITableViewHeaderFooterView {
+class PurchaseListSectionView: UITableViewHeaderFooterView {
     //MARK: - Outlets
     let amountLabel: UILabel = {
         let label = UILabel()
@@ -51,6 +51,9 @@ class PurchaseHeader: UITableViewHeaderFooterView {
     //MARK: - Private Functions
     func setupViews(){
         contentView.backgroundColor = UIColor.purple.withAlphaComponent(0.06)
+        backgroundView?.backgroundColor = .clear
+        
+
         
         contentView.addSubview(boarderView)
         boarderView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor).isActive = true

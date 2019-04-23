@@ -22,14 +22,7 @@ class LedgerController {
         let ledger = Ledger(name: name, appleUserRecordName: CloudKitController.shared.appleUserID?.recordName)
         CoreDataController.shared.saveToPersistentStore()
         
-        let zoneID: CKRecordZone.ID
-        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
-            zoneID = currentZoneID
-        } else {
-            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
-        }
-        
-        guard let newRecord = CKRecord(ledger: ledger, zoneID: zoneID) else {return ledger}
+        guard let newRecord = CKRecord(ledger: ledger) else {return ledger}
         
         let dataBase: CKDatabase
         if UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isParticipant") ?? false {
@@ -41,7 +34,7 @@ class LedgerController {
         CloudKitController.shared.create(record: newRecord, inDataBase: dataBase) { (isSuccess, newRecord) in
             if !isSuccess {
                 guard let uuid = ledger.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(ofType: .ledger, withFailedPurchaseUUID: uuid)
             }
         }
         return ledger
@@ -58,14 +51,8 @@ class LedgerController {
         
         CoreDataController.shared.saveToPersistentStore()
         
-        let zoneID: CKRecordZone.ID
-        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
-            zoneID = currentZoneID
-        } else {
-            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
-        }
         
-        guard let record = CKRecord(ledger: ledger, zoneID: zoneID) else {completion(false);return}
+        guard let record = CKRecord(ledger: ledger) else {completion(false);return}
         
         let dataBase: CKDatabase
         if UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isParticipant") ?? false {
@@ -77,7 +64,7 @@ class LedgerController {
         CloudKitController.shared.saveChangestoCK(recordsToUpdate: [record], purchasesToDelete: [], toDataBase: dataBase) { (isSuccess, updatedRecords, _) in
             if !isSuccess {
                 guard let uuid = ledger.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(ofType: .ledger, withFailedPurchaseUUID: uuid)
                 completion(false)
             } else {
                 completion(true)
@@ -90,14 +77,9 @@ class LedgerController {
     /// - parameter ledger: The ledger to delete.
     func delete(ledger: Ledger) {
         
-        let zoneID: CKRecordZone.ID
-        if let currentZoneID = CloudKitController.shared.currentRecordZoneID {
-            zoneID = currentZoneID
-        } else {
-            zoneID = CKRecordZone.ID(zoneName: Purchase.privateRecordZoneName, ownerName: CKCurrentUserDefaultName)
-        }
+
         
-        guard let recordToDelete = CKRecord(ledger: ledger, zoneID:  zoneID) else {return}
+        guard let recordToDelete = CKRecord(ledger: ledger) else {return}
         
         let dataBase: CKDatabase
         if UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isParticipant") ?? false {
@@ -109,7 +91,7 @@ class LedgerController {
         CloudKitController.shared.delete(record: recordToDelete, inDataBase: dataBase) { (isSuccess) in
             if !isSuccess {
                 guard let uuid = ledger.uuid else {return}
-                SyncController.shared.saveFailedUpload(withFailedPurchaseUUID: uuid)
+                SyncController.shared.saveFailedUpload(ofType: .ledger, withFailedPurchaseUUID: uuid)
             }
         }
         CoreDataController.shared.remove(object: ledger)

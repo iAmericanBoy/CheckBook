@@ -103,8 +103,13 @@ class PurchaseListViewController: UIViewController {
             switch state {
             case .open:
                 self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-                addPurchaseCard.addPurchaseButton.alpha = 0
-                addPurchaseCard.savePurchaseButton.alpha = 1
+                addPurchaseCard.openCardButton.alpha = 0
+                addPurchaseCard.cancelButton.alpha = 1
+                if addPurchaseCard.purchase == nil {
+                    addPurchaseCard.saveButton.alpha = 1
+                } else {
+                    addPurchaseCard.updateButton.alpha = 1
+                }
                 
                 self.overlayView.alpha = 0.5
                 
@@ -113,8 +118,11 @@ class PurchaseListViewController: UIViewController {
                 
             case .closed:
                 self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-                addPurchaseCard.addPurchaseButton.alpha = 1
-                addPurchaseCard.savePurchaseButton.alpha = 0
+                addPurchaseCard.openCardButton.alpha = 1
+                addPurchaseCard.saveButton.alpha = 0
+                addPurchaseCard.cancelButton.alpha = 0
+                addPurchaseCard.updateButton.alpha = 0
+
                 
                 self.overlayView.alpha = 0
                 
@@ -175,9 +183,13 @@ class PurchaseListViewController: UIViewController {
             switch state {
             case .open:
                 self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-                addPurchaseCard.addPurchaseButton.alpha = 0
-                addPurchaseCard.savePurchaseButton.alpha = 1
-
+                addPurchaseCard.openCardButton.alpha = 0
+                addPurchaseCard.cancelButton.alpha = 1
+                if addPurchaseCard.purchase == nil {
+                    addPurchaseCard.saveButton.alpha = 1
+                } else {
+                    addPurchaseCard.updateButton.alpha = 1
+                }
                 self.overlayView.alpha = 0.5
                 
                 addPurchaseCard.view.layer.cornerRadius = 20
@@ -185,9 +197,11 @@ class PurchaseListViewController: UIViewController {
 
             case .closed:
                 self.cardView.frame = self.cardView.frame.offsetBy(dx: 0, dy: distanceToTranslate)
-                addPurchaseCard.addPurchaseButton.alpha = 1
-                addPurchaseCard.savePurchaseButton.alpha = 0
-
+                addPurchaseCard.openCardButton.alpha = 1
+                addPurchaseCard.saveButton.alpha = 0
+                addPurchaseCard.cancelButton.alpha = 0
+                addPurchaseCard.updateButton.alpha = 0
+                
                 self.overlayView.alpha = 0
                 
                 addPurchaseCard.view.layer.cornerRadius = 0
@@ -241,7 +255,7 @@ class PurchaseListViewController: UIViewController {
         purchaseList.tableFooterView = UIView()
         purchaseList.delegate = self
         purchaseList.dataSource = self
-        purchaseList.register(PurchaseHeader.self, forHeaderFooterViewReuseIdentifier: PurchaseHeader.reuseIdentifier)
+        purchaseList.register(PurchaseListSectionView.self, forHeaderFooterViewReuseIdentifier: PurchaseListSectionView.reuseIdentifier)
         CoreDataController.shared.purchaseFetchResultsController.delegate = self
         cardView.layer.shadowColor = UIColor.black.cgColor
         cardView.layer.shadowOpacity = 0.1
@@ -288,31 +302,25 @@ class PurchaseListViewController: UIViewController {
         //Check for updates from Ck
         //-> If there are updates update Context
         //-> after that try to upload cached Purchases to CK
+        SyncController.shared.saveCachedPurchasesToCK()
+        
+        //Fetch Share
+        if let stringURL = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.url, let url = URL(string: stringURL) {
+            CloudKitController.shared.fetchShareMetadata(forURL: url) { (isSuccess) in
+                if isSuccess {
+                    print("Share found")
+                }
+            }
+        }
+        
         CloudKitController.shared.fetchUpdatedRecordsFromCK { (isSuccess, recordsToUpdate, recordIDsToDelete) in
             if isSuccess {
                 SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
-            }
-            SyncController.shared.saveCachedPurchasesToCK()
-            
-            //Fetch Share
-            if let stringURL = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.url, let url = URL(string: stringURL) {
-                CloudKitController.shared.fetchShareMetadata(forURL: url) { (isSuccess, share) in
-                    if isSuccess {
-                        CloudKitController.shared.currentShare = share
-                    }
-                }
             }
         }
         CloudKitController.shared.fetchUpdatedRecordsFromCK(inDataBase: CloudKitController.shared.shareDB) { (isSuccess, recordsToUpdate, recordIDsToDelete) in
             if isSuccess {
                 SyncController.shared.updateContextWith(fetchedRecordsToUpdate: recordsToUpdate, deletedRecordIDs: recordIDsToDelete)
-            }
-            if let stringURL = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.url, let url = URL(string: stringURL) {
-                CloudKitController.shared.fetchShareMetadata(forURL: url) { (isSuccess, share) in
-                    if isSuccess {
-                        CloudKitController.shared.currentShare = share
-                    }
-                }
             }
         }
     }
@@ -452,10 +460,18 @@ extension PurchaseListViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: PurchaseHeader.reuseIdentifier) as? PurchaseHeader
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: PurchaseListSectionView.reuseIdentifier) as? PurchaseListSectionView
         
         view?.purchases = CoreDataController.shared.purchaseFetchResultsController.sections?[section].objects as? [Purchase]
+        view?.layer.shadowOpacity = 0.2
+        view?.layer.shadowRadius = 5
+        view?.layer.shadowColor = UIColor.black.cgColor
+        view?.layer.shadowOffset = CGSize(width: 0, height: 3)
+
         
+        view?.backgroundView?.backgroundColor = .clear
+        view?.backgroundView?.tintColor = .clear
+
         return view
     }
     
