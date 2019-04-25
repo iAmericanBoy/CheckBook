@@ -10,7 +10,9 @@
 		B614B1B9225E63F4005B7C1C /* CBNotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B614B1B8225E63F4005B7C1C /* CBNotificationDelegate.swift */; };
 		B63871CA225D3B6E00BAE0D9 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63871C9225D3B6E00BAE0D9 /* Setting.swift */; };
 		B63871CC225D3FBB00BAE0D9 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63871CB225D3FBB00BAE0D9 /* SettingsTableViewCell.swift */; };
-		B63A723222678DFD00F0E77D /* PurchaseHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63A723122678DFD00F0E77D /* PurchaseHeader.swift */; };
+		B63A723222678DFD00F0E77D /* PurchaseListSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63A723122678DFD00F0E77D /* PurchaseListSectionView.swift */; };
+		B64BA12E2271FD7300A0FA7B /* CheckBookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64BA12D2271FD7300A0FA7B /* CheckBookTests.swift */; };
+		B64BA1362271FDB300A0FA7B /* CoreDataTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64BA1352271FDB300A0FA7B /* CoreDataTestHelper.swift */; };
 		B64EDEA9225EA7C100DC2098 /* Purchase+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64EDEA7225EA7C100DC2098 /* Purchase+CoreDataClass.swift */; };
 		B64EDEAA225EA7C100DC2098 /* Purchase+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64EDEA8225EA7C100DC2098 /* Purchase+CoreDataProperties.swift */; };
 		B652BD66225810440066AD8A /* PurchaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */; };
@@ -46,11 +48,25 @@
 		B6EF3BED225514340009BC2A /* Ledger+MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EF3BEC225514340009BC2A /* Ledger+MagicStrings.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		B64BA1302271FD7300A0FA7B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B6BF9FC7222F160200DFCE8C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B6BF9FCE222F160300DFCE8C;
+			remoteInfo = CheckBook;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		B614B1B8225E63F4005B7C1C /* CBNotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBNotificationDelegate.swift; sourceTree = "<group>"; };
 		B63871C9225D3B6E00BAE0D9 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
 		B63871CB225D3FBB00BAE0D9 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
-		B63A723122678DFD00F0E77D /* PurchaseHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseHeader.swift; sourceTree = "<group>"; };
+		B63A723122678DFD00F0E77D /* PurchaseListSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseListSectionView.swift; sourceTree = "<group>"; };
+		B64BA12B2271FD7200A0FA7B /* CheckBookTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CheckBookTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B64BA12D2271FD7300A0FA7B /* CheckBookTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBookTests.swift; sourceTree = "<group>"; };
+		B64BA12F2271FD7300A0FA7B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B64BA1352271FDB300A0FA7B /* CoreDataTestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTestHelper.swift; sourceTree = "<group>"; };
 		B64EDEA7225EA7C100DC2098 /* Purchase+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Purchase+CoreDataClass.swift"; sourceTree = "<group>"; };
 		B64EDEA8225EA7C100DC2098 /* Purchase+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Purchase+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseTableViewCell.swift; sourceTree = "<group>"; };
@@ -90,6 +106,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		B64BA1282271FD7200A0FA7B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B6BF9FCC222F160300DFCE8C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -101,6 +124,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B64BA12C2271FD7300A0FA7B /* CheckBookTests */ = {
+			isa = PBXGroup;
+			children = (
+				B64BA12D2271FD7300A0FA7B /* CheckBookTests.swift */,
+				B64BA12F2271FD7300A0FA7B /* Info.plist */,
+				B64BA1352271FDB300A0FA7B /* CoreDataTestHelper.swift */,
+			);
+			path = CheckBookTests;
+			sourceTree = "<group>";
+		};
 		B6920AD42231796700A63EC8 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -115,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				B6BF9FD1222F160300DFCE8C /* CheckBook */,
+				B64BA12C2271FD7300A0FA7B /* CheckBookTests */,
 				B6BF9FD0222F160300DFCE8C /* Products */,
 				B6BF9FF3222F322300DFCE8C /* Frameworks */,
 			);
@@ -124,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				B6BF9FCF222F160300DFCE8C /* CheckBook.app */,
+				B64BA12B2271FD7200A0FA7B /* CheckBookTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -160,7 +195,7 @@
 				B69D87F4225554D60019E694 /* Main.storyboard */,
 				B652BD65225810440066AD8A /* PurchaseTableViewCell.swift */,
 				B63871CB225D3FBB00BAE0D9 /* SettingsTableViewCell.swift */,
-				B63A723122678DFD00F0E77D /* PurchaseHeader.swift */,
+				B63A723122678DFD00F0E77D /* PurchaseListSectionView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -230,6 +265,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		B64BA12A2271FD7200A0FA7B /* CheckBookTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B64BA1342271FD7300A0FA7B /* Build configuration list for PBXNativeTarget "CheckBookTests" */;
+			buildPhases = (
+				B64BA1272271FD7200A0FA7B /* Sources */,
+				B64BA1282271FD7200A0FA7B /* Frameworks */,
+				B64BA1292271FD7200A0FA7B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B64BA1312271FD7300A0FA7B /* PBXTargetDependency */,
+			);
+			name = CheckBookTests;
+			productName = CheckBookTests;
+			productReference = B64BA12B2271FD7200A0FA7B /* CheckBookTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		B6BF9FCE222F160300DFCE8C /* CheckBook */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B6BF9FE1222F160700DFCE8C /* Build configuration list for PBXNativeTarget "CheckBook" */;
@@ -253,10 +306,14 @@
 		B6BF9FC7222F160200DFCE8C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1010;
+				LastSwiftUpdateCheck = 1020;
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = "Dominic Lanzillotta";
 				TargetAttributes = {
+					B64BA12A2271FD7200A0FA7B = {
+						CreatedOnToolsVersion = 10.2.1;
+						TestTargetID = B6BF9FCE222F160300DFCE8C;
+					};
 					B6BF9FCE222F160300DFCE8C = {
 						CreatedOnToolsVersion = 10.1;
 						SystemCapabilities = {
@@ -287,11 +344,19 @@
 			projectRoot = "";
 			targets = (
 				B6BF9FCE222F160300DFCE8C /* CheckBook */,
+				B64BA12A2271FD7200A0FA7B /* CheckBookTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		B64BA1292271FD7200A0FA7B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B6BF9FCD222F160300DFCE8C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -305,6 +370,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		B64BA1272271FD7200A0FA7B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B64BA1362271FDB300A0FA7B /* CoreDataTestHelper.swift in Sources */,
+				B64BA12E2271FD7300A0FA7B /* CheckBookTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B6BF9FCB222F160300DFCE8C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -330,7 +404,7 @@
 				B674FB0822580BD3000A5815 /* LedgerController.swift in Sources */,
 				B652BD66225810440066AD8A /* PurchaseTableViewCell.swift in Sources */,
 				B63871CC225D3FBB00BAE0D9 /* SettingsTableViewCell.swift in Sources */,
-				B63A723222678DFD00F0E77D /* PurchaseHeader.swift in Sources */,
+				B63A723222678DFD00F0E77D /* PurchaseListSectionView.swift in Sources */,
 				B6E332A12234CBFB0088D6FF /* PurchaseMethod+MagicStrings.swift in Sources */,
 				B64EDEAA225EA7C100DC2098 /* Purchase+CoreDataProperties.swift in Sources */,
 				B6E3329F2234CAD80088D6FF /* PurchaseMethod+convenience.swift in Sources */,
@@ -347,6 +421,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		B64BA1312271FD7300A0FA7B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B6BF9FCE222F160300DFCE8C /* CheckBook */;
+			targetProxy = B64BA1302271FD7300A0FA7B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		B6BF9FDB222F160700DFCE8C /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -359,6 +441,48 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		B64BA1322271FD7300A0FA7B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = J6B8ZX28ZW;
+				INFOPLIST_FILE = CheckBookTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = oskman.CheckBookTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CheckBook.app/CheckBook";
+			};
+			name = Debug;
+		};
+		B64BA1332271FD7300A0FA7B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = J6B8ZX28ZW;
+				INFOPLIST_FILE = CheckBookTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = oskman.CheckBookTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CheckBook.app/CheckBook";
+			};
+			name = Release;
+		};
 		B6BF9FDF222F160700DFCE8C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -518,6 +642,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		B64BA1342271FD7300A0FA7B /* Build configuration list for PBXNativeTarget "CheckBookTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B64BA1322271FD7300A0FA7B /* Debug */,
+				B64BA1332271FD7300A0FA7B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		B6BF9FCA222F160200DFCE8C /* Build configuration list for PBXProject "CheckBook" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
