@@ -52,7 +52,7 @@ class CheckBookTests: XCTestCase {
         tearDown()
     }
     
-    
+    ///This checks if the two Ledgers created have the same attributes. They are not the same objcts as CoreData doesn't allow two exact matches(objectID!) to be in a context
     func testLedgerCKRecord() {
         setUp()
         guard let testContext = testContext else {
@@ -66,7 +66,16 @@ class CheckBookTests: XCTestCase {
         }
         let ledgerFromRecord = Ledger(record: newRecord, context: testContext)
         
-        XCTAssertNotEqual(ledgerFromRecord, ledger)
+        
+        XCTAssertEqual(ledgerFromRecord?.appleUserRecordName, ledger.appleUserRecordName)
+        XCTAssertEqual(ledgerFromRecord?.lastModified, ledger.lastModified)
+        XCTAssertEqual(ledgerFromRecord?.zoneOwnerName, ledger.zoneOwnerName)
+        XCTAssertEqual(ledgerFromRecord?.zoneName, ledger.zoneName)
+        XCTAssertEqual(ledgerFromRecord?.name, ledger.name)
+        XCTAssertEqual(ledgerFromRecord?.uuid, ledger.uuid)
+        XCTAssertEqual(ledgerFromRecord?.managedObjectContext, ledger.managedObjectContext)
+        XCTAssertEqual(ledgerFromRecord?.url, ledger.url)
+        XCTAssertEqual(ledgerFromRecord?.purchases, ledger.purchases)
         tearDown()
     }
     

@@ -15,6 +15,8 @@ extension Ledger {
     convenience init(name: String,
                      uuid: UUID = UUID(),
                      appleUserRecordName: String?,
+                     zoneName: String? = nil,
+                     zoneOwnerName: String? = nil,
                      url: String? = nil,
                      purchases: NSOrderedSet = NSOrderedSet(),
                      lastModified: Date = Date(),
@@ -27,6 +29,9 @@ extension Ledger {
         self.purchases = purchases
         self.appleUserRecordName = appleUserRecordName
         self.url = url
+        
+        self.zoneName = zoneName ?? Purchase.privateRecordZoneName
+        self.zoneOwnerName = zoneOwnerName ?? CKCurrentUserDefaultName
         
         self.lastModified = lastModified
     }
