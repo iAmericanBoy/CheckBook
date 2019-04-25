@@ -20,8 +20,8 @@ extension UIViewController {
         
         let addAction = UIAlertAction(title: "Add", style: .default) { (action) in
             if let name = nameTextField?.text {
-                guard let ledgerUUID = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.uuid else {return}
-                let newMethod = PurchaseMethodController.shared.createNewPurchaseMethodWith(name: name, withLedgerUUID: ledgerUUID)
+                guard let ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first else {return}
+                let newMethod = PurchaseMethodController.shared.createNewPurchaseMethodWith(name: name, withParentLedger: ledger)
                 completion(newMethod)
             }
         }
@@ -60,9 +60,9 @@ extension UIViewController {
             if let name = nameTextField?.text {
                 UIViewController.alertTextField = alertController.textFields?.first ?? UITextField()
 
-                guard let ledgerUUID = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.uuid else {return}
+                guard let ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first else {return}
 
-                let newCategory = CategoryController.shared.createNewCategoryWith(name: name, ledgerUUID: ledgerUUID)
+                let newCategory = CategoryController.shared.createNewCategoryWith(name: name, withParentLedger: ledger)
                 completion(newCategory)
             }
         }

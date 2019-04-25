@@ -18,9 +18,9 @@ class PurchaseMethodController {
     //MARK: - CRUD
     /// Creates new PurchaseMethod using the convenience initilizer inside the CoredataStack.context and tries to uploads it to CloudKit. If the upload fails the new PurchaseMethod gets added to the CacheContext for a later try.
     /// - parameter name: The name of the purchaseMethod.
-    /// - parameter ledgerUUID: The UUID of the parent.
-    func createNewPurchaseMethodWith(name: String, withLedgerUUID ledgerUUID:UUID) -> PurchaseMethod {
-        let newPurchaseMethod = PurchaseMethod(name: name, ledgerUUID: ledgerUUID)
+    /// - parameter ledger: The parent ledger.
+    func createNewPurchaseMethodWith(name: String, withParentLedger ledger:Ledger) -> PurchaseMethod {
+        let newPurchaseMethod = PurchaseMethod(name: name, ledger: ledger)
         CoreDataController.shared.saveToPersistentStore()
         
         

@@ -15,7 +15,7 @@ extension PurchaseMethod {
     convenience init(name: String,
                      uuid: UUID = UUID(),
                      color: String? = nil,
-                     ledgerUUID: UUID,
+                     ledger: Ledger? = nil,
                      purchases: NSOrderedSet = NSOrderedSet(),
                      lastModified: Date = Date(),
                      context: NSManagedObjectContext = CoreDataStack.context) {
@@ -26,7 +26,9 @@ extension PurchaseMethod {
         self.uuid = uuid
         self.purchases = purchases
         self.color = color
-        self.ledgerUUID = ledgerUUID
+        self.ledgerUUID = ledger?.uuid
+        self.zoneName = ledger?.zoneName
+        self.zoneOwnerName = ledger?.zoneOwnerName
         
         self.lastModified = lastModified
     }
@@ -36,8 +38,10 @@ extension PurchaseMethod {
         guard let name = record[PurchaseMethod.nameKey] as? String,
             let lastModified = record[PurchaseMethod.lastModifiedKey] as? Date else {return nil}
         
-        self.init(name: name, uuid: UUID(uuidString: record.recordID.recordName)!, color: record[PurchaseMethod.colorKey] as? String, ledgerUUID: UUID(uuidString: (record.parent?.recordID.recordName)!)!, lastModified: lastModified, context: context)
+        self.init(name: name, uuid: UUID(uuidString: record.recordID.recordName)!, color: record[PurchaseMethod.colorKey] as? String, lastModified: lastModified, context: context)
         
+        self.ledgerUUID = UUID(uuidString: (record.parent?.recordID.recordName)!)
+
         self.zoneOwnerName = record.recordID.zoneID.ownerName
         self.zoneName = record.recordID.zoneID.zoneName
     }
