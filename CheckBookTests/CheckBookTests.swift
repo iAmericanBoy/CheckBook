@@ -53,7 +53,7 @@ class CheckBookTests: XCTestCase {
     }
     
     ///This checks if the two Ledgers created have the same attributes. They are not the same objcts as CoreData doesn't allow two exact matches(objectID!) to be in a context
-    func testLedgerCKRecord() {
+    func testLedgerCreateConvertCKRecord() {
         setUp()
         guard let testContext = testContext else {
             assertionFailure("unable to unwrap testContext")
@@ -79,7 +79,29 @@ class CheckBookTests: XCTestCase {
         tearDown()
     }
     
-    
+    func testCreateLedgerCKRecord() {
+        setUp()
+        guard let testContext = testContext else {
+            assertionFailure("unable to unwrap testContext")
+            return
+        }
+        let newLedger = Ledger(name: "testName", appleUserRecordName: nil, context: testContext)
+        
+        let newRecord = CKRecord(ledger: newLedger)
+        
+        
+        XCTAssertEqual(newLedger.name, newRecord?[Ledger.nameKey])
+        XCTAssertEqual(newLedger.uuid?.uuidString, newRecord?.recordID.recordName)
+        XCTAssertEqual(newLedger.zoneName, newRecord?.recordID.zoneID.zoneName)
+        XCTAssertEqual(newLedger.zoneOwnerName, newRecord?.recordID.zoneID.ownerName)
+        XCTAssertEqual(newLedger.lastModified, newRecord?[Ledger.lastModifiedKey])
+        XCTAssertEqual(newLedger.appleUserRecordName, newRecord?.creatorUserRecordID?.recordName)
+        XCTAssertEqual(newLedger.url, newRecord?[Ledger.shareURLKey])
+        XCTAssertEqual(newLedger.appleUserRecordName, newRecord?.creatorUserRecordID?.recordName)
+        XCTAssertEqual(Ledger.typeKey, newRecord?.recordType.description)
+        tearDown()
+    }
+
     func testCreateCategory() {
         setUp()
         guard let testContext = testContext else {
@@ -91,6 +113,62 @@ class CheckBookTests: XCTestCase {
         
         XCTAssertEqual(testContext.registeredObjects.count, 2)
         XCTAssertTrue(testContext.registeredObjects.contains(newCategory))
+        tearDown()
+    }
+    func testCreateCategoryCKRecord() {
+        setUp()
+        guard let testContext = testContext else {
+            assertionFailure("unable to unwrap testContext")
+            return
+        }
+        let newLedger = Ledger(name: "testName", appleUserRecordName: nil, context: testContext)
+        let newCategory = Category(name: "testCategory", ledger: newLedger, context: testContext)
+
+        let newRecord = CKRecord(category: newCategory)
+        
+        
+        XCTAssertEqual(newCategory.name, newRecord?[Category.nameKey])
+        XCTAssertEqual(newCategory.color, newRecord?[Category.colorKey])
+        XCTAssertEqual(newCategory.lastModified, newRecord?[Category.lastModifiedKey])
+        XCTAssertEqual(Category.typeKey, newRecord?.recordType)
+
+        XCTAssertEqual(newCategory.ledgerUUID?.uuidString, newRecord?.parent?.recordID.recordName)
+        XCTAssertEqual(newLedger.zoneOwnerName, newRecord?.parent?.recordID.zoneID.ownerName)
+        XCTAssertEqual(newLedger.zoneName, newRecord?.parent?.recordID.zoneID.zoneName)
+        
+        XCTAssertEqual(newCategory.uuid?.uuidString, newRecord?.recordID.recordName)
+        XCTAssertEqual(newCategory.zoneName, newRecord?.recordID.zoneID.zoneName)
+        XCTAssertEqual(newCategory.zoneOwnerName, newRecord?.recordID.zoneID.ownerName)
+
+        tearDown()
+    }
+    
+    func testCategoryCreateConvertCKRecord() {
+        setUp()
+        guard let testContext = testContext else {
+            assertionFailure("unable to unwrap testContext")
+            return
+        }
+        let newLedger = Ledger(name: "testName", appleUserRecordName: nil, context: testContext)
+        let category = Category(name: "testCategory", ledger: newLedger, context: testContext)
+        
+        guard let newRecord = CKRecord(category: category) else {
+            assertionFailure("Unable to create Record from Category")
+            return
+        }
+        let categoryFromRecord = Category(record: newRecord, context: testContext)
+        
+        XCTAssertEqual(categoryFromRecord?.name, category.name)
+        XCTAssertEqual(categoryFromRecord?.uuid, category.uuid)
+        XCTAssertEqual(categoryFromRecord?.ledgerUUID, newLedger.uuid)
+        XCTAssertEqual(categoryFromRecord?.ledgerUUID, category.ledgerUUID)
+        XCTAssertEqual(categoryFromRecord?.lastModified, category.lastModified)
+        XCTAssertEqual(categoryFromRecord?.color, category.color)
+        XCTAssertEqual(categoryFromRecord?.purchases, category.purchases)
+        XCTAssertEqual(categoryFromRecord?.zoneName, category.zoneName)
+        XCTAssertEqual(categoryFromRecord?.zoneOwnerName, category.zoneOwnerName)
+        XCTAssertEqual(categoryFromRecord?.managedObjectContext, category.managedObjectContext)
+
         tearDown()
     }
     
