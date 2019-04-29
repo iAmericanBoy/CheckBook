@@ -54,7 +54,7 @@ class CheckBookTests: XCTestCase {
     }
     
     ///This checks if the two Ledgers created have the same attributes. They are not the same objcts as CoreData doesn't allow two exact matches(objectID!) to be in a context
-    func testLedgerCreateConvertCKRecord() {
+    func testLedgerConvertCKRecord() {
         setUp()
         guard let testContext = testContext else {
             assertionFailure("unable to unwrap testContext")
@@ -89,7 +89,6 @@ class CheckBookTests: XCTestCase {
         let newLedger = Ledger(name: "testName", appleUserRecordName: nil, context: testContext)
         
         let newRecord = CKRecord(ledger: newLedger)
-        
         
         XCTAssertEqual(newLedger.name, newRecord?[Ledger.nameKey])
         XCTAssertEqual(newLedger.uuid?.uuidString, newRecord?.recordID.recordName)
@@ -129,7 +128,6 @@ class CheckBookTests: XCTestCase {
 
         let newRecord = CKRecord(category: newCategory)
         
-        
         XCTAssertEqual(newCategory.name, newRecord?[Category.nameKey])
         XCTAssertEqual(newCategory.color, newRecord?[Category.colorKey])
         XCTAssertEqual(newCategory.lastModified, newRecord?[Category.lastModifiedKey])
@@ -146,7 +144,7 @@ class CheckBookTests: XCTestCase {
         tearDown()
     }
     
-    func testCategoryCreateConvertCKRecord() {
+    func testCategoryConvertCKRecord() {
         setUp()
         guard let testContext = testContext else {
             assertionFailure("unable to unwrap testContext")
@@ -187,6 +185,63 @@ class CheckBookTests: XCTestCase {
         
         XCTAssertEqual(testContext.registeredObjects.count, 2)
         XCTAssertTrue(testContext.registeredObjects.contains(newMethod))
+        tearDown()
+    }
+    
+    func testCreatePurchaseMethodCKRecord() {
+        setUp()
+        guard let testContext = testContext else {
+            assertionFailure("unable to unwrap testContext")
+            return
+        }
+        let newLedger = Ledger(name: "testName", appleUserRecordName: nil, context: testContext)
+        let newPurchaseMethod = PurchaseMethod(name: "testName", ledger: newLedger, context: testContext)
+        let newRecord = CKRecord(purchaseMethod: newPurchaseMethod)
+        
+        XCTAssertEqual(newPurchaseMethod.name, newRecord?[PurchaseMethod.nameKey])
+        XCTAssertEqual(newPurchaseMethod.color, newRecord?[PurchaseMethod.colorKey])
+        XCTAssertEqual(newPurchaseMethod.lastModified, newRecord?[PurchaseMethod.lastModifiedKey])
+        XCTAssertEqual(PurchaseMethod.typeKey, newRecord?.recordType)
+        
+        XCTAssertEqual(newPurchaseMethod.ledgerUUID?.uuidString, newRecord?.parent?.recordID.recordName)
+        XCTAssertEqual(newLedger.zoneOwnerName, newRecord?.parent?.recordID.zoneID.ownerName)
+        XCTAssertEqual(newLedger.zoneName, newRecord?.parent?.recordID.zoneID.zoneName)
+        
+        XCTAssertEqual(newPurchaseMethod.uuid?.uuidString, newRecord?.recordID.recordName)
+        XCTAssertEqual(newPurchaseMethod.zoneName, newRecord?.recordID.zoneID.zoneName)
+        XCTAssertEqual(newPurchaseMethod.zoneOwnerName, newRecord?.recordID.zoneID.ownerName)
+        
+        tearDown()
+    }
+    
+    func testConvertPurchaseMethodCKRecord() {
+        setUp()
+        guard let testContext = testContext else {
+            assertionFailure("unable to unwrap testContext")
+            return
+        }
+        let newLedger = Ledger(name: "testName", appleUserRecordName: nil, context: testContext)
+        let purchaseMethod = PurchaseMethod(name: "testName", ledger: newLedger, context: testContext)
+        
+        guard let newRecord = CKRecord(purchaseMethod: purchaseMethod) else {
+            assertionFailure("Unable to create Record from PurchaseMethod")
+            return
+        }
+        let purchaseMethodFromRecord = PurchaseMethod(record: newRecord, context: testContext)
+        
+        XCTAssertEqual(purchaseMethodFromRecord?.name, purchaseMethod.name)
+        XCTAssertEqual(purchaseMethodFromRecord?.color, purchaseMethod.color)
+        XCTAssertEqual(purchaseMethodFromRecord?.lastModified, purchaseMethod.lastModified)
+        XCTAssertEqual(purchaseMethodFromRecord?.uuid, purchaseMethod.uuid)
+        XCTAssertEqual(purchaseMethodFromRecord?.purchases, purchaseMethod.purchases)
+
+        XCTAssertEqual(purchaseMethodFromRecord?.ledgerUUID, newLedger.uuid)
+        XCTAssertEqual(purchaseMethodFromRecord?.ledgerUUID, purchaseMethod.ledgerUUID)
+        
+        XCTAssertEqual(purchaseMethodFromRecord?.zoneName, purchaseMethod.zoneName)
+        XCTAssertEqual(purchaseMethodFromRecord?.zoneOwnerName, purchaseMethod.zoneOwnerName)
+        XCTAssertEqual(purchaseMethodFromRecord?.managedObjectContext, purchaseMethod.managedObjectContext)
+        
         tearDown()
     }
     
