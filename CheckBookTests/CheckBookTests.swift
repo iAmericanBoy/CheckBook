@@ -262,4 +262,42 @@ class CheckBookTests: XCTestCase {
         XCTAssertTrue(testContext.registeredObjects.contains(newPurchase))
         tearDown()
     }
+    
+        func testCreatePurchaseCKRecord() {
+        setUp()
+        guard let testContext = testContext else {
+            assertionFailure("unable to unwrap testContext")
+            return
+        }
+        let newLedger = Ledger(name: "testName", appleUserRecordName: nil, context: testContext)
+        let newMethod = PurchaseMethod(name: "testMethod", ledger: newLedger, context: testContext)
+        let newCategory = Category(name: "testCategory", ledger: newLedger, context: testContext)
+        
+        let newPurchase = Purchase(amount: 123.45, date: Date(), item: " ", storeName: "testStore", purchaseMethod: newMethod, category: newCategory, appleUserRecordName: nil, ledger: newLedger, context: testContext)
+        
+        let newRecord = CKRecord(purchase: newPurchase)
+        
+        XCTAssertEqual(newPurchase.lastModified, newRecord?[Purchase.lastModifiedKey])
+        XCTAssertEqual(newPurchase.amount?.doubleValue, newRecord?[Purchase.amountKey])
+        XCTAssertEqual(newPurchase.appleUserRecordName, newRecord?.creatorUserRecordID?.recordName)
+        XCTAssertEqual(newPurchase.date, newRecord?[Purchase.dateKey])
+        XCTAssertEqual(newPurchase.item, newRecord?[Purchase.itemKey])
+        XCTAssertEqual(newPurchase.storeName, newRecord?[Purchase.storeNameKey])
+        
+        XCTAssertEqual(newPurchase.methodUUID?.uuidString, newRecord?[Purchase.methodKey])
+        XCTAssertEqual(newPurchase.methodName, newRecord?[Purchase.methodNameKey])
+
+        XCTAssertEqual(newPurchase.categoryUUID?.uuidString, newRecord?[Purchase.categoryKey])
+        
+        XCTAssertEqual(newPurchase.ledgerUUID?.uuidString, newRecord?[Purchase.ledgerKey])
+        XCTAssertEqual(newPurchase.ledgerUUID?.uuidString, newRecord?.parent?.recordID.recordName)
+        XCTAssertEqual(newPurchase.ledger?.zoneName, newRecord?.parent?.recordID.zoneID.zoneName)
+        XCTAssertEqual(newPurchase.ledger?.zoneOwnerName, newRecord?.parent?.recordID.zoneID.ownerName)
+
+        XCTAssertEqual(Purchase.typeKey, newRecord?.recordType)
+
+        tearDown()
+    }
+    
+    //TODO: - Find a way to test references for the purchaseCKRecord
 }
