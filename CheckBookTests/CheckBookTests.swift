@@ -39,6 +39,7 @@ class CheckBookTests: XCTestCase {
         tearDown()
     }
 
+    //MARK: - Ledger
     func testCreateLedger() {
         setUp()
         guard let testContext = testContext else {
@@ -101,7 +102,8 @@ class CheckBookTests: XCTestCase {
         XCTAssertEqual(Ledger.typeKey, newRecord?.recordType.description)
         tearDown()
     }
-
+    
+    //MARK: - Category
     func testCreateCategory() {
         setUp()
         guard let testContext = testContext else {
@@ -115,6 +117,7 @@ class CheckBookTests: XCTestCase {
         XCTAssertTrue(testContext.registeredObjects.contains(newCategory))
         tearDown()
     }
+    
     func testCreateCategoryCKRecord() {
         setUp()
         guard let testContext = testContext else {
@@ -172,6 +175,7 @@ class CheckBookTests: XCTestCase {
         tearDown()
     }
     
+    //MARK: - PurchaseMethod
     func testCreatePurchaseMethod() {
         setUp()
         guard let testContext = testContext else {
@@ -186,6 +190,7 @@ class CheckBookTests: XCTestCase {
         tearDown()
     }
     
+    //MARK: - Purchase
     func testCreatePurchase() {
         setUp()
         guard let testContext = testContext else {
