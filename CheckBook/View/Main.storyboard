@@ -302,7 +302,7 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="bcZ-Wj-o5e">
-                                <rect key="frame" x="12" y="188.33333333333337" width="351" height="365"/>
+                                <rect key="frame" x="12" y="182.33333333333337" width="351" height="365"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" horizontalHuggingPriority="249" verticalHuggingPriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="XSR-dV-iaU">
                                         <rect key="frame" x="0.0" y="0.0" width="351" height="175"/>
@@ -447,7 +447,7 @@
                             <constraint firstItem="hgU-b3-rG5" firstAttribute="trailing" secondItem="4F5-bc-uGJ" secondAttribute="trailing" constant="16" id="U4Q-Rq-BT7"/>
                             <constraint firstItem="fcx-w8-TWn" firstAttribute="top" secondItem="hgU-b3-rG5" secondAttribute="top" id="Y7V-3b-eXB"/>
                             <constraint firstItem="YfS-Ot-UPN" firstAttribute="top" secondItem="BcI-V5-vxB" secondAttribute="top" id="cJ0-Qj-ZGG"/>
-                            <constraint firstItem="hgU-b3-rG5" firstAttribute="bottom" secondItem="bcZ-Wj-o5e" secondAttribute="bottom" id="gEh-ag-Lno"/>
+                            <constraint firstItem="hgU-b3-rG5" firstAttribute="bottom" secondItem="bcZ-Wj-o5e" secondAttribute="bottom" constant="6" id="gEh-ag-Lno"/>
                             <constraint firstItem="bcZ-Wj-o5e" firstAttribute="height" secondItem="QUX-nd-ifU" secondAttribute="height" multiplier="0.62" constant="1" id="iS4-MR-T2a"/>
                             <constraint firstItem="fcx-w8-TWn" firstAttribute="leading" secondItem="hgU-b3-rG5" secondAttribute="leading" constant="18" id="jVB-ae-E5w"/>
                             <constraint firstItem="YfS-Ot-UPN" firstAttribute="trailing" secondItem="BcI-V5-vxB" secondAttribute="trailing" id="lFt-Aw-tbH"/>
