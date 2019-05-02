@@ -246,18 +246,20 @@ class AddPurchaseViewController: UIViewController {
             amountTextField.text = NumberFormatter.localizedString(from: 0, number: .currency)
             if CoreDataController.shared.categoryFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
                 categoryTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
+                categoryPickerView.selectRow(0, inComponent: 0, animated: true)
             }
             if CoreDataController.shared.purchaseMethodFetchResultsController.fetchedObjects?.count ?? 0 > 0 {
                 methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
+                methodPickerView.selectRow(0, inComponent: 0, animated: true)
             }
             
             let dateFormatter = DateFormatter()
             dateFormatter.locale = Locale.autoupdatingCurrent
             dateFormatter.dateStyle = .medium
             dateTextField.text = dateFormatter.string(from: Date())
+            datePicker.setDate(Date(), animated: true)
             
             storeNameTextField.text = nil
-
         }
     }
     
