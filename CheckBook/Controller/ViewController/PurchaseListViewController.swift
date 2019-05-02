@@ -270,10 +270,11 @@ class PurchaseListViewController: UIViewController {
         
         
         let purchasesOfWeek = CoreDataController.shared.purchaseFetchResultsController.fetchedObjects?.filter({ (purchase) -> Bool in
-            return Calendar.current.compare(purchase.day! as Date, to: beginningOfWeek!, toGranularity: Calendar.Component.second).rawValue > 0
+            return Calendar.current.compare(purchase.day! as Date, to: beginningOfWeek!, toGranularity: Calendar.Component.day).rawValue > -1
         })
+
         let purchasesOfMonth = CoreDataController.shared.purchaseFetchResultsController.fetchedObjects?.filter({ (purchase) -> Bool in
-            return Calendar.current.compare(purchase.day! as Date, to: beginningOfMonth!, toGranularity: Calendar.Component.second).rawValue > 0
+            return Calendar.current.compare(purchase.day! as Date, to: beginningOfMonth!, toGranularity: Calendar.Component.day).rawValue > -1
         })
         
         let numberFormatter = NumberFormatter()
