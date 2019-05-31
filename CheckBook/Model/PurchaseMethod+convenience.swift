@@ -6,9 +6,9 @@
 //  Copyright © 2019 Dominic Lanzillotta. All rights reserved.
 //
 
-import Foundation
-import CoreData
 import CloudKit
+import CoreData
+import Foundation
 
 extension PurchaseMethod {
     @discardableResult
@@ -19,7 +19,6 @@ extension PurchaseMethod {
                      purchases: NSOrderedSet = NSOrderedSet(),
                      lastModified: Date = Date(),
                      context: NSManagedObjectContext = CoreDataStack.context) {
-        
         self.init(context: context)
         
         self.name = name
@@ -36,20 +35,21 @@ extension PurchaseMethod {
     @discardableResult
     convenience init?(record: CKRecord, context: NSManagedObjectContext = CoreDataStack.context) {
         guard let name = record[PurchaseMethod.nameKey] as? String,
-            let lastModified = record[PurchaseMethod.lastModifiedKey] as? Date else {return nil}
+            let lastModified = record[PurchaseMethod.lastModifiedKey] as? Date else { return nil }
         
         self.init(name: name, uuid: UUID(uuidString: record.recordID.recordName)!, color: record[PurchaseMethod.colorKey] as? String, lastModified: lastModified, context: context)
         
         self.ledgerUUID = UUID(uuidString: (record.parent?.recordID.recordName)!)
-
+        
         self.zoneOwnerName = record.recordID.zoneID.ownerName
         self.zoneName = record.recordID.zoneID.zoneName
     }
 }
+
 extension CKRecord {
     convenience init?(purchaseMethod: PurchaseMethod) {
         let zoneID = CKRecordZone.ID(zoneName: purchaseMethod.zoneName!, ownerName: purchaseMethod.zoneOwnerName!)
-
+        
         self.init(recordType: PurchaseMethod.typeKey, recordID: CKRecord.ID(recordName: purchaseMethod.uuid!.uuidString, zoneID: zoneID))
         
         setParent(CKRecord.ID(recordName: purchaseMethod.ledgerUUID!.uuidString, zoneID: zoneID))

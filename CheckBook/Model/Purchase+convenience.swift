@@ -6,9 +6,9 @@
 //  Copyright © 2019 Dominic Lanzillotta. All rights reserved.
 //
 
-import Foundation
-import CoreData
 import CloudKit
+import CoreData
+import Foundation
 
 extension Purchase {
     @discardableResult
@@ -23,7 +23,6 @@ extension Purchase {
                      appleUserRecordName: String?,
                      ledger: Ledger?,
                      context: NSManagedObjectContext = CoreDataStack.context) {
-        
         self.init(context: context)
         
         self.amount = amount
@@ -56,8 +55,8 @@ extension CKRecord {
         let ledgerReference = CKRecord.Reference(recordID: CKRecord.ID(recordName: purchase.ledgerUUID!.uuidString, zoneID: zoneID), action: .deleteSelf)
         
         let categoryReference = CKRecord.Reference(recordID: CKRecord.ID(recordName: purchase.categoryUUID!.uuidString, zoneID: zoneID), action: .none)
-
-        guard let methodUUID = purchase.purchaseMethod?.uuid, let methodName = purchase.purchaseMethod?.name, let ledgerUUID = purchase.ledger?.uuid, let categoryUUID = purchase.category?.uuid else {return nil}
+        
+        guard let methodUUID = purchase.purchaseMethod?.uuid, let methodName = purchase.purchaseMethod?.name, let ledgerUUID = purchase.ledger?.uuid, let categoryUUID = purchase.category?.uuid else { return nil }
         
         setParent(CKRecord.ID(recordName: purchase.ledgerUUID!.uuidString, zoneID: zoneID))
         

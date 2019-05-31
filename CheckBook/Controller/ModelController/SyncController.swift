@@ -6,17 +6,17 @@
 //  Copyright © 2019 Dominic Lanzillotta. All rights reserved.
 //
 
-import Foundation
 import CloudKit
 import CoreData
+import Foundation
 
 class SyncController {
+    // MARK: - Singleton
     
-    //MARK: - Singleton
     /// The shared Instance of SyncController.
     static let shared = SyncController()
     
-    ///Saves failed CK object to a local cache.
+    /// Saves failed CK object to a local cache.
     /// - parameter type: The type of the object being saved.
     /// - parameter uuid: The UUID of the purchase that was not able to be uploaded.
     func saveFailedUpload(ofType type: CacheType, withFailedPurchaseUUID uuid: UUID) {
@@ -24,17 +24,16 @@ class SyncController {
         CoreDataController.shared.saveToPersistentStore()
     }
     
-    
-    ///Updates child MOC with objects from CK
+    /// Updates child MOC with objects from CK
     /// - parameter records: The records that need to be updated or created in the local Store
     /// - parameter recordIDs: The recordIDs of records that need to be deleted from the local Store.
     func updateContextWith(fetchedRecordsToUpdate records: [CKRecord], deletedRecordIDs recordIDs: [CKRecord.ID]) {
         records.forEach { recordFromCK in
             
-            guard let uuid = UUID(uuidString: recordFromCK.recordID.recordName) else {return}
+            guard let uuid = UUID(uuidString: recordFromCK.recordID.recordName) else { return }
             
             if recordFromCK.recordType == Purchase.typeKey {
-                CoreDataController.shared.findPurchaseWith(uuid: uuid,inContext: CoreDataStack.context, completion: { purchaseFromCD in
+                CoreDataController.shared.findPurchaseWith(uuid: uuid, inContext: CoreDataStack.context, completion: { purchaseFromCD in
                     
                     guard let amount = recordFromCK[Purchase.amountKey] as? Double,
                         let date = recordFromCK[Purchase.dateKey] as? Date,
@@ -43,21 +42,20 @@ class SyncController {
                         let ledgerUUID = recordFromCK[Purchase.ledgerKey] as? String,
                         let categoryUUID = recordFromCK[Purchase.categoryKey] as? String,
                         let lastModified = recordFromCK[Purchase.lastModifiedKey] as? Date,
-                        let storeName = recordFromCK[Purchase.storeNameKey] as? String else {return}
+                        let storeName = recordFromCK[Purchase.storeNameKey] as? String else { return }
                     
-                    CoreDataController.shared.findPurchaseMethodWith(uuid: UUID(uuidString: methodUUID)!, inContext: CoreDataStack.context, completion: { (foundPurchaseMethod) in
+                    CoreDataController.shared.findPurchaseMethodWith(uuid: UUID(uuidString: methodUUID)!, inContext: CoreDataStack.context, completion: { foundPurchaseMethod in
                         let purchaseMethod: PurchaseMethod?
                         
                         if let foundPurchaseMethod = foundPurchaseMethod {
-                            purchaseMethod  = foundPurchaseMethod
+                            purchaseMethod = foundPurchaseMethod
                         } else {
                             purchaseMethod = PurchaseMethod(name: "", uuid: UUID(uuidString: methodUUID)!, lastModified: Date(timeIntervalSince1970: 0), context: CoreDataStack.context)
                         }
-
                         
-                        guard let method = purchaseMethod else {return}
+                        guard let method = purchaseMethod else { return }
                         
-                        CoreDataController.shared.findLedgerWith(uuid: UUID(uuidString: ledgerUUID)!, inContext: CoreDataStack.context, completion: { (foundLedger) in
+                        CoreDataController.shared.findLedgerWith(uuid: UUID(uuidString: ledgerUUID)!, inContext: CoreDataStack.context, completion: { foundLedger in
                             
                             let ledgerOfPurchase: Ledger?
                             
@@ -65,16 +63,15 @@ class SyncController {
                                 ledgerOfPurchase = foundLedger
                             } else {
                                 // There can only be one Ledger in this App
-                                CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.forEach({ (ledger) in
+                                CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.forEach { ledger in
                                     LedgerController.shared.delete(ledger: ledger)
-                                })
+                                }
                                 ledgerOfPurchase = Ledger(name: "", uuid: UUID(uuidString: ledgerUUID)!, appleUserRecordName: nil, lastModified: Date(timeIntervalSince1970: 0), context: CoreDataStack.context)
                             }
-
                             
-                            guard let ledger = ledgerOfPurchase else {return}
+                            guard let ledger = ledgerOfPurchase else { return }
                             
-                            CoreDataController.shared.findCategoryWith(uuid: UUID(uuidString: categoryUUID)!, inContext: CoreDataStack.context, completion: { (foundCategory) in
+                            CoreDataController.shared.findCategoryWith(uuid: UUID(uuidString: categoryUUID)!, inContext: CoreDataStack.context, completion: { foundCategory in
                                 let categoryOfPurchase: Category?
                                 
                                 if let foundCategory = foundCategory {
@@ -82,15 +79,12 @@ class SyncController {
                                 } else {
                                     categoryOfPurchase = Category(name: "", uuid: UUID(uuidString: categoryUUID)!, lastModified: Date(timeIntervalSince1970: 0), context: CoreDataStack.context)
                                 }
-
                                 
-                                guard let category = categoryOfPurchase else {return}
-                                
+                                guard let category = categoryOfPurchase else { return }
                                 
                                 if let purchaseFromCD = purchaseFromCD {
-                                    //update
+                                    // update
                                     if Calendar.current.compare(lastModified, to: purchaseFromCD.lastModified! as Date, toGranularity: Calendar.Component.second).rawValue > 0 {
-                                        
                                         purchaseFromCD.amount = NSDecimalNumber(value: amount)
                                         purchaseFromCD.date = date as NSDate
                                         purchaseFromCD.item = item
@@ -107,7 +101,7 @@ class SyncController {
                                         purchaseFromCD.lastModified = lastModified as NSDate
                                     }
                                 } else {
-                                    //create new Purchase in ChildContext
+                                    // create new Purchase in ChildContext
                                     Purchase(amount: NSDecimalNumber(value: amount), date: date, item: item, storeName: storeName, uuid: uuid, lastModified: lastModified, purchaseMethod: method, category: category, appleUserRecordName: recordFromCK.creatorUserRecordID?.recordName, ledger: ledger)
                                 }
                             })
@@ -115,15 +109,14 @@ class SyncController {
                     })
                 })
             } else if recordFromCK.recordType == PurchaseMethod.typeKey {
-                CoreDataController.shared.findPurchaseMethodWith(uuid: uuid, completion: { (foundPurchaseMethod) in
+                CoreDataController.shared.findPurchaseMethodWith(uuid: uuid, completion: { foundPurchaseMethod in
                     
                     guard let name = recordFromCK[PurchaseMethod.nameKey] as? String,
-                        let lastModified = recordFromCK[PurchaseMethod.lastModifiedKey] as? Date else {return}
+                        let lastModified = recordFromCK[PurchaseMethod.lastModifiedKey] as? Date else { return }
                     
                     if let foundPurchaseMethod = foundPurchaseMethod {
-                        //update
+                        // update
                         if Calendar.current.compare(lastModified, to: foundPurchaseMethod.lastModified!, toGranularity: Calendar.Component.second).rawValue > 0 {
-                            
                             foundPurchaseMethod.name = name
                             foundPurchaseMethod.uuid = uuid
                             foundPurchaseMethod.zoneOwnerName = recordFromCK.recordID.zoneID.ownerName
@@ -132,20 +125,19 @@ class SyncController {
                             foundPurchaseMethod.lastModified = lastModified
                         }
                     } else {
-                        //create new PurchaseMethod in ChildContext
+                        // create new PurchaseMethod in ChildContext
                         PurchaseMethod(record: recordFromCK, context: CoreDataStack.context)
                     }
                 })
             } else if recordFromCK.recordType == Ledger.typeKey {
-                CoreDataController.shared.findLedgerWith(uuid: uuid, completion: { (foundLedger) in
+                CoreDataController.shared.findLedgerWith(uuid: uuid, completion: { foundLedger in
                     
                     guard let name = recordFromCK[Ledger.nameKey] as? String,
-                        let lastModified = recordFromCK[Ledger.lastModifiedKey] as? Date else {return}
+                        let lastModified = recordFromCK[Ledger.lastModifiedKey] as? Date else { return }
                     
                     if let foundLedger = foundLedger {
-                        //update foundLedger
+                        // update foundLedger
                         if Calendar.current.compare(lastModified, to: foundLedger.lastModified!, toGranularity: Calendar.Component.second).rawValue > 0 {
-                            
                             foundLedger.name = name
                             foundLedger.uuid = uuid
                             foundLedger.zoneOwnerName = recordFromCK.recordID.zoneID.ownerName
@@ -155,24 +147,23 @@ class SyncController {
                         }
                     } else {
                         // There can only be one Ledger in this App
-                        CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.forEach({ (ledger) in
+                        CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.forEach { ledger in
                             LedgerController.shared.delete(ledger: ledger)
-                        })
-                        //create new Ledger in ChildContext
+                        }
+                        // create new Ledger in ChildContext
                         Ledger(record: recordFromCK, context: CoreDataStack.context)
                     }
                 })
             } else if recordFromCK.recordType == Category.typeKey {
-                CoreDataController.shared.findCategoryWith(uuid: uuid, completion: { (foundCategory) in
+                CoreDataController.shared.findCategoryWith(uuid: uuid, completion: { foundCategory in
                     
                     guard let name = recordFromCK[Category.nameKey] as? String,
                         let color = recordFromCK[Category.colorKey] as? String?,
-                        let lastModified = recordFromCK[Category.lastModifiedKey] as? Date else {return}
+                        let lastModified = recordFromCK[Category.lastModifiedKey] as? Date else { return }
                     
                     if let foundCategory = foundCategory {
-                        //update foundCategory
+                        // update foundCategory
                         if Calendar.current.compare(lastModified, to: foundCategory.lastModified!, toGranularity: Calendar.Component.second).rawValue > 0 {
-                            
                             foundCategory.name = name
                             foundCategory.uuid = uuid
                             foundCategory.color = color
@@ -181,31 +172,31 @@ class SyncController {
                             foundCategory.lastModified = lastModified
                         }
                     } else {
-                        //create new Category in ChildContext
+                        // create new Category in ChildContext
                         Category(record: recordFromCK, context: CoreDataStack.context)
                     }
                 })
             }
         }
         
-        //delete
-        recordIDs.forEach { (recordID) in
-            CoreDataController.shared.findPurchaseWith(uuid: UUID(uuidString: recordID.recordName)!, inContext: CoreDataStack.context, completion: { (purchaseToDelete) in
+        // delete
+        recordIDs.forEach { recordID in
+            CoreDataController.shared.findPurchaseWith(uuid: UUID(uuidString: recordID.recordName)!, inContext: CoreDataStack.context, completion: { purchaseToDelete in
                 if let purchase = purchaseToDelete {
                     CoreDataController.shared.remove(object: purchase)
                 }
             })
-            CoreDataController.shared.findPurchaseMethodWith(uuid: UUID(uuidString: recordID.recordName)!, inContext: CoreDataStack.context, completion: { (purchaseMethodToDelete) in
+            CoreDataController.shared.findPurchaseMethodWith(uuid: UUID(uuidString: recordID.recordName)!, inContext: CoreDataStack.context, completion: { purchaseMethodToDelete in
                 if let purchaseMethod = purchaseMethodToDelete {
                     CoreDataController.shared.remove(object: purchaseMethod)
                 }
             })
-            CoreDataController.shared.findLedgerWith(uuid: UUID(uuidString: recordID.recordName)!, inContext: CoreDataStack.context, completion: { (ledgerToDelete) in
+            CoreDataController.shared.findLedgerWith(uuid: UUID(uuidString: recordID.recordName)!, inContext: CoreDataStack.context, completion: { ledgerToDelete in
                 if let ledger = ledgerToDelete {
                     CoreDataController.shared.remove(object: ledger)
                 }
             })
-            CoreDataController.shared.findCategoryWith(uuid: UUID(uuidString: recordID.recordName)!, inContext: CoreDataStack.context, completion: { (categoryToDelete) in
+            CoreDataController.shared.findCategoryWith(uuid: UUID(uuidString: recordID.recordName)!, inContext: CoreDataStack.context, completion: { categoryToDelete in
                 if let category = categoryToDelete {
                     CoreDataController.shared.remove(object: category)
                 }
@@ -217,71 +208,70 @@ class SyncController {
         NotificationCenter.default.post(Notification.syncFinished)
     }
     
-    ///Retries upload of cached objects.
+    /// Retries upload of cached objects.
     func saveCachedPurchasesToCK() {
         var cachedPurchases: [CachePurchase] = []
         var recordsToUpdate: [CKRecord] = []
         var recordsToDelete: [CKRecord.ID] = []
         
-        
         let dateSort = NSSortDescriptor(key: "\(CachePurchase.uploadKey)", ascending: false)
         let fetchRequest: NSFetchRequest<CachePurchase> = CachePurchase.fetchRequest()
         fetchRequest.sortDescriptors = [dateSort]
         do {
-            cachedPurchases =  try CoreDataStack.context.fetch(fetchRequest)
+            cachedPurchases = try CoreDataStack.context.fetch(fetchRequest)
         } catch {
             print("Error fetching cachedObjects with error: \(String(describing: error)) \(error.localizedDescription))")
         }
         
-        cachedPurchases.forEach { (cachedPurchase) in
+        cachedPurchases.forEach { cachedPurchase in
             
-            guard let type = cachedPurchase.type , let cacheType = CacheType(rawValue: type) else {return}
+            guard let type = cachedPurchase.type, let cacheType = CacheType(rawValue: type) else { return }
             
             switch cacheType {
             case .purchase:
-                CoreDataController.shared.findPurchaseWith(uuid: cachedPurchase.uuid, completion: { (purchaseFromCD) in
+                CoreDataController.shared.findPurchaseWith(uuid: cachedPurchase.uuid, completion: { purchaseFromCD in
                     if let purchase = purchaseFromCD {
-                        //sent update to CK
+                        // sent update to CK
                         recordsToUpdate.append(CKRecord(purchase: purchase)!)
                     } else {
-                        //sentdeleteToCK
+                        // sentdeleteToCK
                         if let uuid = cachedPurchase.uuid?.uuidString {
                             recordsToDelete.append(CKRecord.ID(recordName: uuid))
                         }
                     }
                 })
             case .category:
-                CoreDataController.shared.findCategoryWith(uuid: cachedPurchase.uuid, completion: { (categoryFromCD) in
+                CoreDataController.shared.findCategoryWith(uuid: cachedPurchase.uuid, completion: { categoryFromCD in
                     if let category = categoryFromCD {
-                        //sent update to CK
+                        // sent update to CK
                         recordsToUpdate.append(CKRecord(category: category)!)
                     } else {
-                        //sentdeleteToCK
+                        // sentdeleteToCK
                         if let uuid = cachedPurchase.uuid?.uuidString {
                             recordsToDelete.append(CKRecord.ID(recordName: uuid))
                         }
                     }
                 })
             case .ledger:
-                CoreDataController.shared.findLedgerWith(uuid: cachedPurchase.uuid, completion: { (ledgerFromCD) in
+                CoreDataController.shared.findLedgerWith(uuid: cachedPurchase.uuid, completion: { ledgerFromCD in
                     if let ledger = ledgerFromCD {
-                        //sent update to CK
+                        // sent update to CK
                         recordsToUpdate.append(CKRecord(ledger: ledger)!)
                     } else {
-                        //sentdeleteToCK
+                        // sentdeleteToCK
                         if let uuid = cachedPurchase.uuid?.uuidString {
                             recordsToDelete.append(CKRecord.ID(recordName: uuid))
                         }
                     }
                 })
             case .method:
-                CoreDataController.shared.findPurchaseMethodWith(uuid: cachedPurchase.uuid, completion: { (methodFromCD) in
+                CoreDataController.shared.findPurchaseMethodWith(uuid: cachedPurchase.uuid, completion: { methodFromCD in
                     if let method = methodFromCD {
-                        //sent update to CK
+                        // sent update to CK
                         
                         recordsToUpdate.append(CKRecord(purchaseMethod: method)!)
                     } else {
-                        //sentdeleteToCK
+                        // sentdeleteToCK
                         if let uuid = cachedPurchase.uuid?.uuidString {
                             recordsToDelete.append(CKRecord.ID(recordName: uuid))
                         }
@@ -290,27 +280,27 @@ class SyncController {
             }
         }
         
-        CloudKitController.shared.saveChangestoCK(recordsToUpdate: recordsToUpdate, purchasesToDelete: recordsToDelete) { (isSuccess, savedRecords, deletedRecordIDs) in
-            guard let savedRecords = savedRecords, let deletedRecordIDs = deletedRecordIDs, isSuccess else {return}
-            savedRecords.forEach({ (record) in
+        CloudKitController.shared.saveChangestoCK(recordsToUpdate: recordsToUpdate, purchasesToDelete: recordsToDelete) { isSuccess, savedRecords, deletedRecordIDs in
+            guard let savedRecords = savedRecords, let deletedRecordIDs = deletedRecordIDs, isSuccess else { return }
+            savedRecords.forEach { record in
                 
-                CoreDataController.shared.findCacheWith(uuid: UUID(uuidString: record.recordID.recordName), completion: { (foundCache) in
-                    guard let cacheObject = foundCache else {return}
+                CoreDataController.shared.findCacheWith(uuid: UUID(uuidString: record.recordID.recordName), completion: { foundCache in
+                    guard let cacheObject = foundCache else { return }
                     CoreDataController.shared.remove(object: cacheObject)
                 })
-            })
+            }
             
-            deletedRecordIDs.forEach({ (recordID) in
-                CoreDataController.shared.findCacheWith(uuid: UUID(uuidString: recordID.recordName), completion: { (foundCache) in
-                    guard let cacheObject = foundCache else {return}
+            deletedRecordIDs.forEach { recordID in
+                CoreDataController.shared.findCacheWith(uuid: UUID(uuidString: recordID.recordName), completion: { foundCache in
+                    guard let cacheObject = foundCache else { return }
                     CoreDataController.shared.remove(object: cacheObject)
                 })
-            })
+            }
         }
     }
     
     fileprivate func saveObjectsInContexts() {
-        //save
+        // save
         do {
 //            if CoreDataStack.childContext.hasChanges {
 //                try CoreDataStack.childContext.save()

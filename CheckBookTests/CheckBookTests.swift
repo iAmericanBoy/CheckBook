@@ -6,14 +6,12 @@
 //  Copyright © 2019 Dominic Lanzillotta. All rights reserved.
 //
 
-import XCTest
-import CoreData
-import CloudKit
 @testable import CheckBook
-
+import CloudKit
+import CoreData
+import XCTest
 
 class CheckBookTests: XCTestCase {
-
     var testContext: NSManagedObjectContext?
     
     override func setUp() {
@@ -21,12 +19,12 @@ class CheckBookTests: XCTestCase {
         
         testContext = setUpInMemoryManagedObjectContext()
     }
-
+    
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         testContext = nil
-        
     }
+    
     func testTearDown() {
         setUp()
         tearDown()
@@ -38,8 +36,9 @@ class CheckBookTests: XCTestCase {
         XCTAssertNotNil(testContext)
         tearDown()
     }
-
-    //MARK: - Ledger
+    
+    // MARK: - Ledger
+    
     func testCreateLedger() {
         setUp()
         guard let testContext = testContext else {
@@ -53,7 +52,7 @@ class CheckBookTests: XCTestCase {
         tearDown()
     }
     
-    ///This checks if the two Ledgers created have the same attributes. They are not the same objcts as CoreData doesn't allow two exact matches(objectID!) to be in a context
+    /// This checks if the two Ledgers created have the same attributes. They are not the same objcts as CoreData doesn't allow two exact matches(objectID!) to be in a context
     func testLedgerConvertCKRecord() {
         setUp()
         guard let testContext = testContext else {
@@ -66,7 +65,6 @@ class CheckBookTests: XCTestCase {
             return
         }
         let ledgerFromRecord = Ledger(record: newRecord, context: testContext)
-        
         
         XCTAssertEqual(ledgerFromRecord?.appleUserRecordName, ledger.appleUserRecordName)
         XCTAssertEqual(ledgerFromRecord?.lastModified, ledger.lastModified)
@@ -102,7 +100,8 @@ class CheckBookTests: XCTestCase {
         tearDown()
     }
     
-    //MARK: - Category
+    // MARK: - Category
+    
     func testCreateCategory() {
         setUp()
         guard let testContext = testContext else {
@@ -125,14 +124,14 @@ class CheckBookTests: XCTestCase {
         }
         let newLedger = Ledger(name: "testName", appleUserRecordName: nil, context: testContext)
         let newCategory = Category(name: "testCategory", ledger: newLedger, context: testContext)
-
+        
         let newRecord = CKRecord(category: newCategory)
         
         XCTAssertEqual(newCategory.name, newRecord?[Category.nameKey])
         XCTAssertEqual(newCategory.color, newRecord?[Category.colorKey])
         XCTAssertEqual(newCategory.lastModified, newRecord?[Category.lastModifiedKey])
         XCTAssertEqual(Category.typeKey, newRecord?.recordType)
-
+        
         XCTAssertEqual(newCategory.ledgerUUID?.uuidString, newRecord?.parent?.recordID.recordName)
         XCTAssertEqual(newLedger.zoneOwnerName, newRecord?.parent?.recordID.zoneID.ownerName)
         XCTAssertEqual(newLedger.zoneName, newRecord?.parent?.recordID.zoneID.zoneName)
@@ -140,7 +139,7 @@ class CheckBookTests: XCTestCase {
         XCTAssertEqual(newCategory.uuid?.uuidString, newRecord?.recordID.recordName)
         XCTAssertEqual(newCategory.zoneName, newRecord?.recordID.zoneID.zoneName)
         XCTAssertEqual(newCategory.zoneOwnerName, newRecord?.recordID.zoneID.ownerName)
-
+        
         tearDown()
     }
     
@@ -169,11 +168,12 @@ class CheckBookTests: XCTestCase {
         XCTAssertEqual(categoryFromRecord?.zoneName, category.zoneName)
         XCTAssertEqual(categoryFromRecord?.zoneOwnerName, category.zoneOwnerName)
         XCTAssertEqual(categoryFromRecord?.managedObjectContext, category.managedObjectContext)
-
+        
         tearDown()
     }
     
-    //MARK: - PurchaseMethod
+    // MARK: - PurchaseMethod
+    
     func testCreatePurchaseMethod() {
         setUp()
         guard let testContext = testContext else {
@@ -234,7 +234,7 @@ class CheckBookTests: XCTestCase {
         XCTAssertEqual(purchaseMethodFromRecord?.lastModified, purchaseMethod.lastModified)
         XCTAssertEqual(purchaseMethodFromRecord?.uuid, purchaseMethod.uuid)
         XCTAssertEqual(purchaseMethodFromRecord?.purchases, purchaseMethod.purchases)
-
+        
         XCTAssertEqual(purchaseMethodFromRecord?.ledgerUUID, newLedger.uuid)
         XCTAssertEqual(purchaseMethodFromRecord?.ledgerUUID, purchaseMethod.ledgerUUID)
         
@@ -245,7 +245,8 @@ class CheckBookTests: XCTestCase {
         tearDown()
     }
     
-    //MARK: - Purchase
+    // MARK: - Purchase
+    
     func testCreatePurchase() {
         setUp()
         guard let testContext = testContext else {
@@ -255,7 +256,7 @@ class CheckBookTests: XCTestCase {
         let newLedger = Ledger(name: "testName", appleUserRecordName: nil, context: testContext)
         let newMethod = PurchaseMethod(name: "testMethod", ledger: newLedger, context: testContext)
         let newCategory = Category(name: "testCategory", ledger: newLedger, context: testContext)
-
+        
         let newPurchase = Purchase(amount: 123.45, date: Date(), item: " ", storeName: "testStore", purchaseMethod: newMethod, category: newCategory, appleUserRecordName: nil, ledger: newLedger, context: testContext)
         
         XCTAssertEqual(testContext.registeredObjects.count, 4)
@@ -263,7 +264,7 @@ class CheckBookTests: XCTestCase {
         tearDown()
     }
     
-        func testCreatePurchaseCKRecord() {
+    func testCreatePurchaseCKRecord() {
         setUp()
         guard let testContext = testContext else {
             assertionFailure("unable to unwrap testContext")
@@ -286,18 +287,18 @@ class CheckBookTests: XCTestCase {
         
         XCTAssertEqual(newPurchase.methodUUID?.uuidString, newRecord?[Purchase.methodKey])
         XCTAssertEqual(newPurchase.methodName, newRecord?[Purchase.methodNameKey])
-
+        
         XCTAssertEqual(newPurchase.categoryUUID?.uuidString, newRecord?[Purchase.categoryKey])
         
         XCTAssertEqual(newPurchase.ledgerUUID?.uuidString, newRecord?[Purchase.ledgerKey])
         XCTAssertEqual(newPurchase.ledgerUUID?.uuidString, newRecord?.parent?.recordID.recordName)
         XCTAssertEqual(newPurchase.ledger?.zoneName, newRecord?.parent?.recordID.zoneID.zoneName)
         XCTAssertEqual(newPurchase.ledger?.zoneOwnerName, newRecord?.parent?.recordID.zoneID.ownerName)
-
+        
         XCTAssertEqual(Purchase.typeKey, newRecord?.recordType)
-
+        
         tearDown()
     }
     
-    //TODO: - Find a way to test references for the purchaseCKRecord
+    // TODO: - Find a way to test references for the purchaseCKRecord
 }

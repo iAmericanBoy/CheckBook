@@ -6,17 +6,18 @@
 //  Copyright © 2019 Dominic Lanzillotta. All rights reserved.
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 class CoreDataController {
-
-    //MARK: - Singleton
+    // MARK: - Singleton
+    
     /// The shared Instance of CoreDataController.
     static let shared = CoreDataController()
     
-    //MARK: - FetchResultsController
-    ///FetchController to fetch all the Purchases.
+    // MARK: - FetchResultsController
+    
+    /// FetchController to fetch all the Purchases.
     let purchaseFetchResultsController: NSFetchedResultsController<Purchase> = {
         let fetchRequest: NSFetchRequest<Purchase> = Purchase.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
@@ -24,7 +25,7 @@ class CoreDataController {
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: "day", cacheName: nil)
     }()
     
-    ///FetchController to fetch all the PurchaseMethods.
+    /// FetchController to fetch all the PurchaseMethods.
     let purchaseMethodFetchResultsController: NSFetchedResultsController<PurchaseMethod> = {
         let fetchRequest: NSFetchRequest<PurchaseMethod> = PurchaseMethod.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
@@ -32,7 +33,7 @@ class CoreDataController {
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
     }()
     
-    ///FetchController to fetch all the Categories.
+    /// FetchController to fetch all the Categories.
     let categoryFetchResultsController: NSFetchedResultsController<Category> = {
         let fetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
@@ -40,7 +41,7 @@ class CoreDataController {
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
     }()
     
-    ///FetchController to fetch all the PurchaseMethods.
+    /// FetchController to fetch all the PurchaseMethods.
     let purchasesOfPurchaseMethodFetchResultsController: NSFetchedResultsController<Purchase> = {
         let fetchRequest: NSFetchRequest<Purchase> = Purchase.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
@@ -48,35 +49,37 @@ class CoreDataController {
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
     }()
     
-    ///FetchController to fetch all the Ledgers.
+    /// FetchController to fetch all the Ledgers.
     let ledgersFetchResultsController: NSFetchedResultsController<Ledger> = {
         let fetchRequest: NSFetchRequest<Ledger> = Ledger.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
     }()
-        
-    //MARK: - init
-    ///Simple initializer to set up the fetchResultsController.
+    
+    // MARK: - init
+    
+    /// Simple initializer to set up the fetchResultsController.
     init() {
-        do{
+        do {
             try purchaseFetchResultsController.performFetch()
             try purchaseMethodFetchResultsController.performFetch()
             try ledgersFetchResultsController.performFetch()
             try categoryFetchResultsController.performFetch()
-
+            
         } catch {
             print("Error loading fetchResultsControllers. \(String(describing: error)), \(error.localizedDescription)")
         }
     }
     
-    //MARK: Read
+    // MARK: Read
+    
     /// Looks in the Context for a Purchase with a given UUID.
     /// - parameter uuid: The UUID of the Puchease that is being searched for.
     /// - parameter context: The context where we should check for the Object with the given UUID.
     /// - parameter completion: Handler for when the purchase has been found.
     /// - parameter foundPurchase: The purchase that was found or nil.
-    func findPurchaseWith(uuid: UUID?, inContext context: NSManagedObjectContext = CoreDataStack.context, completion: @escaping (_ foundPurchase:Purchase?) -> Void ) {
+    func findPurchaseWith(uuid: UUID?, inContext context: NSManagedObjectContext = CoreDataStack.context, completion: @escaping (_ foundPurchase: Purchase?) -> Void) {
         guard let uuid = uuid else {
             completion(nil)
             return
@@ -98,7 +101,7 @@ class CoreDataController {
     /// - parameter context: The context where we should check for the Object with the given UUID.
     /// - parameter completion: Handler for when the purchaseMethod has been found.
     /// - parameter foundPurchaseMethod: The purchaseMethod that was found or nil.
-    func findPurchaseMethodWith(uuid: UUID?, inContext context: NSManagedObjectContext = CoreDataStack.context, completion: @escaping (_ foundPurchaseMethod:PurchaseMethod?) -> Void ) {
+    func findPurchaseMethodWith(uuid: UUID?, inContext context: NSManagedObjectContext = CoreDataStack.context, completion: @escaping (_ foundPurchaseMethod: PurchaseMethod?) -> Void) {
         guard let uuid = uuid else {
             completion(nil)
             return
@@ -120,7 +123,7 @@ class CoreDataController {
     /// - parameter context: The context where we should check for the Object with the given UUID.
     /// - parameter completion: Handler for when the ledger has been found.
     /// - parameter foundLedger: The ledger that was found or nil.
-    func findLedgerWith(uuid: UUID?, inContext context: NSManagedObjectContext = CoreDataStack.context, completion: @escaping (_ foundLedger:Ledger?) -> Void ) {
+    func findLedgerWith(uuid: UUID?, inContext context: NSManagedObjectContext = CoreDataStack.context, completion: @escaping (_ foundLedger: Ledger?) -> Void) {
         guard let uuid = uuid else {
             completion(nil)
             return
@@ -142,7 +145,7 @@ class CoreDataController {
     /// - parameter context: The context where we should check for the Object with the given UUID.
     /// - parameter completion: Handler for when the ledger has been found.
     /// - parameter foundLedger: The ledger that was found or nil.
-    func findCacheWith(uuid: UUID?, inContext context: NSManagedObjectContext = CoreDataStack.context, completion: @escaping (_ foundLedger:CachePurchase?) -> Void ) {
+    func findCacheWith(uuid: UUID?, inContext context: NSManagedObjectContext = CoreDataStack.context, completion: @escaping (_ foundLedger: CachePurchase?) -> Void) {
         guard let uuid = uuid else {
             completion(nil)
             return
@@ -164,7 +167,7 @@ class CoreDataController {
     /// - parameter context: The context where we should check for the Object with the given UUID.
     /// - parameter completion: Handler for when the Category has been found.
     /// - parameter foundCategory: The Category that was found or nil.
-    func findCategoryWith(uuid: UUID?, inContext context: NSManagedObjectContext = CoreDataStack.context, completion: @escaping (_ foundCategory: Category?) -> Void ) {
+    func findCategoryWith(uuid: UUID?, inContext context: NSManagedObjectContext = CoreDataStack.context, completion: @escaping (_ foundCategory: Category?) -> Void) {
         guard let uuid = uuid else {
             completion(nil)
             return
@@ -181,7 +184,8 @@ class CoreDataController {
         }
     }
     
-    //MARK: - Delete
+    // MARK: - Delete
+    
     /// Removes the Object from the Context.
     /// - parameter object: The object to remove.
     func remove(object: NSManagedObject) {
@@ -202,14 +206,14 @@ class CoreDataController {
                 let result = try CoreDataStack.context.execute(deleteRequest) as? NSBatchDeleteResult
                 
                 let objectIDArray = result?.result as? [NSManagedObjectID]
-                let changes = [NSDeletedObjectsKey : objectIDArray]
-                NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes as [AnyHashable : Any], into: [CoreDataStack.context])
+                let changes = [NSDeletedObjectsKey: objectIDArray]
+                NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes as [AnyHashable: Any], into: [CoreDataStack.context])
             } catch {
                 print(error)
             }
         }
         
-        do{
+        do {
             try purchaseFetchResultsController.performFetch()
             try purchaseMethodFetchResultsController.performFetch()
             try ledgersFetchResultsController.performFetch()
@@ -220,7 +224,8 @@ class CoreDataController {
         }
     }
     
-    //MARK: - Save
+    // MARK: - Save
+    
     func saveToPersistentStore() {
         do {
             if CoreDataStack.context.hasChanges {

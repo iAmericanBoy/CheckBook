@@ -9,9 +9,9 @@
 import Foundation
 
 enum Setting: CaseIterable {
-    static var allCases: [Setting] = [.share(false),.deletePersonalData]
+    static var allCases: [Setting] = [.share(false), .deletePersonalData]
     typealias AllCases = [Setting]
-    
+
     case share(Bool)
     case deletePersonalData
 }

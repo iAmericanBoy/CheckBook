@@ -14,24 +14,27 @@ protocol SettingsDelegate: NSObject {
 }
 
 class SettingsTableViewCell: UITableViewCell {
+    // MARK: - Outlets
 
-    //MARK: - Outlets
-    @IBOutlet weak var cellLabel: UILabel!
-    @IBOutlet weak var cellSwitch: UISwitch!
-    @IBOutlet weak var cellButton: UIButton!
-    
-    //MARK: - Properties
+    @IBOutlet var cellLabel: UILabel!
+    @IBOutlet var cellSwitch: UISwitch!
+    @IBOutlet var cellButton: UIButton!
+
+    // MARK: - Properties
+
     var setting: Setting? {
         didSet {
             updateViews()
         }
     }
+
     var delegate: SettingsDelegate?
-    
-    //MARK: - Actions
+
+    // MARK: - Actions
+
     @IBAction func switchValueChanged(_ sender: UISwitch) {
-        guard let setting = setting else {return}
-        
+        guard let setting = setting else { return }
+
         if sender.isOn {
             switch setting {
             case .share:
@@ -39,12 +42,11 @@ class SettingsTableViewCell: UITableViewCell {
             case .deletePersonalData:
                 ()
             }
-        } else {
-            
-        }
+        } else {}
     }
+
     @IBAction func cellButtonTapped(_ sender: UIButton) {
-        guard let setting = setting else {return}
+        guard let setting = setting else { return }
 
         switch setting {
         case .share:
@@ -53,14 +55,15 @@ class SettingsTableViewCell: UITableViewCell {
             delegate?.deleteUserData()
         }
     }
-    
-    //MARK: - Private Functions
+
+    // MARK: - Private Functions
+
     fileprivate func updateViews() {
         cellButton.layer.borderWidth = 1
-        cellButton.layer.borderColor = UIColor(red: (4/255),green: (122/255),blue: (255/255),alpha: 1).cgColor
+        cellButton.layer.borderColor = UIColor(red: 4 / 255, green: 122 / 255, blue: 255 / 255, alpha: 1).cgColor
         cellButton.layer.cornerRadius = 3
 
-        guard let setting = setting else {return}
+        guard let setting = setting else { return }
         switch setting {
         case .share(let isSharing):
             cellLabel.text = "Share Ledger"

@@ -6,29 +6,32 @@
 //  Copyright © 2019 Dominic Lanzillotta. All rights reserved.
 //
 
-import UIKit
 import CloudKit
+import UIKit
 
 class SettingsViewController: UIViewController {
+    // MARK: - Outlets
     
-    //MARK: - Outlets
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet var tableView: UITableView!
     
-    //MARK: - LifeCycle
+    // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.tableFooterView = UIView()
-
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.tableFooterView = UIView()
     }
-    //MARK: - Actions
+    
+    // MARK: - Actions
+    
     @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
     }
 }
 
-//MARK: - UITableViewDataSource, UITableViewDelegate
+// MARK: - UITableViewDataSource, UITableViewDelegate
+
 extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return Setting.allCases.count
@@ -48,7 +51,8 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-//MARK: - SettingsDelegate
+// MARK: - SettingsDelegate
+
 extension SettingsViewController: SettingsDelegate {
     func deleteUserData() {
         self.deleteUserData {
@@ -60,7 +64,6 @@ extension SettingsViewController: SettingsDelegate {
     }
     
     func shareLedger() {
-        
         if let share = CloudKitController.shared.currentShare {
             let sharingViewController = UICloudSharingController(share: share, container: CKContainer.default())
             sharingViewController.delegate = self
@@ -68,22 +71,20 @@ extension SettingsViewController: SettingsDelegate {
             self.present(sharingViewController, animated: true)
             
         } else {
-            
-            
-            guard let ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first, let record = CKRecord(ledger: ledger) else {return}
+            guard let ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first, let record = CKRecord(ledger: ledger) else { return }
             
             let share = CKShare(rootRecord: record)
             share.publicPermission = .readWrite
             
-            let sharingViewController = UICloudSharingController(preparationHandler: {(UICloudSharingController, handler: @escaping (CKShare?, CKContainer?, Error?) -> Void) in
-                let operation = CKModifyRecordsOperation(recordsToSave: [record,share], recordIDsToDelete: nil)
+            let sharingViewController = UICloudSharingController(preparationHandler: { (_, handler: @escaping (CKShare?, CKContainer?, Error?) -> Void) in
+                let operation = CKModifyRecordsOperation(recordsToSave: [record, share], recordIDsToDelete: nil)
                 operation.savePolicy = .changedKeys
                 
-                operation.modifyRecordsCompletionBlock = { (savedRecord, _,error) in
+                operation.modifyRecordsCompletionBlock = { _, _, error in
                     handler(share, CKContainer.default(), error)
                 }
                 
-                operation.perRecordCompletionBlock = { (savedRecord,error) in
+                operation.perRecordCompletionBlock = { _, error in
                     if let error = error {
                         print(error)
                     }
@@ -98,12 +99,13 @@ extension SettingsViewController: SettingsDelegate {
     }
 }
 
-//MARK: - UICloudSharingControllerDelegate
+// MARK: - UICloudSharingControllerDelegate
+
 extension SettingsViewController: UICloudSharingControllerDelegate {
     func cloudSharingControllerDidSaveShare(_ csc: UICloudSharingController) {
-        guard let ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first, let url = csc.share?.url else {return}
+        guard let ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first, let url = csc.share?.url else { return }
         
-        LedgerController.shared.add(stringURL: url.absoluteString, toLedger: ledger) { (isSuccess) in
+        LedgerController.shared.add(stringURL: url.absoluteString, toLedger: ledger) { isSuccess in
             if isSuccess {
                 print("Succesfully added Url to Ledger")
                 print(url)
@@ -117,11 +119,10 @@ extension SettingsViewController: UICloudSharingControllerDelegate {
     }
     
     func itemThumbnailData(for csc: UICloudSharingController) -> Data? {
-        return nil //You can set a hero image in your share sheet. Nil uses the default.
+        return nil // You can set a hero image in your share sheet. Nil uses the default.
     }
     
     func itemTitle(for csc: UICloudSharingController) -> String? {
         return CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first?.name
     }
 }
-

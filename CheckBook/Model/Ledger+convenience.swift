@@ -6,9 +6,9 @@
 //  Copyright © 2019 Dominic Lanzillotta. All rights reserved.
 //
 
-import Foundation
-import CoreData
 import CloudKit
+import CoreData
+import Foundation
 
 extension Ledger {
     @discardableResult
@@ -21,7 +21,6 @@ extension Ledger {
                      purchases: NSOrderedSet = NSOrderedSet(),
                      lastModified: Date = Date(),
                      context: NSManagedObjectContext = CoreDataStack.context) {
-        
         self.init(context: context)
         
         self.name = name
@@ -39,9 +38,9 @@ extension Ledger {
     @discardableResult
     convenience init?(record: CKRecord, context: NSManagedObjectContext = CoreDataStack.context) {
         guard let name = record[Ledger.nameKey] as? String,
-            let lastModified = record[Ledger.lastModifiedKey] as? Date else {return nil}
+            let lastModified = record[Ledger.lastModifiedKey] as? Date else { return nil }
         
-        self.init(name: name, uuid: UUID(uuidString: record.recordID.recordName)!, appleUserRecordName: record.creatorUserRecordID?.recordName, url: record[Ledger.shareURLKey] as? String , lastModified: lastModified, context: context)
+        self.init(name: name, uuid: UUID(uuidString: record.recordID.recordName)!, appleUserRecordName: record.creatorUserRecordID?.recordName, url: record[Ledger.shareURLKey] as? String, lastModified: lastModified, context: context)
         
         self.zoneOwnerName = record.recordID.zoneID.ownerName
         self.zoneName = record.recordID.zoneID.zoneName
@@ -57,4 +56,3 @@ extension CKRecord {
         setValue(ledger.lastModified, forKey: Ledger.lastModifiedKey)
     }
 }
-

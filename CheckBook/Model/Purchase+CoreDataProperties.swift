@@ -7,12 +7,10 @@
 //
 //
 
-import Foundation
 import CoreData
-
+import Foundation
 
 extension Purchase {
-
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Purchase> {
         return NSFetchRequest<Purchase>(entityName: "Purchase")
     }
@@ -31,5 +29,4 @@ extension Purchase {
     @NSManaged public var category: Category?
     @NSManaged public var ledger: Ledger?
     @NSManaged public var purchaseMethod: PurchaseMethod?
-
 }
