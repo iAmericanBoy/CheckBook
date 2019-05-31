@@ -9,7 +9,8 @@
 import UIKit
 
 class PurchaseListSectionView: UITableViewHeaderFooterView {
-    //MARK: - Outlets
+    // MARK: - Outlets
+    
     let amountLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -29,17 +30,19 @@ class PurchaseListSectionView: UITableViewHeaderFooterView {
         return view
     }()
     
-    //MARK: - Properties
+    // MARK: - Properties
+    
     static let reuseIdentifier = "PurchaseHeader"
     
     var purchases: [Purchase]? {
-        didSet{
+        didSet {
             updateViews()
         }
     }
     
-    //MARK: - LifeCycle
-    override public init(reuseIdentifier: String?) {
+    // MARK: - LifeCycle
+    
+    public override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         setupViews()
     }
@@ -48,12 +51,11 @@ class PurchaseListSectionView: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - Private Functions
-    func setupViews(){
+    // MARK: - Private Functions
+    
+    func setupViews() {
         contentView.backgroundColor = UIColor.purple.withAlphaComponent(0.06)
         backgroundView?.backgroundColor = .clear
-        
-
         
         contentView.addSubview(boarderView)
         boarderView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -73,13 +75,13 @@ class PurchaseListSectionView: UITableViewHeaderFooterView {
     }
     
     func updateViews() {
-        guard let purchases = purchases else {return}
+        guard let purchases = purchases else { return }
         let numberFormatter = NumberFormatter()
         numberFormatter.locale = Locale.autoupdatingCurrent
         numberFormatter.numberStyle = .currency
         
-        var total:NSDecimalNumber = 0.0
-        for purchase in purchases  {
+        var total: NSDecimalNumber = 0.0
+        for purchase in purchases {
             total = total.adding(purchase.amount ?? 0)
         }
         amountLabel.text = numberFormatter.string(from: total)

@@ -8,9 +8,7 @@
 
 import UIKit
 
-
 extension UIViewController {
-    
     static var alertTextField = UITextField()
     
     func addNewPurchaseMethodAlert(_ completion: @escaping (PurchaseMethod?) -> Void) {
@@ -18,16 +16,16 @@ extension UIViewController {
         
         let alertController = UIAlertController(title: "New", message: "Add a new Purchase Method", preferredStyle: .alert)
         
-        let addAction = UIAlertAction(title: "Add", style: .default) { (action) in
+        let addAction = UIAlertAction(title: "Add", style: .default) { _ in
             if let name = nameTextField?.text {
-                guard let ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first else {return}
+                guard let ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first else { return }
                 let newMethod = PurchaseMethodController.shared.createNewPurchaseMethodWith(name: name, withParentLedger: ledger)
                 completion(newMethod)
             }
         }
         addAction.isEnabled = false
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
             completion(nil)
         }
         
@@ -35,7 +33,7 @@ extension UIViewController {
             textField.placeholder = "Add Name"
             textField.autocapitalizationType = .sentences
             UIViewController.alertTextField = alertController.textFields?.first ?? UITextField()
-            NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: .main) { notif in
+            NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: .main) { _ in
                 
                 if let name = textField.text, !name.isEmpty {
                     addAction.isEnabled = true
@@ -56,19 +54,19 @@ extension UIViewController {
         
         let alertController = UIAlertController(title: "New", message: "Add a new Category", preferredStyle: .alert)
         
-        let addAction = UIAlertAction(title: "Add", style: .default) { (action) in
+        let addAction = UIAlertAction(title: "Add", style: .default) { _ in
             if let name = nameTextField?.text {
                 UIViewController.alertTextField = alertController.textFields?.first ?? UITextField()
-
-                guard let ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first else {return}
-
+                
+                guard let ledger = CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.first else { return }
+                
                 let newCategory = CategoryController.shared.createNewCategoryWith(name: name, withParentLedger: ledger)
                 completion(newCategory)
             }
         }
         addAction.isEnabled = false
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
             completion(nil)
         }
         
@@ -76,7 +74,7 @@ extension UIViewController {
             textField.placeholder = "Add Name"
             textField.autocapitalizationType = .sentences
             UIViewController.alertTextField = alertController.textFields?.first ?? UITextField()
-            NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: .main) { notif in
+            NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: .main) { _ in
                 
                 if let name = textField.text, !name.isEmpty {
                     addAction.isEnabled = true
@@ -92,12 +90,12 @@ extension UIViewController {
         }
     }
     
-    func addNewLedgerAlert(_ completion: @escaping (String?) -> Void)  {
+    func addNewLedgerAlert(_ completion: @escaping (String?) -> Void) {
         var nameTextField: UITextField?
         
         let alertController = UIAlertController(title: "New", message: "Add a new Ledger", preferredStyle: .alert)
         
-        let addAction = UIAlertAction(title: "Add", style: .default) { (action) in
+        let addAction = UIAlertAction(title: "Add", style: .default) { _ in
             if let name = nameTextField?.text {
                 _ = LedgerController.shared.createNewLedgerWith(name: name)
                 completion(name)
@@ -105,14 +103,14 @@ extension UIViewController {
         }
         addAction.isEnabled = false
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
             completion(nil)
         }
         alertController.addTextField { textField in
             textField.placeholder = "Add Name"
             UIViewController.alertTextField = alertController.textFields?.first ?? UITextField()
-
-            NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: .main) { notif in
+            
+            NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: .main) { _ in
                 
                 if let name = textField.text, !name.isEmpty {
                     addAction.isEnabled = true
@@ -129,25 +127,23 @@ extension UIViewController {
     }
     
     func tooManyLedgers(_ completion: @escaping () -> Void) {
-        
         let alertController = UIAlertController(title: "Subscribe to new Ledger", message: "You can only be part of 1 ledger at a time", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-        let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) in
+        let settingsAction = UIAlertAction(title: "Settings", style: .default) { _ in
             completion()
         }
-
+        
         alertController.addAction(cancelAction)
         alertController.addAction(settingsAction)
         self.present(alertController, animated: true)
     }
     
     func deleteUserData(_ completion: @escaping () -> Void) {
-        
         let alertController = UIAlertController(title: "Warning", message: "Do you really want to delete all of your data? This can't be undone and will also delete the shared Ledger if your are sharing with your Partner", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-        let settingsAction = UIAlertAction(title: "Confirm Delete", style: .destructive) { (_) in
+        let settingsAction = UIAlertAction(title: "Confirm Delete", style: .destructive) { _ in
             completion()
         }
         

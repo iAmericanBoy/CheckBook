@@ -11,26 +11,26 @@ import UIKit
 protocol AddPurchaseCardDelegate: class {
     func panDidEnd() -> State
     func userDidInteractWithCard() -> State
-    func panViews(withPanPoint panPoint:CGPoint)
+    func panViews(withPanPoint panPoint: CGPoint)
     func cardPanned(recognizer: UIPanGestureRecognizer)
 }
 
 class AddPurchaseViewController: UIViewController {
+    // MARK: - Outlets
     
-    //MARK: - Outlets
     @IBOutlet var panGesture: UIPanGestureRecognizer!
-    @IBOutlet weak var pullView: UIView!
-    @IBOutlet weak var pullViewWidthContraint: NSLayoutConstraint!
-    @IBOutlet weak var openCardButton: UIButton!
-    @IBOutlet weak var cancelButton: UIButton!
-    @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var updateButton: UIButton!
+    @IBOutlet var pullView: UIView!
+    @IBOutlet var pullViewWidthContraint: NSLayoutConstraint!
+    @IBOutlet var openCardButton: UIButton!
+    @IBOutlet var cancelButton: UIButton!
+    @IBOutlet var saveButton: UIButton!
+    @IBOutlet var updateButton: UIButton!
     
-    @IBOutlet weak var storeNameTextField: UITextField!
-    @IBOutlet weak var methodTextField: UITextField!
-    @IBOutlet weak var dateTextField: UITextField!
-    @IBOutlet weak var amountTextField: UITextField!
-    @IBOutlet weak var categoryTextField: UITextField!
+    @IBOutlet var storeNameTextField: UITextField!
+    @IBOutlet var methodTextField: UITextField!
+    @IBOutlet var dateTextField: UITextField!
+    @IBOutlet var amountTextField: UITextField!
+    @IBOutlet var categoryTextField: UITextField!
     @IBOutlet var dateToolBar: UIToolbar!
     @IBOutlet var datePicker: UIDatePicker!
     @IBOutlet var methodPickerView: UIPickerView!
@@ -38,7 +38,8 @@ class AddPurchaseViewController: UIViewController {
     @IBOutlet var categoryToolBar: UIToolbar!
     @IBOutlet var categoryPickerView: UIPickerView!
     
-    //MARK: - Properties
+    // MARK: - Properties
+    
     var delegate: AddPurchaseCardDelegate?
     /// The current state of the card.
     var currentState = State.open
@@ -48,8 +49,9 @@ class AddPurchaseViewController: UIViewController {
             updateViews()
         }
     }
-
-    //MARK: - LifeCycle
+    
+    // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
@@ -58,7 +60,7 @@ class AddPurchaseViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(forName: Notification.syncFinished.name, object: nil, queue: .main) { (_) in
+        NotificationCenter.default.addObserver(forName: Notification.syncFinished.name, object: nil, queue: .main) { _ in
             
             try! CoreDataController.shared.categoryFetchResultsController.performFetch()
             try! CoreDataController.shared.purchaseMethodFetchResultsController.performFetch()
@@ -71,28 +73,25 @@ class AddPurchaseViewController: UIViewController {
                 self.methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: 0, section: 0)).name
             }
         }
-        NotificationCenter.default.addObserver(forName: Notification.appleIdFound.name, object: nil, queue: .main) { (_) in
+        NotificationCenter.default.addObserver(forName: Notification.appleIdFound.name, object: nil, queue: .main) { _ in
             try! CoreDataController.shared.ledgersFetchResultsController.performFetch()
-            if CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.count != 0 {
-                
-            } else {
+            if CoreDataController.shared.ledgersFetchResultsController.fetchedObjects?.count != 0 {} else {
                 _ = LedgerController.shared.createNewLedgerWith(name: "New Ledger")
                 try! CoreDataController.shared.ledgersFetchResultsController.performFetch()
                 print("Ledger Created")
             }
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification,object: nil)
-
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-
     }
     
-    //MARK: - Actions
+    // MARK: - Actions
+    
     @IBAction func handlePan(_ sender: UIPanGestureRecognizer) {
         dismissKeyBoards()
 //        switch sender.state {
@@ -133,13 +132,13 @@ class AddPurchaseViewController: UIViewController {
     }
     
     @IBAction func addNewCardButtonTapped(_ sender: UIBarButtonItem) {
-        self.addNewPurchaseMethodAlert { newCard in
+        addNewPurchaseMethodAlert { newCard in
             DispatchQueue.main.async {
                 try! CoreDataController.shared.purchaseMethodFetchResultsController.performFetch()
                 self.methodPickerView.reloadAllComponents()
                 if let newCard = newCard {
                     self.methodTextField.text = newCard.name
-                    guard let indexPath = CoreDataController.shared.purchaseMethodFetchResultsController.indexPath(forObject: newCard) else {return}
+                    guard let indexPath = CoreDataController.shared.purchaseMethodFetchResultsController.indexPath(forObject: newCard) else { return }
                     self.methodPickerView.selectRow(indexPath.row, inComponent: 0, animated: true)
                 }
             }
@@ -147,19 +146,18 @@ class AddPurchaseViewController: UIViewController {
     }
     
     @IBAction func newCategoryButtonTapped(_ sender: UIBarButtonItem) {
-        self.addNewCategoryAlert { newCatergory in
+        addNewCategoryAlert { newCatergory in
             DispatchQueue.main.async {
                 try! CoreDataController.shared.categoryFetchResultsController.performFetch()
                 self.categoryPickerView.reloadAllComponents()
                 if let newCatergory = newCatergory {
                     self.categoryTextField.text = newCatergory.name
-                    guard let indexPath = CoreDataController.shared.categoryFetchResultsController.indexPath(forObject: newCatergory) else {return}
+                    guard let indexPath = CoreDataController.shared.categoryFetchResultsController.indexPath(forObject: newCatergory) else { return }
                     self.categoryPickerView.selectRow(indexPath.row, inComponent: 0, animated: true)
                 }
             }
         }
     }
-    
     
     @IBAction func doneButtonTapped(_ sender: UIBarButtonItem) {
         dismissKeyBoards()
@@ -172,7 +170,8 @@ class AddPurchaseViewController: UIViewController {
         dateTextField.text = dateFormatter.string(from: sender.date)
     }
     
-    //MARK: - Private Functions
+    // MARK: - Private Functions
+    
     fileprivate func savePurchase() {
         let methodRow = methodPickerView.selectedRow(inComponent: 0)
         let categoryRow = categoryPickerView.selectedRow(inComponent: 0)
@@ -181,9 +180,9 @@ class AddPurchaseViewController: UIViewController {
         guard let storeName = storeNameTextField.text, !storeName.isEmpty,
             let amount = amountTextField.text, let amountNumber = numberFormatter.number(from: amount),
             let methodText = methodTextField.text, !methodText.isEmpty,
-            let categoryText = methodTextField.text, !categoryText.isEmpty else {updateViews(); return}
+            let categoryText = methodTextField.text, !categoryText.isEmpty else { updateViews(); return }
         
-        //Set TextFields to Empty
+        // Set TextFields to Empty
         amountTextField.text = NumberFormatter.localizedString(from: 0, number: .currency)
         storeNameTextField.text = ""
         
@@ -208,6 +207,7 @@ class AddPurchaseViewController: UIViewController {
         
         updateViews()
     }
+    
     fileprivate func updateViews() {
         switch currentState {
         case .open:
@@ -225,8 +225,8 @@ class AddPurchaseViewController: UIViewController {
         }
         
         if let purchase = purchase {
-            //updatePurchaseMode
-
+            // updatePurchaseMode
+            
             storeNameTextField.text = purchase.storeName
             amountTextField.text = NumberFormatter.localizedString(from: purchase.amount ?? 0, number: .currency)
             categoryTextField.text = purchase.category?.name
@@ -278,24 +278,20 @@ class AddPurchaseViewController: UIViewController {
         categoryTextField.delegate = self
         categoryTextField.inputAccessoryView = categoryToolBar
         categoryTextField.inputView = categoryPickerView
-
         
         methodTextField.delegate = self
         methodTextField.inputAccessoryView = paymentMethodToolBar
         methodTextField.inputView = methodPickerView
-
         
         dateTextField.delegate = self
         dateTextField.inputAccessoryView = dateToolBar
         dateTextField.inputView = datePicker
         
-        
         amountTextField.inputAccessoryView = dateToolBar
         
         view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-
-        pullView.layer.cornerRadius = pullView.frame.height / 2
         
+        pullView.layer.cornerRadius = pullView.frame.height / 2
     }
     
     fileprivate func dismissKeyBoards() {
@@ -311,28 +307,27 @@ class AddPurchaseViewController: UIViewController {
             if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
                 let keyboardRectangle = keyboardFrame.cgRectValue
                 let keyboardHeight = keyboardRectangle.height
-                self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight - 22, right: 0)
+                additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight - 22, right: 0)
             }
         }
     }
 }
 
-//MARK: - UITextFieldDelegate
-extension AddPurchaseViewController: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+// MARK: - UITextFieldDelegate
 
-    }
+extension AddPurchaseViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {}
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if textField == amountTextField {
-            guard let text = textField.text else {return true}
+            guard let text = textField.text else { return true }
             
             let oldDigits = numberFormatter.number(from: text) ?? 0
             var digits = oldDigits.decimalValue
             
             if let digit = Decimal(string: string) {
                 let newDigits: Decimal = digit / 100
-            
+                
                 digits *= 10
                 digits += newDigits
             }
@@ -351,18 +346,18 @@ extension AddPurchaseViewController: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-
+        additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         textField.resignFirstResponder()
         return true
     }
 }
 
-//MARK: - UIPickerViewDelegate, UIPickerViewDataSource
+// MARK: - UIPickerViewDelegate, UIPickerViewDataSource
+
 extension AddPurchaseViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         if pickerView.tag == 1111 {
@@ -399,8 +394,6 @@ extension AddPurchaseViewController: UIPickerViewDelegate, UIPickerViewDataSourc
             methodTextField.text = CoreDataController.shared.purchaseMethodFetchResultsController.object(at: IndexPath(item: row, section: component)).name
         } else if pickerView.tag == 2222 {
             categoryTextField.text = CoreDataController.shared.categoryFetchResultsController.object(at: IndexPath(item: row, section: component)).name
-        } else {
-            
-        }
+        } else {}
     }
 }

@@ -6,16 +6,17 @@
 //  Copyright © 2019 Dominic Lanzillotta. All rights reserved.
 //
 
-import Foundation
 import CloudKit
+import Foundation
 
 class PurchaseController {
+    // MARK: - Singleton
     
-    //MARK: - Singleton
     /// The shared Instance of PurchaseController.
     static let shared = PurchaseController()
     
-    //MARK: - CRUD
+    // MARK: - CRUD
+    
     /// Creates new Purchase using the convenience initilizer inside the CoredataStack.context and tries to uploads it to CloudKit. If the upload fails the new Purchase gets added to the CacheContext for a later try.
     /// - parameter amount: The amount of the purchase.
     /// - parameter date: The date of the purchase.
@@ -24,7 +25,7 @@ class PurchaseController {
     /// - parameter method: The method of payment of the purchase.
     /// - parameter ledger: The leger of the purchase.
     /// - parameter category: The category of the purchase.
-    func createNewPurchaseWith(amount: NSDecimalNumber, date: Date, item: String, storeName:String, purchaseMethod: PurchaseMethod, ledger: Ledger, category: Category) {
+    func createNewPurchaseWith(amount: NSDecimalNumber, date: Date, item: String, storeName: String, purchaseMethod: PurchaseMethod, ledger: Ledger, category: Category) {
         let purchase = Purchase(amount: amount, date: date, item: item, storeName: storeName, purchaseMethod: purchaseMethod, category: category, appleUserRecordName: CloudKitController.shared.appleUserID?.recordName, ledger: ledger)
         CoreDataController.shared.saveToPersistentStore()
         
@@ -34,11 +35,11 @@ class PurchaseController {
         } else {
             dataBase = CloudKitController.shared.privateDB
         }
-
-        guard let recordToCreate = CKRecord(purchase: purchase) else {return}
-        CloudKitController.shared.create(record: recordToCreate, inDataBase: dataBase) { (isSuccess, newRecord) in
+        
+        guard let recordToCreate = CKRecord(purchase: purchase) else { return }
+        CloudKitController.shared.create(record: recordToCreate, inDataBase: dataBase) { isSuccess, _ in
             if !isSuccess {
-                guard let uuid = purchase.uuid else {return}
+                guard let uuid = purchase.uuid else { return }
                 SyncController.shared.saveFailedUpload(ofType: .purchase, withFailedPurchaseUUID: uuid)
             }
         }
@@ -52,14 +53,14 @@ class PurchaseController {
     /// - parameter storeName: updated The storeName of the purchase.
     /// - parameter method: The updated method of payment of the purchase.
     /// - parameter category: The updated category of the purchase.
-    func update(purchase: Purchase, amount:Decimal?, date: Date?, item: String?, storeName: String?, purchaseMethod: PurchaseMethod?, category: Category?) {
-        if let amount = amount {purchase.amount = amount as NSDecimalNumber}
-        if let date = date {purchase.date = date as NSDate}
-        if let item = item {purchase.item = item}
-        if let storeName = storeName {purchase.storeName = storeName}
-        if let purchaseMethod = purchaseMethod {purchase.purchaseMethod = purchaseMethod}
-        if let category = category {purchase.category = category}
-
+    func update(purchase: Purchase, amount: Decimal?, date: Date?, item: String?, storeName: String?, purchaseMethod: PurchaseMethod?, category: Category?) {
+        if let amount = amount { purchase.amount = amount as NSDecimalNumber }
+        if let date = date { purchase.date = date as NSDate }
+        if let item = item { purchase.item = item }
+        if let storeName = storeName { purchase.storeName = storeName }
+        if let purchaseMethod = purchaseMethod { purchase.purchaseMethod = purchaseMethod }
+        if let category = category { purchase.category = category }
+        
         purchase.lastModified = Date() as NSDate
         CoreDataController.shared.saveToPersistentStore()
         
@@ -70,11 +71,10 @@ class PurchaseController {
             dataBase = CloudKitController.shared.privateDB
         }
         
-        
-        guard let recordToUpdate = CKRecord(purchase: purchase) else {return}
-        CloudKitController.shared.update(record: recordToUpdate, inDataBase: dataBase) { (isSuccess, updatedPurchase) in
+        guard let recordToUpdate = CKRecord(purchase: purchase) else { return }
+        CloudKitController.shared.update(record: recordToUpdate, inDataBase: dataBase) { isSuccess, _ in
             if !isSuccess {
-                guard let uuid = purchase.uuid else {return}
+                guard let uuid = purchase.uuid else { return }
                 SyncController.shared.saveFailedUpload(ofType: .method, withFailedPurchaseUUID: uuid)
             }
         }
@@ -83,7 +83,6 @@ class PurchaseController {
     /// Deletes the Purchase, deletes it from Cotext and CloudKit. If the CK delete Fails the puchease gets added to the cache for uploading at a later date.
     /// - parameter purchase: The purchase to delete.
     func delete(purchase: Purchase) {
-        
         let dataBase: CKDatabase
         if UserDefaults(suiteName: "group.com.oskman.DaysInARowGroup")?.bool(forKey: "isParticipant") ?? false {
             dataBase = CloudKitController.shared.shareDB
@@ -91,11 +90,11 @@ class PurchaseController {
             dataBase = CloudKitController.shared.privateDB
         }
         
-        guard let recordToDelete = CKRecord(purchase: purchase) else {return}
+        guard let recordToDelete = CKRecord(purchase: purchase) else { return }
         
-        CloudKitController.shared.delete(record: recordToDelete, inDataBase: dataBase) { (isSuccess) in
+        CloudKitController.shared.delete(record: recordToDelete, inDataBase: dataBase) { isSuccess in
             if !isSuccess {
-                guard let uuid = purchase.uuid else {return}
+                guard let uuid = purchase.uuid else { return }
                 SyncController.shared.saveFailedUpload(ofType: .purchase, withFailedPurchaseUUID: uuid)
             }
         }

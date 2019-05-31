@@ -6,8 +6,8 @@
 //  Copyright © 2019 Dominic Lanzillotta. All rights reserved.
 //
 
+import CoreData
 import Foundation
-import  CoreData
 
 extension CachePurchase {
     @discardableResult
